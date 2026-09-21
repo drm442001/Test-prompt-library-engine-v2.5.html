@@ -103,7 +103,10 @@
 .mgsplx .issue.warn{border-color:#e0a13c;background:#241a06;color:var(--warn)}
 .mgsplx .issue.info{border-color:#5b7fd0;background:#131b30;color:#b9c9f5}
 .mgsplx .empty{text-align:center;color:#8b93ad;padding:2.6rem 1rem;font-size:.9rem}
-.mgsplx .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.85rem}
+.mgsplx .grid3{display:grid;grid-template-columns:1fr;gap:.85rem}
+.mgsplx .vflow{display:flex;flex-direction:column;gap:.85rem}
+.mgsplx .varwrap{display:flex;flex-direction:column;gap:.5rem;margin:.25rem 0 .55rem}
+.mgsplx .flag.ok{background:#10281c;border:1px solid var(--ok);color:#a6e8c6}
 .mgsplx .lane h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
 .mgsplx .lane.before{border-color:#ff5a3c}
 .mgsplx .lane.after{border-color:#2f9d6b}
@@ -777,12 +780,11 @@ var PLX = (function () {
   /* Locked §16: source images are references, never edit targets. Engine-appended, never inside copied prompt text. */
   var PROTECTION = [
     'SOURCE IMAGE PROTECTION (mandatory):',
-    'The supplied BEFORE and AFTER images are source references only.',
-    'Do NOT retouch, enhance, regenerate, recolor, reshape, or alter them in any way.',
-    'Do NOT modify faces, clothing, background, or objects; do NOT add or remove image content;',
-    'do NOT change original details, grain, skin texture, or colours of the supplied files.',
-    'You may only ARRANGE, size, crop-to-fit and label the supplied images inside the composition;',
-    'the photographs themselves must remain visually unchanged from the supplied files.'
+    'Use supplied Before.jpg as BEFORE image.',
+    'Use supplied After.jpg as AFTER image.',
+    'Do not modify either image.',
+    'Do Not: retouch, recolor, enhance, regenerate, crop subject, change pose, change clothing, change background.',
+    'Do not retouch, recolor, enhance, or regenerate either image. Do not crop the subject, change pose, change clothing, or change background.'
   ].join('\n');
 
   function extractFeatures(labels, howto) {
@@ -1033,6 +1035,7 @@ var PLX = (function () {
     search: '', dirty: { library: true, image: true, publisher: true },
     preset: 'studio',
     custom: {},      /* libId|num -> { varName: value } */
+    customMode: {},  /* libId|num -> { varName: true } marks the explicit "Custom…" choice */
     overrides: {},   /* libId|num -> { fieldKey: text } */
     images: {},      /* libId|num -> { before:{}, after:{}, thumb:{} } */
     mode: 'original',/* 'original' | 'customized' */
@@ -1272,8 +1275,8 @@ var PLX = (function () {
 
   /* ---------------- shared section block ---------------- */
   function srcFlag(p, key) {
-    if (p.fields[key]) return '<span class="flag src">source</span>';
-    return '<span class="flag miss">missing</span>';
+    if (p.fields[key]) return '<span class="flag src">SOURCE</span>';
+    return '<span class="flag miss">MISSING</span>';
   }
   function secBlock(o) {
     var parts = [];
@@ -1359,7 +1362,7 @@ var PLX = (function () {
     if (S.activeLib === id) { S.activeLib = S.libs.length ? S.libs[S.libs.length - 1].id : null; S.selected = null; }
     touchAll(); S.dirty = { library: true, image: true, publisher: true }; render();
   }
-  function clearAll() { S.libs = []; S.byId = {}; S.activeLib = null; S.selected = null; S.custom = {}; S.overrides = {}; S.images = {}; PAY = {}; notice('info', 'Cleared.'); S.dirty = { library: true, image: true, publisher: true }; render(); }
+  function clearAll() { S.libs = []; S.byId = {}; S.activeLib = null; S.selected = null; S.custom = {}; S.customMode = {}; S.overrides = {}; S.images = {}; PAY = {}; notice('info', 'Cleared.'); S.dirty = { library: true, image: true, publisher: true }; render(); }
 
   function cardHTML(p, L) {
     var out = [], pl = payloads(p), mode = currentMode(p), set = pl[mode];
@@ -1376,14 +1379,13 @@ var PLX = (function () {
       label: 'Section 1 · ' + (L.tier === 'legacy' ? 'Prompt Title' : 'Post Title'),
       note: 'Blogger Title', flag: srcFlag(p, 'title'),
       value: p.fields.title,
-      actions: [{ name: 'copyTitle', label: 'Copy Title', aria: 'Copy the prompt title' }],
-      issues: p.issues.filter(function (i) { return i.section === 'title'; })
+      actions: [{ name: 'copyTitle', label: 'Copy Title', aria: 'Copy the prompt title' }]
     }));
 
     /* 2 INTRODUCTION */
     out.push(secBlock({
       label: 'Section 2 · Introduction', note: 'blog opening',
-      flag: p.fields.intro ? '<span class="flag src">source</span>' : '<span class="flag miss">unavailable in source</span>',
+      flag: p.fields.intro ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">unavailable in source</span>',
       value: p.raw.intro || p.fields.intro || '— not present in this library file —',
       actions: p.fields.intro ? [{ name: 'copyIntro', label: 'Copy Introduction' }] : []
     }));
@@ -1391,90 +1393,97 @@ var PLX = (function () {
     /* 3 BEFORE IMAGE PROMPT */
     out.push(secBlock({
       cls: 'before', label: 'Section 3 · Before Image Prompt', note: 'image generator - never part of Full Body',
-      flag: p.fields.before ? '<span class="flag src">source</span>' : '<span class="flag miss">missing</span>',
-      value: set.copyBeforePrompt,
+      flag: p.fields.before ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      html: (p.custom.present ? '<div class="varwrap">' + varControlsInner(p, 's3') + '</div>' : '') +
+        '<div class="val">' + escT(set.copyBeforePrompt) + '</div>',
       actions: [
         { name: 'copyBeforePrompt', label: isCust ? 'Copy Before Prompt (customized)' : 'Copy Before Prompt' },
-        { name: 'copyBeforeFile', label: 'Copy Before Title', aria: 'Copy Before image filename', filename: true }
-      ],
-      issues: p.issues.filter(function (i) { return i.section === 'before'; })
+        { name: 'copyBeforeFile', label: 'Copy Before Title', aria: 'Copy Before image filename', filename: true },
+        { name: 'copyBeforeOriginal', label: 'Copy Original Prompt' },
+        { name: 'copyBeforeCustom', label: 'Copy Customized Prompt' }
+      ]
     }));
 
     /* 4 THUMBNAIL ALT */
     out.push(secBlock({
       label: 'Section 4 · Alt Text — Thumbnail Image',
       note: p.fields.altThumb ? 'from library' : 'engine fallback',
-      flag: p.fields.altThumb ? '<span class="flag src">source</span>' : '<span class="flag gen">generated fallback</span>',
+      flag: p.fields.altThumb ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
       value: set.copyThumbAlt,
-      actions: [{ name: 'copyThumbAlt', label: 'Copy Thumbnail Alt' }],
-      issues: p.issues.filter(function (i) { return i.section === 'altThumb'; })
+      actions: [{ name: 'copyThumbAlt', label: 'Copy Thumbnail Alt' }]
     }));
 
     /* 5 BEFORE / AFTER ALT */
     out.push(secBlock({
       label: 'Section 5 · Alt Text — Before / After Images',
-      flag: (p.fields.altBefore || p.fields.altAfter) ? '<span class="flag src">source</span>' : '<span class="flag miss">missing</span>',
+      flag: (p.fields.altBefore || p.fields.altAfter) ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
       html: '<p class="mini">Before Alt</p><div class="val">' + escT(set.copyBeforeAlt || '— missing —') + '</div>' +
         '<p class="mini">After Alt</p><div class="val">' + escT(set.copyAfterAlt || '— missing —') + '</div>',
-      actions: [{ name: 'copyBeforeAlt', label: 'Copy Before Alt' }, { name: 'copyAfterAlt', label: 'Copy After Alt' }],
-      issues: p.issues.filter(function (i) { return i.section === 'altBefore' || i.section === 'altAfter' || i.section === 'altpair'; })
+      actions: [{ name: 'copyBeforeAlt', label: 'Copy Before Alt' }, { name: 'copyAfterAlt', label: 'Copy After Alt' }]
     }));
 
-    /* 6 + 7 + 9 FULL BODY */
+    /* 6 PROMPT */
     out.push(secBlock({
-      cls: 'gen', label: 'Sections 6 + 7 + 9 · Blog Full Body',
-      note: 'prompt + negative prompt + how to use (Section 3 excluded by spec)',
-      html: '<p class="mini">Section 6 · Prompt</p><div class="val">' + escT(set.copyPrompt) + '</div>' +
-        '<p class="mini">Section 7 · Negative Prompt</p><div class="val">' + escT(set.copyNegative) + '</div>' +
-        '<p class="mini">Section 9 · How To Use This Prompt</p>' + howtoHTML(set.copyFullBody.split('HOW TO USE THIS PROMPT:\n')[1] || ''),
+      cls: 'gen', label: 'Section 6 · Prompt', note: 'main AI prompt',
+      flag: p.fields.prompt ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      html: (p.custom.present ? '<div class="varwrap">' + varControlsInner(p, 's6') + '</div>' : '') +
+        '<div class="val">' + escT(set.copyPrompt) + '</div>',
       actions: [
         { name: 'copyPrompt', label: 'Copy Prompt' },
-        { name: 'copyNegative', label: 'Copy Negative' },
-        { name: 'copyHowto', label: 'Copy How To Use' },
-        { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' },
-        { name: 'copyFullBody', label: 'Copy Full Body', spec: true }
-      ],
-      issues: p.issues.filter(function (i) { return i.section === 'prompt' || i.section === 'howto'; })
+        { name: 'copyPromptOriginal', label: 'Copy Original Prompt' },
+        { name: 'copyPromptCustom', label: 'Copy Customized Prompt' }
+      ]
+    }));
+
+    /* 7 NEGATIVE PROMPT */
+    out.push(secBlock({
+      cls: 'gen', label: 'Section 7 · Negative Prompt',
+      flag: p.fields.negative ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      value: set.copyNegative || '— missing —',
+      actions: [{ name: 'copyNegative', label: 'Copy Negative' }, { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }]
     }));
 
     /* 8 TOOLS */
     out.push(secBlock({
       label: 'Section 8 · Compatible AI Tools',
-      flag: p.fields.tools ? '<span class="flag src">source</span>' : '<span class="flag miss">not in source</span>',
+      flag: p.fields.tools ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">not in source</span>',
       value: p.fields.tools || '— this library does not declare AI tools for this prompt; the engine inserts none —',
-      actions: p.fields.tools ? [{ name: 'copyTools', label: 'Copy Tools' }] : [],
-      issues: p.issues.filter(function (i) { return i.section === 'tools'; })
+      actions: p.fields.tools ? [{ name: 'copyTools', label: 'Copy Tools' }] : []
+    }));
+
+    /* 9 HOW TO USE */
+    out.push(secBlock({
+      cls: 'gen', label: 'Section 9 · How To Use This Prompt',
+      flag: p.fields.howto ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      html: howtoHTML(set.copyHowto || ''),
+      actions: [{ name: 'copyHowto', label: 'Copy How To Use' }, { name: 'copyFullBody', label: 'Copy Full Body', spec: true }]
     }));
 
     /* 10 THUMBNAIL */
     out.push(secBlock({
       cls: 'thumb', label: 'Section 10 · Thumbnail Image Generator Prompt',
       note: set.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
-      flag: set.thumbFromLibrary ? '<span class="flag src">source</span>' : '<span class="flag gen">generated</span>',
+      flag: set.thumbFromLibrary ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
       value: set.copyThumbPrompt,
       html: presetRowHTML(p),
-      actions: [{ name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt' }, { name: 'copyThumbPromptProtected', label: 'Copy With Source-Image Protection' }],
-      issues: p.issues.filter(function (i) { return i.section === 'thumb'; })
+      actions: [{ name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt' }, { name: 'copyThumbPromptProtected', label: 'Copy With Source-Image Protection' }]
     }));
 
     /* 11/12/13 */
     out.push(secBlock({
       label: 'Section 11 · Labels (SEO)', flag: srcFlag(p, 'labels'),
       value: set.copyLabels || '— missing —',
-      actions: [{ name: 'copyLabels', label: 'Copy Labels' }],
-      issues: p.issues.filter(function (i) { return i.section === 'labels'; })
+      actions: [{ name: 'copyLabels', label: 'Copy Labels' }]
     }));
     out.push(secBlock({
       label: 'Section 12 · Permalink', flag: srcFlag(p, 'permalink'),
       value: p.fields.permalink || '— missing —',
-      actions: [{ name: 'copyPermalink', label: 'Copy Permalink' }],
-      issues: p.issues.filter(function (i) { return i.section === 'permalink'; })
+      actions: [{ name: 'copyPermalink', label: 'Copy Permalink' }]
     }));
     out.push(secBlock({
       label: 'Section 13 · Search Description', flag: srcFlag(p, 'search'),
       value: p.fields.search || '— missing —',
-      actions: [{ name: 'copySearchDesc', label: 'Copy Search Description' }],
-      issues: p.issues.filter(function (i) { return i.section === 'search'; })
+      actions: [{ name: 'copySearchDesc', label: 'Copy Search Description' }]
     }));
 
     out.push(customizePanel(p));
@@ -1520,6 +1529,34 @@ var PLX = (function () {
   }
 
   /* ---------------- customize panel ---------------- */
+  function varControlsInner(p, anchor) {
+    var c = p.custom; if (!c.present) return '';
+    var an = c.analysis || { vars: [] }; if (!an.vars.length) return '';
+    var vals = valuesFor(p);
+    var mode = S.customMode[pkey(p)] || {};
+    var out = [];
+    an.vars.forEach(function (v) {
+      var selVal = vals[v.name] || '';
+      var inCustom = (selVal && v.options.indexOf(selVal) === -1) || !!mode[v.name];
+      var customSel = inCustom ? '__custom__' : selVal;
+      var safe = v.name.replace(/[^a-zA-Z0-9]/g, '_');
+      var idc = 'var-' + anchor + '-' + safe;
+      out.push('<div class="var">');
+      out.push('<div class="vname">[' + escT(v.name) + ']' + (v.duplicates ? ' <span class="badge err" style="font-size:.66rem">declared ' + (v.duplicates + 1) + '×</span>' : '') + '</div>');
+      if (v.hint) out.push('<div class="hint">' + escT(v.hint) + '</div>');
+      if (v.options.length) {
+        out.push('<select id="' + idc + '" data-action="var" data-var="' + escA(v.name) + '" aria-label="Value for ' + escA(v.name) + '">');
+        out.push('<option value="">— choose —</option>');
+        v.options.forEach(function (op) { out.push('<option value="' + escA(op) + '"' + (selVal === op ? ' selected' : '') + '>' + escT(op) + '</option>'); });
+        out.push('<option value="__custom__"' + (customSel === '__custom__' ? ' selected' : '') + '>Custom…</option>');
+        out.push('</select>');
+      }
+      out.push('<input type="text" id="' + idc + '-txt" data-action="var" data-var="' + escA(v.name) + '" placeholder="' + escA(v.options.length ? 'Custom value (used when "Custom…" is selected)' : 'Type the replacement value') + '" value="' + escA(selVal) + '" aria-label="Replacement value for ' + escA(v.name) + '" style="margin-top:.35rem"' + (inCustom ? '' : ' hidden') + ' />');
+      out.push('</div>');
+    });
+    return out.join('');
+  }
+
   function customizePanel(p) {
     var c = p.custom, out = [];
     out.push('<div class="sec" id="customize-' + escA(p.uid) + '">');
@@ -1532,54 +1569,53 @@ var PLX = (function () {
     }
     var an = c.analysis || { vars: [], malformed: [], orphan: [] };
     if (!an.vars.length) out.push('<div class="val">Step 4 was found but no valid <code>[Variable Name]</code> definitions were parsed. Original text is untouched.</div>');
-    var vals = valuesFor(p);
+    out.push('<div class="varrow">' + varControlsInner(p, 'panel') + '</div>');
     an.vars.forEach(function (v) {
-      var bad = (!v.occ.before && !v.occ.prompt);
-      out.push('<div class="var' + (bad ? ' bad' : '') + '">');
-      out.push('<div class="vname">[' + escT(v.name) + ']' + (v.duplicates ? ' <span class="badge err" style="font-size:.66rem">declared ' + (v.duplicates + 1) + '×</span>' : '') + '</div>');
-      if (v.hint) out.push('<div class="hint">' + escT(v.hint) + '</div>');
-      var idc = 'var-' + escA(p.uid) + '-' + v.name.replace(/[^a-zA-Z0-9]/g, '_');
-      if (v.options.length) {
-        out.push('<select id="' + idc + '" data-action="var" data-var="' + escA(v.name) + '" aria-label="Value for ' + escA(v.name) + '">');
-        out.push('<option value="">— choose —</option>');
-        v.options.forEach(function (op) {
-          out.push('<option value="' + escA(op) + '"' + (vals[v.name] === op ? ' selected' : '') + '>' + escT(op) + '</option>');
-        });
-        out.push('<option value="__custom__"' + (vals[v.name] && v.options.indexOf(vals[v.name]) === -1 ? ' selected' : '') + '>Custom…</option>');
-        out.push('</select>');
-      }
-      var cur = vals[v.name] || '';
-      out.push('<input type="text" id="' + idc + '-txt" data-action="var" data-var="' + escA(v.name) + '" ' +
-        'placeholder="' + escA(v.options.length ? 'Custom value (used when "Custom…" is selected)' : 'Type the replacement value') + '" ' +
-        'value="' + escA(cur) + '" aria-label="Replacement value for ' + escA(v.name) + '" style="margin-top:.35rem" />');
-      out.push('<div class="occ">Occurrences replaced — <b>S3 ' + v.occ.before + '</b> · <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' · <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' · left as-is elsewhere ' + v.occ.other : '') + '</div>');
-      if (bad) out.push('<div class="issue error">ERROR · declared in Step 4 but absent from Section 3 and Section 6 — nothing will be replaced.</div>');
-      out.push('</div>');
+      out.push('<div class="occ">[' + escT(v.name) + '] — occurrences replaced: <b>S3 ' + v.occ.before + '</b> · <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' · <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' · left as-is elsewhere ' + v.occ.other : '') + '</div>');
     });
     out.push('</div>');
     return out.join('');
   }
   function wireVarControls(p) {
-    /* select+text pairing: the text input always owns the value; the select writes into it */
+    /* select+text pairing: supports multiple instances of dropdowns across sections */
     var scope = el('libbody'); if (!scope) return;
     scope.querySelectorAll('select[data-action="var"]').forEach(function (sel) {
       sel.addEventListener('change', function () {
         var name = sel.dataset.var, v = sel.value;
-        var box = scope.querySelector('input[data-var="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]');
-        if (v === '__custom__') { if (box) { box.value = ''; box.focus(); } return; }
-        if (box) box.value = v;
+        var k = pkey(p);
+        if (!S.customMode[k]) S.customMode[k] = {};
+        if (v === '__custom__') {
+          S.customMode[k][name] = true;
+          // Show all text inputs for this variable in the card
+          scope.querySelectorAll('input[data-action="var"][data-var="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]').forEach(function (box) {
+            box.hidden = false;
+            box.focus();
+          });
+          return;
+        }
+        delete S.customMode[k][name];
+        scope.querySelectorAll('input[data-action="var"][data-var="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]').forEach(function (box) {
+          box.value = v;
+          box.hidden = true;
+        });
         setVar(p, name, v);
       });
     });
     scope.querySelectorAll('input[data-action="var"]').forEach(function (inp) {
-      inp.addEventListener('input', function () { setVar(p, inp.dataset.var, inp.value); });
+      inp.addEventListener('input', function () {
+        var name = inp.dataset.var, v = inp.value;
+        scope.querySelectorAll('input[data-action="var"][data-var="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]').forEach(function (box) {
+          if (box !== inp) box.value = v;
+        });
+        setVar(p, name, v);
+      });
     });
   }
   function setVar(p, name, value) {
     var k = pkey(p);
     if (!S.custom[k]) S.custom[k] = {};
     if (value === undefined || value === '') delete S.custom[k][name]; else S.custom[k][name] = value;
-    if (value && p.custom.vars.some(function (v) { return v.options.length && v.options.indexOf(value) === -1; })) S.mode = 'customized';
+    if (value) S.mode = 'customized';
     S.dirty = { library: true, image: true, publisher: true };
     render();
   }
@@ -1591,15 +1627,19 @@ var PLX = (function () {
   }
 
   /* ---------------- TAB 2: Image Studio ---------------- */
+  /* ---------------- TAB 2: Image Studio ---------------- */
   function imgState(p) {
     var k = pkey(p);
-    if (!S.images[k]) S.images[k] = { before: null, after: null, thumb: null };
+    if (!S.images[k]) S.images[k] = { before: null, after: null, thumb: null, dupBefore: false, dupAfter: false };
     return S.images[k];
   }
   function renderImageTab() {
     var wrap = el('imagebody'), p = selectedPrompt(), L = lib();
-    if (!p || !L) { wrap.innerHTML = '<div class="lane"><div class="empty">Load a library and select a prompt first.</div></div>'; return; }
+    if (!p || !L) { wrap.innerHTML = '<div class="card"><div class="empty">Load a library and select a prompt first.</div></div>'; return; }
     var st = imgState(p), out = [], issues = p.issues;
+    var set = payloads(p)[currentMode(p)] || payloads(p).original;
+    var d = PLX.derive(p, { mode: currentMode(p), values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
+
     out.push('<div class="toolbar" style="justify-content:space-between;align-items:flex-end">');
     out.push('<div><span class="lab">Selected prompt</span><h2 class="cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' · ' + escT(p.fields.title || '(untitled)') + '</h2></div>');
     out.push('<div class="btnrow"><input type="file" id="imgInput" accept="image/*" multiple style="display:none" />' +
@@ -1607,75 +1647,86 @@ var PLX = (function () {
       '<button type="button" class="btn" data-action="swapslots">Swap Before ↔ After</button>' +
       '<button type="button" class="btn ghost" data-action="clearimages">Clear</button></div>');
     out.push('</div>');
-    var role = slotStatus(st);
-    out.push(roleBanner(st, role));
 
-    out.push('<div class="grid3">');
-    /* BEFORE */
-    out.push(laneHTML({
-      cls: 'before', head: 'BEFORE — Section 3', slot: st.before, keyName: 'before',
-      blocks: [
-        secBlock({
-          label: 'Prompt Title', value: p.fields.title,
-          actions: [{ name: 'copyTitle', label: 'Copy Title' }]
-        }),
-        secBlock({
-          label: 'Section 3 · Before Image Prompt', note: 'raw / problem state',
-          flag: p.fields.before ? '<span class="flag src">source</span>' : '<span class="flag miss">missing</span>',
-          value: payload(p, 'copyBeforePrompt'),
-          actions: [{ name: 'copyBeforePrompt', label: 'Copy Before Prompt' }, { name: 'copyBeforeFile', label: 'Copy Before Title', filename: true }]
-        }),
-        secBlock({ label: 'File name', note: 'role from suffix, not upload order', value: payload(p, 'filenames').before, actions: [{ name: 'copyBeforeFile', label: 'Copy filename' }] }),
-        secBlock({ label: 'Before Alt', value: payload(p, 'copyBeforeAlt') || '— missing —', actions: [{ name: 'copyBeforeAlt', label: 'Copy Before Alt' }] })
+    /* Everything vertical: PATCH-06 required order */
+    out.push('<div class="vflow">');
+
+    /* 1. Before Prompt */
+    out.push(secBlock({
+      cls: 'before', label: 'Before Prompt', note: 'Section 3 · raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      flag: p.fields.before ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      value: set.copyBeforePrompt,
+      actions: [
+        { name: 'copyBeforePrompt', label: 'Copy Before Prompt' },
+        { name: 'copyBeforeOriginal', label: 'Copy Original Prompt' }
       ]
     }));
-    /* AFTER */
-    out.push(laneHTML({
-      cls: 'after', head: 'AFTER — Sections 6 + 7', slot: st.after, keyName: 'after',
-      blocks: [
-        secBlock({
-          label: 'Section 6 · Prompt', flag: p.fields.prompt ? '<span class="flag src">source</span>' : '<span class="flag miss">missing</span>',
-          value: payload(p, 'copyPrompt'),
-          actions: [{ name: 'copyPrompt', label: 'Copy Prompt' }]
-        }),
-        secBlock({
-          label: 'Section 7 · Negative Prompt', flag: p.fields.negative ? '<span class="flag src">source</span>' : '<span class="flag miss">missing</span>',
-          value: payload(p, 'copyNegative') || '— missing —',
-          actions: [{ name: 'copyNegative', label: 'Copy Negative' }, { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }]
-        }),
-        secBlock({ label: 'File name', value: payload(p, 'filenames').after, actions: [{ name: 'copyAfterFile', label: 'Copy filename' }] }),
-        secBlock({ label: 'After Alt', value: payload(p, 'copyAfterAlt') || '— missing —', actions: [{ name: 'copyAfterAlt', label: 'Copy After Alt' }] })
+
+    /* 2. Before Title */
+    out.push(secBlock({
+      label: 'Before Title', note: 'file name convention',
+      value: payload(p, 'filenames').before,
+      actions: [{ name: 'copyBeforeTitle', label: 'Copy Before Title', filename: true }]
+    }));
+
+    /* 3. Prompt */
+    out.push(secBlock({
+      cls: 'after', label: 'Prompt', note: 'Section 6 · main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      flag: p.fields.prompt ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      value: set.copyPrompt,
+      actions: [
+        { name: 'copyPrompt', label: 'Copy Prompt' },
+        { name: 'copyPromptOriginal', label: 'Copy Original Prompt' }
       ]
     }));
-    /* THUMBNAIL */
-    var d = PLX.derive(p, { mode: currentMode(p), values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
-    out.push(laneHTML({
-      cls: 'thumb', head: 'THUMBNAIL — Section 10 + supplied images', slot: st.thumb, keyName: 'thumb',
-      blocks: [
-        secBlock({
-          label: 'Section 10 · Generator Prompt',
-          note: d.thumbFromLibrary ? 'from library' : 'engine style preset — Section 10 unavailable in this file',
-          flag: d.thumbFromLibrary ? '<span class="flag src">source</span>' : '<span class="flag gen">generated</span>',
-          value: d.thumb, html: presetRowHTML(p) + suffixMenuHTML(p),
-          actions: [{ name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt' }]
-        }),
-        secBlock({
-          label: 'Short title + file name', note: 'deterministic abbreviation',
-          value: payload(p, 'filenamesShort').thumb + '\n(full-title variant: ' + payload(p, 'filenames').thumb + ')',
-          actions: [{ name: 'copyThumbFileShort', label: 'Copy Short Filename' }, { name: 'copyThumbFile', label: 'Copy Full Filename' }]
-        }),
-        secBlock({
-          label: 'Source image protection', note: 'appended after the prompt text only',
-          html: '<div class="val">' + escT(PLX.PROTECTION) + '</div>',
-          actions: [{ name: 'copyThumbPromptProtected', label: 'Copy Prompt + Protection' }]
-        })
+
+    /* 4. Negative Prompt */
+    out.push(secBlock({
+      cls: 'after', label: 'Negative Prompt', note: 'Section 7',
+      flag: p.fields.negative ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      value: set.copyNegative || '— missing —',
+      actions: [
+        { name: 'copyNegative', label: 'Copy Negative' },
+        { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }
       ]
     }));
+
+    /* 5. After Title */
+    out.push(secBlock({
+      label: 'After Title', note: 'file name convention',
+      value: payload(p, 'filenames').after,
+      actions: [{ name: 'copyAfterTitle', label: 'Copy After Title', filename: true }]
+    }));
+
+    /* 6. Thumbnail Generator Prompt (Part B: automatically includes source protection) */
+    var thumbPromptAutoProtected = d.thumbWithProtection;
+    out.push(secBlock({
+      cls: 'thumb', label: 'Thumbnail Generator Prompt',
+      note: d.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
+      flag: d.thumbFromLibrary ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
+      value: thumbPromptAutoProtected,
+      html: presetRowHTML(p) + suffixMenuHTML(p),
+      actions: [
+        { name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt' },
+        { name: 'copyThumbPromptProtected', label: 'Copy With Source-Image Protection' }
+      ]
+    }));
+
+    /* 7. Thumbnail Controls */
+    var role = slotStatus(st);
+    out.push('<div class="lane thumb"><h3>Thumbnail Controls</h3>');
+    out.push(roleBanner(st, role));
+    out.push(thumbPreviewHTML(st));
+    out.push('<div class="sectop" style="margin-top:.7rem"><span class="lab">Thumbnail File Names</span>');
+    out.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
+    out.push('<button type="button" class="cbtn spec" data-action="copy" data-copy="copyThumbFullTitle">Copy Thumbnail Full Title</button>');
+    out.push('<button type="button" class="cbtn" data-action="copy" data-copy="copyThumbShortTitle">Copy Thumbnail Short Title</button>');
+    out.push('</span></div>');
+    out.push('<div class="val" style="font-size:.8rem;color:var(--dim)">Full: ' + escT(payload(p, 'filenames').thumb) + '<br>Short: ' + escT(payload(p, 'filenamesShort').thumb) + '</div>');
     out.push('</div>');
-    if (issues.filter(function (i) { return /BEFORE|AFTER|alt|MISSING_/.test(i.code); }).length) {
-      out.push('<div class="sec"><div class="sectop"><span class="lab">Image-related validation</span></div>' +
-        issues.filter(function (i) { return /BEFORE|AFTER|ALT|MISSING_/.test(i.code); }).map(issueHTML).join('') + '</div>');
-    }
+
+    out.push('</div>'); /* end .vflow */
+
     wrap.innerHTML = out.join('');
     wireMenu(p);
   }
@@ -1709,13 +1760,45 @@ var PLX = (function () {
     return 'partial';
   }
   function roleBanner(st, status) {
-    var msg, cls;
-    if (status === 'empty') { msg = 'No images attached. Before/After roles come from the file name suffix (…Before.jpg / …After.jpg) — upload order is ignored. Attach files to verify the pair.'; cls = 'info'; }
-    else if (status === 'ok') { msg = 'Pair verified: BEFORE and AFTER roles were both read from file names.'; cls = 'info'; }
-    else if (status === 'partial') { msg = 'Only one side is attached. Publishing continues, but the thumbnail prompt expects two source images.'; cls = 'warn'; }
-    else if (status === 'conflict') { msg = 'Both attached files claim the same role. Resolve before generating the thumbnail — the engine will not guess.'; cls = 'error'; }
-    else { msg = 'Roles look reversed (the BEFORE slot holds an “After” file). Use “Swap Before ↔ After” or reassign manually — nothing is auto-swapped.'; cls = 'error'; }
-    return '<div class="issue ' + cls + '" role="status"><b>' + cls.toUpperCase() + '</b> · ' + escT(msg) + '</div>';
+    var parts = [];
+    if (st.dupBefore) parts.push('<div class="issue error"><b>ERROR</b> · Duplicate Before: multiple Before images detected.</div>');
+    if (st.dupAfter) parts.push('<div class="issue error"><b>ERROR</b> · Duplicate After: multiple After images detected.</div>');
+    if (!st.before) parts.push('<div class="issue warn"><b>VALIDATION</b> · Missing Before image.</div>');
+    if (!st.after) parts.push('<div class="issue warn"><b>VALIDATION</b> · Missing After image.</div>');
+    if (status === 'ok' && !st.dupBefore && !st.dupAfter) {
+      parts.push('<div class="issue info" style="background:#10281c;border-color:var(--ok);color:#a6e8c6"><b>VERIFIED</b> · Pair verified: BEFORE and AFTER roles both detected from filenames. <span class="flag ok">PAIR VERIFIED</span></div>');
+    } else if (status === 'conflict') {
+      parts.push('<div class="issue error"><b>ERROR</b> · Both attached files claim the same role. Resolve before generating the thumbnail.</div>');
+    } else if (status === 'reversed') {
+      parts.push('<div class="issue error"><b>ERROR</b> · Roles look reversed (the BEFORE slot holds an “After” file). Use “Swap Before ↔ After”.</div>');
+    }
+    return parts.join('');
+  }
+  function thumbPreviewHTML(st) {
+    var isOk = st.before && st.after && st.before.role === 'before' && st.after.role === 'after' && !st.dupBefore && !st.dupAfter;
+    var out = [];
+    out.push('<div class="sec" style="margin-top:.6rem">');
+    out.push('<div class="sectop"><span class="lab">Thumbnail Source Image Preview</span>');
+    if (isOk) out.push('<span class="flag ok">PAIR VERIFIED</span>');
+    else out.push('<span class="flag miss">UNVERIFIED PAIR</span>');
+    out.push('</div>');
+    out.push('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.6rem;margin-top:.4rem">');
+    /* BEFORE box */
+    out.push('<div class="slot" data-filled="' + (st.before ? 'true' : 'false') + '">');
+    out.push('<div class="who"><span class="badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
+    out.push('<div class="fname">' + (st.before ? escT(st.before.name) : 'No file (Missing Before image)') + '</div>');
+    if (st.before && st.before.url) out.push('<img alt="Before preview" src="' + escA(st.before.url) + '" />');
+    out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="before">' + (st.before ? 'Replace' : 'Choose Before image') + '</button></div>');
+    out.push('</div>');
+    /* AFTER box */
+    out.push('<div class="slot" data-filled="' + (st.after ? 'true' : 'false') + '">');
+    out.push('<div class="who"><span class="badge" style="background:#1e7d54;color:#fff;margin-right:.3rem">AFTER</span> Detected Role: ' + (st.after ? escT(st.after.roleLabel) : 'none') + '</div>');
+    out.push('<div class="fname">' + (st.after ? escT(st.after.name) : 'No file (Missing After image)') + '</div>');
+    if (st.after && st.after.url) out.push('<img alt="After preview" src="' + escA(st.after.url) + '" />');
+    out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="after">' + (st.after ? 'Replace' : 'Choose After image') + '</button></div>');
+    out.push('</div>');
+    out.push('</div></div>');
+    return out.join('');
   }
   function suffixMenuHTML(p) {
     var cur = p.suffix || C.defaultSuffix;
@@ -1750,18 +1833,29 @@ var PLX = (function () {
     if (st[which] && st[which].url) { try { URL.revokeObjectURL(st[which].url); } catch (e) { } }
     var url = null; try { url = URL.createObjectURL(file); } catch (e) { url = null; }
     st[which] = { name: file.name, size: file.size, type: file.type, role: which === 'thumb' ? 'thumb' : det.role, roleLabel: det.label, base: det.base, url: url };
+    if (which === 'before') st.dupBefore = false;
+    if (which === 'after') st.dupAfter = false;
     S.dirty = { image: true, publisher: true }; touch(p); render();
   }
   function assignFiles(files) {
     var p = selectedPrompt(); if (!p) { notice('err', 'Select a prompt first.'); return; }
     var st = imgState(p), i, placed = [], conflicts = [];
+    var seen = {};
     for (i = 0; i < files.length; i++) {
       var f = files[i];
       if (!/^image\//.test(f.type || '') && !/\.(jpe?g|png|webp|gif|avif)$/i.test(f.name)) { conflicts.push(f.name + ' — not an image file'); continue; }
       var det = PLX.detectRole(f.name);
       var target = det.role === 'before' ? 'before' : det.role === 'after' ? 'after' : det.role === 'thumb' ? 'thumb' : null;
       if (!target) { conflicts.push(f.name + ' — role could not be detected from the file name'); continue; }
-      if (st[target]) { conflicts.push(f.name + ' — the ' + target.toUpperCase() + ' slot is occupied (use Replace or Swap)'); continue; }
+      if (seen[target]) {
+        conflicts.push('Duplicate ' + (target === 'before' ? 'Before' : 'After') + ' image detected: ' + f.name);
+        if (target === 'before') st.dupBefore = true;
+        if (target === 'after') st.dupAfter = true;
+        continue;
+      }
+      seen[target] = true;
+      if (target === 'before') st.dupBefore = false;
+      if (target === 'after') st.dupAfter = false;
       place(p, target, f); placed.push(target + ' ← ' + f.name);
     }
     notice(placed.length ? 'ok' : 'warn', (placed.length ? 'Placed by filename role: ' + placed.map(escT).join(', ') + '. ' : '') + (conflicts.length ? '<br>' + conflicts.map(escT).join('<br>') : ''));
@@ -1790,28 +1884,37 @@ var PLX = (function () {
     if (blocked) out.push('<div class="issue error"><b>ERROR</b> · ' + escT(role === 'reversed' ? 'Before/After roles look reversed.' : 'Both image slots claim the same role.') + ' Copying is blocked until the Image Studio pair is correct (configurable).</div>');
 
     out.push('<div class="lane"><h3>Blogger field mapping</h3><div class="fields">');
-    [['title', 'Title', 'Section 1', 'copyTitle'],
-     ['altThumb', 'Thumbnail Alt', 'Section 4', 'copyThumbAlt'],
-     ['altBefore', 'Before Image Alt', 'Section 5', 'copyBeforeAlt'],
-     ['altAfter', 'After Image Alt', 'Section 5', 'copyAfterAlt'],
-     ['labels', 'Labels', 'Section 11', 'copyLabels'],
-     ['permalink', 'Permalink / URL slug', 'Section 12', 'copyPermalink'],
-     ['search', 'Search Description', 'Section 13', 'copySearchDesc']].forEach(function (row) {
-      var key = row[0], base = payload(p, row[3]), val = ovr[key] !== undefined ? ovr[key] : base, edited = ovr[key] !== undefined;
-      out.push('<div class="field"><div class="flab"><span>' + escT(row[1]) + '</span>' +
-        '<span class="src" data-base-label="' + escA(row[2]) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 generated fallback' : '') + '">' + escT(row[2]) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · generated fallback' : '')) + '</span></div>');
-      out.push('<textarea rows="2" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row[1]) + ' for Blogger">' + escA(val) + '</textarea>');
-      out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-copy="' + row[3] + '"' + (blocked ? ' data-blocked="1"' : '') + '>Copy</button>' +
-        (edited ? '<button type="button" class="cbtn ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>' : '') +
-        '</div></div>');
+
+    /* PATCH-10: All 8 publisher blocks in locked order with exact copy button names */
+    var pubBlocks = [
+      { key: 'title', label: 'Prompt Title', sec: 'Section 1', copyKey: 'copyTitle', btnLabel: 'Copy Title', rows: 2 },
+      { key: 'altThumb', label: 'Thumbnail Alt', sec: 'Section 4', copyKey: 'copyThumbAlt', btnLabel: 'Copy Thumbnail Alt', rows: 2 },
+      { key: 'altBefore', label: 'Before Alt', sec: 'Section 5', copyKey: 'copyBeforeAlt', btnLabel: 'Copy Before Alt', rows: 2 },
+      { key: 'altAfter', label: 'After Alt', sec: 'Section 5', copyKey: 'copyAfterAlt', btnLabel: 'Copy After Alt', rows: 2 },
+      { key: '__body', label: 'Prompt + Negative + How To Use', sec: 'Sections 6 + 7 + 9', copyKey: 'copyFullBody', btnLabel: 'Copy Full Body', rows: 14, isBody: true },
+      { key: 'labels', label: 'Labels', sec: 'Section 11', copyKey: 'copyLabels', btnLabel: 'Copy Labels', rows: 2 },
+      { key: 'permalink', label: 'Permalink', sec: 'Section 12', copyKey: 'copyPermalink', btnLabel: 'Copy Permalink', rows: 2 },
+      { key: 'search', label: 'Search Description', sec: 'Section 13', copyKey: 'copySearchDesc', btnLabel: 'Copy Search Description', rows: 2 }
+    ];
+
+    pubBlocks.forEach(function (row) {
+      var key = row.key;
+      var base = (key === '__body') ? payload(p, 'copyFullBody') : payload(p, row.copyKey);
+      var val = ovr[key] !== undefined ? ovr[key] : base;
+      var edited = ovr[key] !== undefined;
+
+      out.push('<div class="field' + (row.isBody ? ' body' : '') + '">');
+      out.push('<div class="flab"><span>' + escT(row.label) + '</span>');
+      out.push('<span class="src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
+        escT(row.sec) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : '')) + '</span></div>');
+      out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
+      out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-copy="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
+      if (row.isBody) out.push('<button type="button" class="cbtn" data-action="copybodytext">Copy from this box</button>');
+      if (edited) out.push('<button type="button" class="cbtn ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>');
+      out.push('</div></div>');
     });
-    out.push('<div class="field body"><div class="flab"><span>Post Body — Full Content</span><span class="src">Sections 6 + 7 + 9 · ' + escT(payload(p, 'copyFullBody').length) + ' chars</span></div>');
-    out.push('<textarea rows="14" data-action="ovr" data-field="__body" aria-label="Blogger post body">' + escA(ovr.__body !== undefined ? ovr.__body : payload(p, 'copyFullBody')) + '</textarea>');
-    out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-copy="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
-      '<button type="button" class="cbtn" data-action="copybodytext">Copy from this box</button>' +
-      (ovr.__body !== undefined ? '<button type="button" class="cbtn ghost" data-action="revert" data-field="__body">Revert</button>' : '') +
-      '</div></div>');
-    out.push('</div>');
+
+    out.push('</div></div>');
 
     out.push('<div class="sec"><div class="sectop"><span class="lab">Output options</span></div>');
     out.push('<label class="check"><input type="checkbox" data-action="cfg" data-cfg="bodyExtras"' + (C.bodyExtras === 'v2.4' ? ' checked' : '') + ' />' +
@@ -2005,10 +2108,15 @@ var PLX = (function () {
   function handleCopy(name, btn) {
     var p = selectedPrompt(); if (!p) { toast('Nothing selected', true); return; }
     if (name === 'copyTools') { var t = p.fields.tools || ''; if (!t) { toast('No Section 8 data', true); return; } copyText(t, btn); return; }
-    if (name === 'copyBeforeFile') { copyText(payload(p, 'filenames').before, btn); return; }
-    if (name === 'copyAfterFile') { copyText(payload(p, 'filenames').after, btn); return; }
-    if (name === 'copyThumbFile') { copyText(payload(p, 'filenames').thumb, btn); return; }
-    if (name === 'copyThumbFileShort') { copyText(payload(p, 'filenamesShort').thumb, btn); return; }
+    if (name === 'copyBeforeFile' || name === 'copyBeforeTitle') { copyText(payload(p, 'filenames').before, btn); return; }
+    if (name === 'copyAfterFile' || name === 'copyAfterTitle') { copyText(payload(p, 'filenames').after, btn); return; }
+    if (name === 'copyThumbFile' || name === 'copyThumbFullTitle') { copyText(payload(p, 'filenames').thumb, btn); return; }
+    if (name === 'copyThumbFileShort' || name === 'copyThumbShortTitle') { copyText(payload(p, 'filenamesShort').thumb, btn); return; }
+    /* PATCH-03: explicit Original / Customized copy buttons */
+    if (name === 'copyBeforeOriginal') { copyText(p.raw.before || p.fields.before, btn); return; }
+    if (name === 'copyBeforeCustom') { var cb = payloads(p).customized; copyText(cb ? cb.copyBeforePrompt : (p.raw.before || p.fields.before), btn); return; }
+    if (name === 'copyPromptOriginal') { copyText(p.raw.prompt || p.fields.prompt, btn); return; }
+    if (name === 'copyPromptCustom') { var cp = payloads(p).customized; copyText(cp ? cp.copyPrompt : (p.raw.prompt || p.fields.prompt), btn); return; }
     var v = payload(p, name);
     if (v === undefined || v === null) { toast('No data for that action', true); return; }
     if (String(v).indexOf('— missing —') !== -1 || String(v).indexOf('not present in this library') !== -1) { toast('Nothing to copy — section unavailable', true); return; }
@@ -2023,7 +2131,7 @@ var PLX = (function () {
       if (t.disabled) return;
       S.mode = t.dataset.mode; S.dirty = { library: true, image: true, publisher: true }; render(); return;
     }
-    if (a === 'clearvars') { if (p) { delete S.custom[pkey(p)]; S.mode = 'original'; touch(p); S.dirty = { library: true, image: true, publisher: true }; render(); notice('info', 'Customization cleared — all copies return to byte-exact library text.'); } return; }
+    if (a === 'clearvars') { if (p) { delete S.custom[pkey(p)]; delete S.customMode[pkey(p)]; S.mode = 'original'; touch(p); S.dirty = { library: true, image: true, publisher: true }; render(); notice('info', 'Customization cleared — all copies return to byte-exact library text.'); } return; }
     if (a === 'suffix') {
       if (p) { p.suffix = t.dataset.suffix; touch(p); S.dirty = { library: true, image: true, publisher: true }; render(); }
       return;
@@ -2216,5 +2324,5 @@ var PLX = (function () {
 })();
 
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e813b19e74491b',t:'MTc4OTk4MzI5Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
