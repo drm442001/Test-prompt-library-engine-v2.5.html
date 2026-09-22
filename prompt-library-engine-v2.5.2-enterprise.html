@@ -2234,23 +2234,35 @@ var PLX = (function () {
   }
 
   /* ---------------- Universal Card v2.1 Compatibility Layer (PLE-11) - Engine only, do not modify Universal Card source ---------------- */
+  /* PLE-11: Verify Export Structure mapping Engine -> Universal Card without modifying Universal Card source */
   function toUniversalCard(p, opts) {
     opts = opts || {};
     var mode = opts.mode || currentMode(p);
     var set = payloads(p)[mode] || payloads(p).original;
+    var setOriginal = payloads(p).original;
+    var setCustomized = payloads(p).customized || setOriginal;
     var d = PLX.derive(p, { mode: mode, values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
+    var dOriginal = PLX.derive(p, { mode: 'original', values: {}, preset: S.preset, suffix: p.suffix || C.defaultSuffix });
+    var dCustom = PLX.derive(p, { mode: 'customized', values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
     // Field mapping verified for Universal Card v2.1 expected structure
+    // Engine Field -> Universal Card Field per PLE-11 spec table
+    // Prompt Title -> Card Title, Before Prompt -> Before Prompt, Prompt -> Main Prompt, Negative -> Negative, HowTo -> HowTo, Labels/Permalink/Search -> same
     return {
       version: '2.1',
+      // Strict mapping per PLE-11 table
+      cardTitle: set.copyTitle || p.fields.title || '',
       promptTitle: set.copyTitle || p.fields.title || '',
+      title: set.copyTitle || p.fields.title || '',
+      beforePrompt: set.copyBeforePrompt || d.S3 || p.fields.before || '',
+      mainPrompt: set.copyPrompt || d.S6 || p.fields.prompt || '',
       prompt: set.copyPrompt || d.S6 || p.fields.prompt || '',
       negativePrompt: set.copyNegative || d.S7 || p.fields.negative || '',
-      beforePrompt: set.copyBeforePrompt || d.S3 || p.fields.before || '',
-      thumbnailPrompt: set.copyThumbPromptProtected || d.thumbWithProtection || set.copyThumbPrompt || d.thumb || '',
+      howToUse: set.copyHowto || d.S9 || p.fields.howto || '',
       labels: set.copyLabels || p.fields.labels || '',
       permalink: set.copyPermalink || p.fields.permalink || '',
       searchDescription: set.copySearchDesc || p.fields.search || '',
-      // Additional compatibility fields for Universal Card expected structure
+      // Extended compatibility for Universal Card popup formatting
+      thumbnailPrompt: set.copyThumbPromptProtected || d.thumbWithProtection || set.copyThumbPrompt || d.thumb || '',
       thumbnailAlt: set.copyThumbAlt || '',
       beforeAlt: set.copyBeforeAlt || '',
       afterAlt: set.copyAfterAlt || '',
@@ -2259,7 +2271,38 @@ var PLX = (function () {
       filenamesShort: set.filenamesShort || d.filenamesShort || {},
       mode: mode,
       promptNumber: p.num || '',
-      sourceName: (lib() && lib().sourceName) || ''
+      sourceName: (lib() && lib().sourceName) || '',
+      // Placeholder Compatibility per PLE-11 C
+      original: {
+        promptTitle: setOriginal.copyTitle || p.fields.title || '',
+        cardTitle: setOriginal.copyTitle || p.fields.title || '',
+        beforePrompt: setOriginal.copyBeforePrompt || dOriginal.S3 || p.fields.before || '',
+        mainPrompt: setOriginal.copyPrompt || dOriginal.S6 || p.fields.prompt || '',
+        prompt: setOriginal.copyPrompt || dOriginal.S6 || p.fields.prompt || '',
+        negativePrompt: setOriginal.copyNegative || dOriginal.S7 || p.fields.negative || '',
+        howToUse: setOriginal.copyHowto || dOriginal.S9 || p.fields.howto || '',
+        // Original must preserve [] placeholders
+        hasPlaceholders: /\[[^\]]+\]/.test(setOriginal.copyPrompt || p.fields.prompt || '')
+      },
+      customized: {
+        promptTitle: setCustomized.copyTitle || p.fields.title || '',
+        cardTitle: setCustomized.copyTitle || p.fields.title || '',
+        beforePrompt: setCustomized.copyBeforePrompt || dCustom.S3 || p.fields.before || '',
+        mainPrompt: setCustomized.copyPrompt || dCustom.S6 || p.fields.prompt || '',
+        prompt: setCustomized.copyPrompt || dCustom.S6 || p.fields.prompt || '',
+        negativePrompt: setCustomized.copyNegative || dCustom.S7 || p.fields.negative || '',
+        howToUse: setCustomized.copyHowto || dCustom.S9 || p.fields.howto || '',
+        // Customized must be compatible with popup (no [] placeholders)
+        isCompatible: !/\[[^\]]+\]/.test(setCustomized.copyPrompt || '')
+      },
+      // Metadata Compatibility per PLE-11 D
+      metadata: {
+        title: set.copyTitle || p.fields.title || '',
+        category: (String(set.copyLabels || p.fields.labels || '').split(',')[0] || '').trim(),
+        labels: set.copyLabels || p.fields.labels || '',
+        searchDescription: set.copySearchDesc || p.fields.search || '',
+        permalink: set.copyPermalink || p.fields.permalink || ''
+      }
     };
   }
   function exportUniversalCard(L, opts) {
