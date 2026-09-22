@@ -72,13 +72,13 @@
 .mgsplx .pitem[aria-current="true"]{border-color:var(--brand);background:#1c2445;color:#fff}
 .mgsplx .pitem .n{color:var(--brand2);font-weight:800;margin-right:.35rem}
 .mgsplx .count{font-size:.74rem;color:var(--dim);text-align:right;margin-top:.4rem}
-.mgsplx .card,.mgsplx .lane{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem}
+.mgsplx .card,.mgsplx .lane{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
 .mgsplx .cardhead{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.85rem}
 .mgsplx .num{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#0f1220;font-weight:800;font-size:.82rem;
   padding:.22rem .6rem;border-radius:999px;white-space:nowrap}
 .mgsplx .tier{font-size:.7rem;color:var(--dim);border:1px solid var(--line2);border-radius:999px;padding:.12rem .5rem}
 .mgsplx .cardtitle{font-size:1.02rem;font-weight:750;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
-.mgsplx .sec{background:var(--panel2);border:1px solid #242a44;border-radius:.7rem;padding:.7rem .8rem;margin-bottom:.65rem}
+.mgsplx .sec{background:var(--panel2);border:1px solid #242a44;border-radius:.7rem;padding:.7rem .8rem;margin-bottom:.65rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .mgsplx .sec.gen{background:#12172f;border-color:#3a4470}
 .mgsplx .sec.miss{background:#141527;border-style:dashed;color:var(--dim)}
 .mgsplx .sectop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
@@ -1493,10 +1493,7 @@ var PLX = (function () {
     }));
 
     out.push(customizePanel(p));
-    if (p.unknown.length) {
-      out.push('<div class="sec miss"><div class="sectop"><span class="lab">Unmapped headings preserved <em>(' + p.unknown.length + ')</em></span></div><ul class="howto">' +
-        p.unknown.map(function (u) { return '<li>' + escT(u.heading) + (u.text ? ' — ' + escT(trim(u.text).slice(0, 80)) : '') + '</li>'; }).join('') + '</ul></div>');
-    }
+    /* PLE-01 Prompt A: validation messages removed from Prompt Library — kept only in Blog Publisher Validation Center */
     out.push(exportRow(p, L));
     out.push('</article>');
     return out.join('');
