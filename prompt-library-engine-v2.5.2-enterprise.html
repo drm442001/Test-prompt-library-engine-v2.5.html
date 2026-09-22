@@ -848,15 +848,17 @@ var PLX = (function () {
     ].join('\n')
   };
 
-  /* Locked §16: source images are references, never edit targets. Engine-appended, never inside copied prompt text. */
+  /* Locked §16: source images are references, never edit targets. Engine-appended, never inside copied prompt text. PLE-07 Critical Protection */
   var PROTECTION = [
     'SOURCE IMAGE PROTECTION (mandatory):',
-    'Use the supplied Before image exactly as the BEFORE source image.',
-    'Use the supplied After image exactly as the AFTER source image.',
-    'Do not edit, retouch, enhance, recolor, regenerate, replace, or otherwise alter either supplied source image.',
-    'Do not swap the Before and After roles.',
-    'Only create the thumbnail composition/layout around the supplied source images.',
-    'The source images are already prepared assets.'
+    'Use supplied Before image exactly as BEFORE source.',
+    'Use supplied After image exactly as AFTER source.',
+    'Do not enhance either image.',
+    'Do not retouch either image.',
+    'Do not recolor either image.',
+    'Do not regenerate either image.',
+    'Do not swap image positions.',
+    'Only create thumbnail composition around supplied images.'
   ].join('\n');
 
   function extractFeatures(labels, howto) {
@@ -1006,7 +1008,7 @@ var PLX = (function () {
       protection: PROTECTION,
       thumbWithProtection: (function(){
         var v = String(thumb || '');
-        if (/Use the supplied Before image exactly as the BEFORE source image\./i.test(v) && /Use the supplied After image exactly as the AFTER source image\./i.test(v)) return v;
+        if (/SOURCE IMAGE PROTECTION/i.test(v)) return v;
         return v ? (v + '\n\n' + PROTECTION) : PROTECTION;
       })()
     };
@@ -1212,7 +1214,7 @@ var PLX = (function () {
     function pick(src, key) { return (ovr[key] !== undefined && ovr[key] !== '') ? ovr[key] : src; }
     function wrapP(txt) {
       var v = String(txt || '');
-      if (/Use the supplied Before image exactly as the BEFORE source image\./i.test(v) && /Use the supplied After image exactly as the AFTER source image\./i.test(v)) return v;
+      if (/SOURCE IMAGE PROTECTION/i.test(v)) return v;
       return v ? (v + '\n\n' + PLX.PROTECTION) : PLX.PROTECTION;
     }
     function mkSet(d0) {
@@ -1819,13 +1821,17 @@ var PLX = (function () {
     if (slot) {
       parts.push('<div class="who">' + escT(keyName === 'thumb' ? 'Thumbnail file' : keyName) + '</div>');
       parts.push('<div class="fname">' + escT(slot.name) + '</div>');
-      parts.push('<div class="kv"><span><b>' + escT(slot.roleLabel || 'SOURCE ROLE NOT DETECTED') + '</b></span>' + (slot.role === 'before' || slot.role === 'after' ? '<span>SOURCE VERIFIED</span>' : '<span>SOURCE ROLE NOT DETECTED</span>') + '<span>from filename (not upload order)</span></div>');
+      var badgeText = 'SOURCE ROLE NOT DETECTED';
+      if (slot.role === 'before') badgeText = 'BEFORE IMAGE \u2014 SOURCE VERIFIED';
+      else if (slot.role === 'after') badgeText = 'AFTER IMAGE \u2014 SOURCE VERIFIED';
+      else if (slot.role === 'thumb') badgeText = 'THUMBNAIL \u2014 SOURCE VERIFIED';
+      parts.push('<div class="kv"><span><b>' + escT(badgeText) + '</b></span><span>from filename (not upload order)</span></div>');
       if (slot.url) parts.push('<img alt="Attached ' + escA(keyName) + ' preview" src="' + escA(slot.url) + '" />');
       parts.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="' + keyName + '">Replace</button>');
       if (keyName !== 'thumb') parts.push('<button type="button" class="cbtn" data-action="assignother" data-slot="' + keyName + '">Send to ' + (keyName === 'before' ? 'After' : 'Before') + '</button>');
       parts.push('<button type="button" class="cbtn ghost" data-action="unassign" data-slot="' + keyName + '">Remove</button></div>');
     } else {
-      parts.push('<div class="who">' + escT(keyName) + '</div><div class="fname" style="color:#8b93ad;font-weight:500">empty — no file assigned</div>');
+      parts.push('<div class="who">' + escT(keyName) + '</div><div class="fname" style="color:#8b93ad;font-weight:500">empty \u2014 no file assigned</div>');
       parts.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="' + keyName + '">Choose file</button></div>');
     }
     parts.push('</div>');
@@ -1862,14 +1868,16 @@ var PLX = (function () {
     out.push('<div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.4rem">');
     /* BEFORE box */
     out.push('<div class="slot" data-filled="' + (st.before ? 'true' : 'false') + '">');
-    out.push('<div class="who"><span class="badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
+    var beforeBadge = st.before && st.before.role === 'before' ? 'BEFORE IMAGE \u2014 SOURCE VERIFIED' : 'SOURCE ROLE NOT DETECTED';
+    out.push('<div class="who"><span class="badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> ' + escT(beforeBadge) + ' \u2014 Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
     out.push('<div class="fname">' + (st.before ? escT(st.before.name) : 'No file (Missing Before image)') + '</div>');
     if (st.before && st.before.url) out.push('<img alt="Before preview" src="' + escA(st.before.url) + '" />');
     out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="before">' + (st.before ? 'Replace' : 'Choose Before image') + '</button></div>');
     out.push('</div>');
     /* AFTER box */
     out.push('<div class="slot" data-filled="' + (st.after ? 'true' : 'false') + '">');
-    out.push('<div class="who"><span class="badge" style="background:#1e7d54;color:#fff;margin-right:.3rem">AFTER</span> Detected Role: ' + (st.after ? escT(st.after.roleLabel) : 'none') + '</div>');
+    var afterBadge = st.after && st.after.role === 'after' ? 'AFTER IMAGE \u2014 SOURCE VERIFIED' : 'SOURCE ROLE NOT DETECTED';
+    out.push('<div class="who"><span class="badge" style="background:#1e7d54;color:#fff;margin-right:.3rem">AFTER</span> ' + escT(afterBadge) + ' \u2014 Detected Role: ' + (st.after ? escT(st.after.roleLabel) : 'none') + '</div>');
     out.push('<div class="fname">' + (st.after ? escT(st.after.name) : 'No file (Missing After image)') + '</div>');
     if (st.after && st.after.url) out.push('<img alt="After preview" src="' + escA(st.after.url) + '" />');
     out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="after">' + (st.after ? 'Replace' : 'Choose After image') + '</button></div>');

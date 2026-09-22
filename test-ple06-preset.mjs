@@ -79,14 +79,12 @@ pass = chk('presetRowHTML contains new note regenerates only Section 10', html.i
 pass = chk('presetRowHTML does NOT contain old note absent from library', !html.includes('applies only when Section 10 is absent')) && pass;
 
 // Console Errors = 0 via syntax check
-import { execSync } from 'node:child_process';
 try {
-  execSync('node --check prompt-library-engine-v2.5.2-enterprise.html', {stdio:'pipe'});
-  // Actually need to extract script blocks
+  const { execSync } = await import('node:child_process');
+  const fs = await import('node:fs');
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
   for (let i=0;i<scripts.length;i++){
     const tmp = `/tmp/check${i}.js`;
-    const fs = await import('node:fs');
     fs.writeFileSync(tmp, scripts[i]);
     execSync(`node --check ${tmp}`, {stdio:'pipe'});
   }

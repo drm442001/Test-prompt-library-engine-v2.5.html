@@ -7,7 +7,6 @@ const html = readFileSync('./prompt-library-engine-v2.5.2-enterprise.html','utf8
 const coreMatch = html.match(/var PLX = \(function \(\) \{[\s\S]*?return \{[\s\S]*?\};\s+\}\)\(\);/);
 if (!coreMatch) { console.error('PLX core not found'); process.exit(1); }
 
-// Evaluate PLX in VM to get detectRole and PROTECTION
 let PLX;
 try {
   const code = coreMatch[0] + '\nPLX';
@@ -37,7 +36,7 @@ const tests = [
   ['photo AFTER.PNG', 'after'],
   ['photo Before.JPEG', 'before'],
   ['photo After.WEBP', 'after'],
-  ['x-after-final.jpg', 'unknown'], // should not detect
+  ['x-after-final.jpg', 'unknown'],
 ];
 
 for (const [fname, expected] of tests){
@@ -45,8 +44,6 @@ for (const [fname, expected] of tests){
   pass = chk(`detectRole ${fname} -> ${expected}`, det.role===expected, `got ${det.role}`) && pass;
 }
 
-// Test upload order independence: simulate assignFiles logic
-// The logic in assignFiles uses detectRole and seen map, not order
 function simulateAssign(files){
   const st = { before:null, after:null, thumb:null, dupBefore:false, dupAfter:false };
   const seen={};
@@ -65,22 +62,26 @@ let st1 = simulateAssign(['a Before.jpg','b After.jpg']);
 pass = chk('order before then after - before role correct', st1.before && st1.before.role==='before', '') && pass;
 pass = chk('order before then after - after role correct', st1.after && st1.after.role==='after', '') && pass;
 
-let st2 = simulateAssign(['b After.jpg','a Before.jpg']); // reversed upload order
+let st2 = simulateAssign(['b After.jpg','a Before.jpg']);
 pass = chk('reversed order after then before - before role correct', st2.before && st2.before.role==='before', '') && pass;
 pass = chk('reversed order after then before - after role correct', st2.after && st2.after.role==='after', '') && pass;
 pass = chk('reversed order - roles not swapped', st2.before.name.includes('Before') && st2.after.name.includes('After'), '') && pass;
 
-// Test protection text exactly once
+// Test protection text exactly once - PLE-07 new spec
 const prot = PLX.PROTECTION;
-pass = chk('PROTECTION contains 7 lines rule', prot.split('\n').length===7, `lines ${prot.split('\n').length}`) && pass;
-pass = chk('PROTECTION contains Before image exactly', prot.includes('Use the supplied Before image exactly as the BEFORE source image.'), '') && pass;
-pass = chk('PROTECTION contains After image exactly', prot.includes('Use the supplied After image exactly as the AFTER source image.'), '') && pass;
-pass = chk('PROTECTION contains Do not swap', prot.includes('Do not swap the Before and After roles.'), '') && pass;
+pass = chk('PROTECTION contains 9 lines rule', prot.split('\n').length===9, `lines ${prot.split('\n').length}`) && pass;
+pass = chk('PROTECTION contains Before image exactly', prot.includes('Use supplied Before image exactly as BEFORE source.'), '') && pass;
+pass = chk('PROTECTION contains After image exactly', prot.includes('Use supplied After image exactly as AFTER source.'), '') && pass;
+pass = chk('PROTECTION contains Do not enhance', prot.includes('Do not enhance either image.'), '') && pass;
+pass = chk('PROTECTION contains Do not retouch', prot.includes('Do not retouch either image.'), '') && pass;
+pass = chk('PROTECTION contains Do not recolor', prot.includes('Do not recolor either image.'), '') && pass;
+pass = chk('PROTECTION contains Do not regenerate', prot.includes('Do not regenerate either image.'), '') && pass;
+pass = chk('PROTECTION contains Do not swap', prot.includes('Do not swap image positions.'), '') && pass;
+pass = chk('PROTECTION contains Only create thumbnail', prot.includes('Only create thumbnail composition around supplied images.'), '') && pass;
 
-// Test wrapP logic dedup
 function wrapP(txt){
   var v = String(txt||'');
-  if (/Use the supplied Before image exactly as the BEFORE source image\./i.test(v) && /Use the supplied After image exactly as the AFTER source image\./i.test(v)) return v;
+  if (/SOURCE IMAGE PROTECTION/i.test(v)) return v;
   return v ? (v + '\n\n' + prot) : prot;
 }
 
@@ -91,13 +92,9 @@ pass = chk('protection added once', (once.match(new RegExp(prot.split('\n')[0].r
 const twice = wrapP(once);
 pass = chk('protection not duplicated second time', twice===once, `twice length ${twice.length} once ${once.length}`) && pass;
 
-const doubleProt = thumbWithoutProt + '\n\n' + prot + '\n\n' + prot;
-const deduped = wrapP(doubleProt); // our guard would not catch double, but we test derive guard
-// Derive guard we fixed should also prevent double
-// Simulate derive thumbWithProtection logic
 function thumbWithProtection(thumb){
   var v = String(thumb||'');
-  if (/Use the supplied Before image exactly as the BEFORE source image\./i.test(v) && /Use the supplied After image exactly as the AFTER source image\./i.test(v)) return v;
+  if (/SOURCE IMAGE PROTECTION/i.test(v)) return v;
   return v ? (v + '\n\n' + prot) : prot;
 }
 const t1 = thumbWithProtection(thumbWithoutProt);
