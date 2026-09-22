@@ -703,79 +703,133 @@ var PLX = (function () {
   /* ==========================================================================
      THUMBNAIL LAYER (preserved v2.4 preset system + deterministic short title)
      ========================================================================== */
-  var PRESET_NAMES = { studio: 'Studio Portrait Style (Default)', split: 'Split Arrow Style', minimal: 'Minimalist Clean', cinematic: 'Cinematic Bold' };
+    var PRESET_NAMES = { premium_dark: 'Premium Dark', cinematic_gold: 'Cinematic Gold', neon_purple: 'Neon Purple', minimal_clean: 'Minimal Clean' };
   var THUMB_TEMPLATES = {
-    studio: [
+    premium_dark: [
       'Create a professional YouTube/blog thumbnail image, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
-      '', 'TITLE: "{{PROMPT_TITLE}}"', '', 'LAYOUT (Left 40% | Right 60% split):', '',
+      '',
+      'TITLE: "{{PROMPT_TITLE}}"',
+      '',
+      'LAYOUT (Left 40% | Right 60% split):',
+      '',
       'LEFT SIDE (40%):',
       '- Bold uppercase title "{{PROMPT_TITLE}}" broken into 2-3 lines',
       '- White color text with YELLOW highlight box behind 1-2 key words',
       '- Add red brush-stroke badge with white text "({{YEAR}})" below title',
-      '- Background: deep black with subtle dot-pattern texture', '',
+      '- Background: deep black premium dark with subtle dot-pattern texture',
+      '',
       'RIGHT SIDE (60%):',
       '- Split before/after comparison using the 2 attached images',
       '- FIRST attached image = BEFORE (place LEFT, red border, red rounded label "BEFORE" at bottom)',
       '- SECOND attached image = AFTER (place RIGHT, green border, green rounded label "AFTER" at bottom)',
-      '- White vertical divider between them with circular play-button icon in center', '',
+      '- White vertical divider between them with circular play-button icon in center',
+      '',
       'BOTTOM BAR (full width, overlapping bottom):',
       '- Yellow rounded pill bar containing 3 feature highlights separated by vertical lines:',
-      '  {{FEATURE_1}}', '  {{FEATURE_2}}', '  {{FEATURE_3}}', '',
+      '  {{FEATURE_1}}',
+      '  {{FEATURE_2}}',
+      '  {{FEATURE_3}}',
+      '',
       'STYLE GUIDELINES:',
       '- Fonts: Bold sans-serif, high contrast, uppercase',
-      '- Overall vibe: Professional, eye-catching, high CTR',
-      '- Color palette: Black background, white/yellow text, red+green accent labels', '',
+      '- Overall vibe: Professional premium dark, eye-catching, high CTR, luxury editorial',
+      '- Color palette: Black premium dark background, white/yellow text, red+green accent labels, subtle gold accent',
+      '',
       'NEGATIVE PROMPT:',
       'blurry text, low contrast, watermarks, extra objects, distorted faces, misspelled words, cluttered composition, small unreadable text',
       '',
       'INSTRUCTION: Attach BEFORE image first, AFTER image second when using this prompt.'
     ].join('\n'),
-    split: [
-      'Create a professional thumbnail image, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
-      '', 'TITLE: "{{PROMPT_TITLE}}"', '', 'LAYOUT (Top title bar + Full-width before/after below):', '',
-      'TOP SECTION:', '- Bold uppercase title "{{PROMPT_TITLE}}" at top center',
-      '- White text with YELLOW highlight boxes behind key words', '- Red rounded badge "{{YEAR}}" at top-right corner', '',
-      'MAIN AREA:', '- Full-width before/after side-by-side using 2 attached images',
-      '- FIRST attached image = BEFORE (LEFT side, blurred realistic background retained)',
-      '- SECOND attached image = AFTER (RIGHT side, clean processed look)',
-      '- White curved arrow pointing from BEFORE to AFTER in center',
-      '- Yellow circular badge in center with text "CLEAN PROFESSIONAL PHOTOS"',
-      '- BEFORE label: black rounded box bottom-left', '- AFTER label: black rounded box bottom-right', '',
-      'BOTTOM BAR:', '- Yellow brush-stroke bar with 3 checkmark features:',
-      '  {{FEATURE_1}}   {{FEATURE_2}}   {{FEATURE_3}}', '',
-      'STYLE:', '- Vibrant, punchy, real-world street-photography vibe', '- Bold sans-serif fonts, high contrast', '',
-      'NEGATIVE PROMPT:', 'blurry text, watermarks, distorted faces, misspelled words, low contrast', '',
+    cinematic_gold: [
+      'Create a cinematic gold dramatic thumbnail, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
+      '',
+      'TITLE: "{{PROMPT_TITLE}}"',
+      '',
+      'LAYOUT:',
+      '- Dark cinematic background with subtle gradient (deep navy and rich gold #D4AF37)',
+      '- Large bold title "{{PROMPT_TITLE}}" LEFT side with dramatic shadow and gold metallic sheen',
+      '- Glowing golden yellow highlight on key word with outer glow',
+      '- RIGHT side: 2 attached images stacked or split with gold glow',
+      '- FIRST attached image = BEFORE (desaturated, red glow border, red rounded label "BEFORE" at bottom)',
+      '- SECOND attached image = AFTER (vibrant, green glow border, green rounded label "AFTER" at bottom)',
+      '- Lens flare effect between images with warm gold bokeh',
+      '- "{{YEAR}}" in metallic gold badge with embossed effect top-right',
+      '',
+      'BOTTOM:',
+      '- Dark charcoal bar with gold separator lines and 3 feature icons + text:',
+      '  {{FEATURE_1}} | {{FEATURE_2}} | {{FEATURE_3}}',
+      '',
+      'STYLE:',
+      '- Movie-poster vibe, dramatic cinematic gold, high-impact luxury, award-winning',
+      '- Bold display fonts, high contrast, cinematic color grading with gold highlights',
+      '- Premium gold foil accents, rich shadows, epic lighting',
+      '',
+      'NEGATIVE PROMPT:',
+      'flat lighting, cartoon style, watermarks, distorted faces, low contrast text, cheap plastic, dull colors',
+      '',
       'INSTRUCTION: Attach BEFORE image first, AFTER image second when using this prompt.'
     ].join('\n'),
-    minimal: [
-      'Create a minimalist professional thumbnail, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
-      '', 'TITLE: "{{PROMPT_TITLE}}"', '', 'LAYOUT:', '- Clean white/off-white background',
-      '- Centered bold title "{{PROMPT_TITLE}}" at top in dark charcoal color',
-      '- Below title: 2 attached images side-by-side with thin black border',
-      '- FIRST attached = BEFORE (small "BEFORE" label below in gray)',
-      '- SECOND attached = AFTER (small "AFTER" label below in green)',
-      '- Thin arrow between images', '- Small "{{YEAR}}" tag top-right in muted color', '',
-      'BOTTOM (optional subtle bar):', '- Thin gray line separator with 3 minimal features:',
-      '  {{FEATURE_1}}  {{FEATURE_2}}  {{FEATURE_3}}', '',
-      'STYLE:', '- Minimal, editorial, premium feel', '- Sans-serif thin/medium fonts',
-      '- No cluttered elements, lots of whitespace', '',
-      'NEGATIVE PROMPT:', 'cluttered, neon colors, gradients, watermarks, distorted, low quality', '',
+    neon_purple: [
+      'Create a neon purple vibrant thumbnail image, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
+      '',
+      'TITLE: "{{PROMPT_TITLE}}"',
+      '',
+      'LAYOUT (Top title bar + Full-width before/after below):',
+      '',
+      'TOP SECTION:',
+      '- Bold uppercase title "{{PROMPT_TITLE}}" at top center with neon purple glow #7c3aed',
+      '- White text with NEON PURPLE highlight boxes behind key words with electric glow',
+      '- Purple rounded badge "{{YEAR}}" at top-right corner with neon border and glow',
+      '',
+      'MAIN AREA:',
+      '- Full-width before/after side-by-side using 2 attached images on dark charcoal #1a1a2e',
+      '- FIRST attached image = BEFORE (LEFT side, neon purple border #7c3aed, red label "BEFORE" with purple glow)',
+      '- SECOND attached image = AFTER (RIGHT side, neon green border, green label "AFTER" with purple glow)',
+      '- Thin purple divider line #7c3aed vertical between them with circular play-button icon glowing purple',
+      '- Purple circular badge in center with text "AI TRANSFORMATION" in neon',
+      '- BEFORE label: black rounded box bottom-left with purple neon outline',
+      '- AFTER label: black rounded box bottom-right with purple neon outline',
+      '',
+      'BOTTOM BAR:',
+      '- Purple to pink gradient brush-stroke bar with 3 checkmark features in white:',
+      '  {{FEATURE_1}}   {{FEATURE_2}}   {{FEATURE_3}}',
+      '',
+      'STYLE:',
+      '- Vibrant neon purple tech, modern AI aesthetic, electric, eye-catching, cyberpunk inspired',
+      '- Bold sans-serif fonts, high contrast, neon glow effects, purple dominant #7c3aed',
+      '- Premium AI editing aesthetic, high contrast, clean readable typography with neon accents',
+      '',
+      'NEGATIVE PROMPT:',
+      'blurry text, watermarks, distorted faces, misspelled words, low contrast, flat dull colors, no glow',
+      '',
       'INSTRUCTION: Attach BEFORE image first, AFTER image second when using this prompt.'
     ].join('\n'),
-    cinematic: [
-      'Create a cinematic dramatic thumbnail, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
-      '', 'TITLE: "{{PROMPT_TITLE}}"', '', 'LAYOUT:',
-      '- Dark cinematic background with subtle gradient (deep blue/purple)',
-      '- Large bold title "{{PROMPT_TITLE}}" LEFT side with dramatic shadow',
-      '- Glowing yellow/orange highlight on key word',
-      '- RIGHT side: 2 attached images stacked or split',
-      '- FIRST = BEFORE (desaturated, red glow border, "BEFORE" label)',
-      '- SECOND = AFTER (vibrant, green glow border, "AFTER" label)',
-      '- Lens flare effect between images', '- "{{YEAR}}" in metallic gold badge', '',
-      'BOTTOM:', '- Dark bar with 3 feature icons + text:',
-      '  {{FEATURE_1}} | {{FEATURE_2}} | {{FEATURE_3}}', '',
-      'STYLE:', '- Movie-poster vibe, dramatic, high-impact', '- Bold display fonts', '- Cinematic color grading', '',
-      'NEGATIVE PROMPT:', 'flat lighting, cartoon style, watermarks, distorted faces, low contrast text', '',
+    minimal_clean: [
+      'Create a minimalist clean professional thumbnail, EXACT size {{SIZE}} pixels, {{FORMAT}} format.',
+      '',
+      'TITLE: "{{PROMPT_TITLE}}"',
+      '',
+      'LAYOUT:',
+      '- Clean white/off-white background #fafafa with subtle light gray dot grid',
+      '- Centered bold title "{{PROMPT_TITLE}}" at top in dark charcoal #1a1a2e color, thin weight',
+      '- Below title: 2 attached images side-by-side with thin black border 1px and 12px radius',
+      '- FIRST attached image = BEFORE (small "BEFORE" label below in gray #6b7280, uppercase tiny)',
+      '- SECOND attached image = AFTER (small "AFTER" label below in green #1e7d54, uppercase tiny)',
+      '- Thin light gray arrow between images minimal',
+      '- Small "{{YEAR}}" tag top-right in muted gray #9ca3af with light border',
+      '',
+      'BOTTOM (optional subtle bar):',
+      '- Thin light gray line separator #e5e7eb with 3 minimal features in charcoal:',
+      '  {{FEATURE_1}}  {{FEATURE_2}}  {{FEATURE_3}}',
+      '',
+      'STYLE:',
+      '- Minimal, editorial, premium clean feel, lots of whitespace, Scandinavian',
+      '- Sans-serif thin/medium fonts, no clutter, ultra clean',
+      '- No gradients, no neon, pure minimal professional, Apple-like',
+      '',
+      'NEGATIVE PROMPT:',
+      'cluttered, neon colors, gradients, watermarks, distorted, low quality, heavy shadows, busy background',
+      '',
       'INSTRUCTION: Attach BEFORE image first, AFTER image second when using this prompt.'
     ].join('\n')
   };
@@ -877,7 +931,7 @@ var PLX = (function () {
     var thumbFromLibrary = !!S10src;
     var thumb = S10src;
     if (!thumb && opts.allowPreset !== false) {
-      var tpl = THUMB_TEMPLATES[preset] || THUMB_TEMPLATES.studio;
+      var tpl = THUMB_TEMPLATES[preset] || THUMB_TEMPLATES.premium_dark;
       var feats = extractFeatures(f.labels, f.howto);
       thumb = tpl
         .split('{{PROMPT_TITLE}}').join(legacy ? cleanTitle(f.title) : f.title)
@@ -910,7 +964,7 @@ var PLX = (function () {
       secB('AFTER IMAGE ALT TEXT', f.altAfter), secB('PROMPT + NEGATIVE + HOW TO USE', fullBody),
       secB('LABELS', f.labels), secB('PERMALINK', f.permalink), secB('SEARCH DESCRIPTION', f.search),
       secB('THUMBNAIL IMAGE GENERATOR PROMPT\nImage Specs: ' + CFG.thumbSize + ' \u00b7 ' + fmtLabel() +
-           '\nStyle Preset: ' + (PRESET_NAMES[preset] || PRESET_NAMES.studio), thumb)
+           '\nStyle Preset: ' + (PRESET_NAMES[preset] || PRESET_NAMES.premium_dark), thumb)
     ].join('\n\n');
     var fn = filenames(p, { ext: CFG.ext, suffix: opts.suffix || CFG.defaultSuffix }, false);
     var fnShort = filenames(p, { ext: CFG.ext, suffix: opts.suffix || CFG.defaultSuffix }, true);
@@ -1069,7 +1123,10 @@ var PLX = (function () {
   })();
   function loadPreset() {
     var v = LS.get(C.lsPresetKey) || LS.get(C.lsPresetLegacyKey);
+    var map = { studio: 'premium_dark', split: 'neon_purple', minimal: 'minimal_clean', cinematic: 'cinematic_gold' };
+    if (v && map[v]) v = map[v];
     if (v && PLX.THUMB_TEMPLATES[v]) { S.preset = v; LS.set(C.lsPresetKey, v); }
+    else if (!v) { S.preset = 'premium_dark'; }
   }
 
   /* ---------------- toast + clipboard ---------------- */
