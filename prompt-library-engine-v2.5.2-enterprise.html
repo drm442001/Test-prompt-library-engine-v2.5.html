@@ -1715,12 +1715,21 @@ var PLX = (function () {
       '<button type="button" class="btn ghost" data-action="clearimages">Clear</button></div>');
     out.push('</div>');
 
-    /* Everything vertical: PATCH-06 required order */
+    /* Vertical workflow - PLE-08 locked order: 1 Title, 2 Before Prompt, 3 Main Prompt, 4 Negative Prompt, 5 Thumbnail Prompt */
     out.push('<div class="vflow">');
 
-    /* 1. Before Prompt */
+    /* 1. Prompt Title */
     out.push(secBlock({
-      cls: 'before', label: 'Before Image Prompt', note: 'Section 3 · raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      label: '1 · Prompt Title',
+      note: 'Section 1 · Post Title' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      flag: p.fields.title ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      value: p.fields.title || '— missing —',
+      actions: [{ name: 'copyTitle', label: 'Copy Prompt Title' }]
+    }));
+
+    /* 2. Before Prompt */
+    out.push(secBlock({
+      cls: 'before', label: '2 · Before Prompt', note: 'Section 3 · raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
       flag: p.fields.before ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
       value: set.copyBeforePrompt,
       actions: [
@@ -1729,16 +1738,9 @@ var PLX = (function () {
       ]
     }));
 
-    /* 2. Before Title */
+    /* 3. Main Prompt */
     out.push(secBlock({
-      label: 'Before Title', note: 'file name convention',
-      value: payload(p, 'filenames').before,
-      actions: [{ name: 'copyBeforeTitle', label: 'Copy Before Image Title', filename: true }]
-    }));
-
-    /* 3. Prompt */
-    out.push(secBlock({
-      cls: 'after', label: 'Prompt', note: 'Section 6 · main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      cls: 'after', label: '3 · Main Prompt', note: 'Section 6 · main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
       flag: p.fields.prompt ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
       value: set.copyPrompt,
       actions: [
@@ -1749,23 +1751,16 @@ var PLX = (function () {
 
     /* 4. Negative Prompt */
     out.push(secBlock({
-      cls: 'after', label: 'Negative Prompt', note: 'Section 7',
+      cls: 'after', label: '4 · Negative Prompt', note: 'Section 7',
       flag: p.fields.negative ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
       value: set.copyNegative || '— missing —',
       actions: [{ name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }]
     }));
 
-    /* 5. After Title */
-    out.push(secBlock({
-      label: 'After Title', note: 'file name convention',
-      value: payload(p, 'filenames').after,
-      actions: [{ name: 'copyAfterTitle', label: 'Copy After Image Title', filename: true }]
-    }));
-
-    /* 6. Thumbnail Generator Prompt (Part B: automatically includes source protection) */
+    /* 5. Thumbnail Prompt */
     var thumbPromptAutoProtected = d.thumbWithProtection;
     out.push(secBlock({
-      cls: 'thumb', label: 'Thumbnail Generator Prompt',
+      cls: 'thumb', label: '5 · Thumbnail Prompt',
       note: d.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
       flag: d.thumbFromLibrary ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
       value: thumbPromptAutoProtected,
@@ -1773,7 +1768,7 @@ var PLX = (function () {
       actions: [{ name: 'copyThumbPromptProtected', label: 'Copy Thumbnail Prompt' }]
     }));
 
-    /* 7. Thumbnail Controls */
+    /* Thumbnail Controls - vertical, no side-by-side */
     var role = slotStatus(st);
     out.push('<div class="lane thumb"><h3>Thumbnail Controls</h3>');
     out.push(roleBanner(st, role));
@@ -1843,7 +1838,7 @@ var PLX = (function () {
     if (isOk) out.push('<span class="flag ok">PAIR VERIFIED</span>');
     else out.push('<span class="flag miss">UNVERIFIED PAIR</span>');
     out.push('</div>');
-    out.push('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.6rem;margin-top:.4rem">');
+    out.push('<div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.4rem">');
     /* BEFORE box */
     out.push('<div class="slot" data-filled="' + (st.before ? 'true' : 'false') + '">');
     out.push('<div class="who"><span class="badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
