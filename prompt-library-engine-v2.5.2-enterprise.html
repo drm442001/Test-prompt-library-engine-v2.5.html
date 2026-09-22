@@ -983,7 +983,11 @@ var PLX = (function () {
       fullBody: fullBody, promptNegative: pn, allSettings: allSettings,
       filenames: fn, filenamesShort: fnShort,
       protection: PROTECTION,
-      thumbWithProtection: (thumb ? thumb + '\n\n' + PROTECTION : PROTECTION)
+      thumbWithProtection: (function(){
+        var v = String(thumb || '');
+        if (/Use the supplied Before image exactly as the BEFORE source image\./i.test(v) && /Use the supplied After image exactly as the AFTER source image\./i.test(v)) return v;
+        return v ? (v + '\n\n' + PROTECTION) : PROTECTION;
+      })()
     };
   }
 
