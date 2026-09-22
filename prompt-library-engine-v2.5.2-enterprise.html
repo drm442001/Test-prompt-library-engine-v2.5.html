@@ -941,10 +941,13 @@ var PLX = (function () {
     var S7 = normSection('negative', srcOf('negative'), legacy);
     var S9 = normSection('howto', srcOf('howto'), legacy);
     var S10src = normSection('thumb', vals && vals.thumb ? vals.thumb : srcOf('thumb'), legacy);
-    var preset = opts.preset || 'studio';
+    var preset = opts.preset || 'premium_dark';
+    // PLE-06: Thumbnail Style Preset must regenerate only Section 10, even when library has S10
+    // Always generate from preset template when allowPreset !== false (default true)
     var thumbFromLibrary = !!S10src;
-    var thumb = S10src;
-    if (!thumb && opts.allowPreset !== false) {
+    var thumbLibraryOriginal = S10src;
+    var thumb;
+    if (opts.allowPreset !== false) {
       var tpl = THUMB_TEMPLATES[preset] || THUMB_TEMPLATES.premium_dark;
       var feats = extractFeatures(f.labels, f.howto);
       thumb = tpl
@@ -953,6 +956,10 @@ var PLX = (function () {
         .replace(/\{\{FORMAT\}\}/g, fmtLabel())
         .split('{{YEAR}}').join(CFG.year)
         .split('{{FEATURE_1}}').join(feats[0]).split('{{FEATURE_2}}').join(feats[1]).split('{{FEATURE_3}}').join(feats[2]);
+      // When library has custom S10, keep flag false to indicate GENERATED from preset, but original remains in raw
+      thumbFromLibrary = false;
+    } else {
+      thumb = S10src;
     }
     var thumbAltSrc = raw.altThumb || f.altThumb;
     var thumbAlt = thumbAltSrc || thumbnailAltFromTitle(legacy ? cleanTitle(f.title) : f.title, f.labels);
@@ -1107,7 +1114,7 @@ var PLX = (function () {
     libs: [], byId: {}, seq: 0,
     activeLib: null, selected: null, tab: 'library',
     search: '', dirty: { library: true, image: true, publisher: true },
-    preset: 'studio',
+    preset: 'premium_dark',
     custom: {},      /* libId|num -> { varName: value } */
     customMode: {},  /* libId|num -> { varName: true } marks the explicit "Custom…" choice */
     overrides: {},   /* libId|num -> { fieldKey: text } */
@@ -1597,7 +1604,7 @@ var PLX = (function () {
     }).join('');
     return '<div class="kv"><label for="preset-' + escA(p.uid) + '" style="font-weight:700;color:#8fa0d8">Style preset</label>' +
       '<select id="preset-' + escA(p.uid) + '" data-action="preset" style="width:auto;min-width:210px">' + opts + '</select>' +
-      '<span class="src">applies only when Section 10 is absent from the library</span></div>';
+      '<span class="src">regenerates only Section 10 — original library prompt preserved in source</span></div>';
   }
   function exportRow(p, L) {
     var f = payload(p, 'filenames'), fs = payload(p, 'filenamesShort');
