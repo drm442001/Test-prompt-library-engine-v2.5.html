@@ -1,0 +1,21 @@
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
+const html = readFileSync('./prompt-library-engine-v2.5.2-enterprise.html','utf8');
+const coreMatch = html.match(/var PLX = \(function \(\) \{[\s\S]*?return \{[\s\S]*?\};\s+\}\)\(\);/);
+let PLX = vm.runInNewContext(coreMatch[0]+'\nPLX');
+const md = readFileSync('./Photo-Retouch-Prompts.md','utf8');
+const lib = PLX.parseMarkdown(md);
+[0,24,49].forEach(idx=>{
+  const p = lib.prompts[idx];
+  p.libId='L1'; p.uid='P'+p.num; p.rev=0;
+  p.custom.analysis = PLX.analyzeCustomization(p);
+  const vals={};
+  p.custom.vars.forEach(v=>{ if(v.options[0]) vals[v.name]=v.options[0]; });
+  const applied = PLX.applyValues(p, vals);
+  console.log(`\nPrompt #${p.num} vars ${p.custom.vars.map(v=>v.name).join(', ')}`);
+  console.log(`Original S3 has [VAR]? ${p.raw.before.includes('[')}`);
+  console.log(`Custom S3 has no [VAR]? ${!applied.before.includes('['+p.custom.vars[0]?.name+']')}`);
+  console.log(`Original S3 snippet: ${p.raw.before.slice(0,80)}`);
+  console.log(`Custom S3 snippet: ${applied.before.slice(0,80)}`);
+  console.log(`Custom S6 contains first option? ${applied.prompt.includes(vals[p.custom.vars[1]?.name]||'')}`);
+});
