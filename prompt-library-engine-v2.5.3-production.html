@@ -2543,7 +2543,6 @@ var PLX = (function () {
     document.addEventListener('click', function (e) {
       if (e.target && !(e.target.closest && e.target.closest('.menu'))) {
         (MENU_STATE.closes || []).forEach(function (fn) { try { fn(false); } catch (err) { } });
-        if (MENU_STATE.close) { try { MENU_STATE.close(false); } catch (err2) { } }
       }
     }, false);
     mkInput();
