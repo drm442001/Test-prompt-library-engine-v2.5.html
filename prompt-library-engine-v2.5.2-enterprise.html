@@ -1485,6 +1485,9 @@ var PLX = (function () {
       actions: p.fields.intro ? [{ name: 'copyIntro', label: 'Copy Introduction' }] : []
     }));
 
+    /* MGS-CUSTOMIZE-01: Customize Prompt panel appears above Before Image Prompt (LOCKED UI) */
+    out.push(customizePanel(p));
+
     /* 3 BEFORE IMAGE PROMPT */
     out.push(secBlock({
       cls: 'before', label: 'Section 3 · Before Image Prompt', note: 'image generator - never part of Full Body',
@@ -1579,7 +1582,6 @@ var PLX = (function () {
       actions: [{ name: 'copySearchDesc', label: 'Copy Search Description' }]
     }));
 
-    out.push(customizePanel(p));
     /* PLE-01 Prompt A: validation messages removed from Prompt Library — kept only in Blog Publisher Validation Center */
     out.push(exportRow(p, L));
     out.push('</article>');
