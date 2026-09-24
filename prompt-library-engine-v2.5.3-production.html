@@ -48,7 +48,6 @@
   border:1px solid var(--line2);border-radius:.6rem;padding:.6rem;width:100%}
 .mgs-lib-root input[type="text"],.mgs-lib-root select{min-height:44px;font-size:16px}
 .mgs-lib-root textarea{font-size:15px;min-height:120px;resize:vertical}
-.mgs-lib-root .mgs-lib-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem}
 .mgs-lib-root .mgs-lib-notice{border-radius:.7rem;font-size:.84rem;padding:.7rem .85rem;margin:0 0 1rem;display:none;background:var(--panel)}
 .mgs-lib-root .mgs-lib-notice[data-kind="warn"]{display:block;background:var(--mgs-lib-color-28);border:1px solid var(--mgs-lib-color-18);color:var(--warn)}
 .mgs-lib-root .mgs-lib-notice[data-kind="err"]{display:block;background:var(--mgs-lib-color-29);border:1px solid var(--mgs-lib-color-17);color:var(--err)}
@@ -105,7 +104,6 @@
 .mgs-lib-root .mgs-lib-empty{text-align:center;color:var(--mgs-lib-color-55);padding:2.6rem 1rem;font-size:.9rem}
 .mgs-lib-root .mgs-lib-grid3{display:grid;grid-template-columns:1fr;gap:.85rem}
 .mgs-lib-root .mgs-lib-vflow{display:flex;flex-direction:column;gap:.85rem}
-.mgs-lib-root .mgs-lib-varwrap{display:flex;flex-direction:column;gap:.5rem;margin:.25rem 0 .55rem}
 .mgs-lib-root .mgs-lib-flag.mgs-lib-ok{background:var(--mgs-lib-color-32);border:1px solid var(--ok);color:var(--mgs-lib-color-33)}
 .mgs-lib-root .mgs-lib-lane h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
 .mgs-lib-root .mgs-lib-lane.mgs-lib-before{border-color:var(--mgs-lib-color-56)}
@@ -492,7 +490,7 @@ var PLX = (function () {
     var numM = RE_NUM.exec(headLine);
     var num = numM ? numM[1] : String(blockIdx + 1);
     var fields = emptyFields();
-    var cur = null, buf = [], seen = [], step4Block = null, step4Field = null, line0 = '';
+    var cur = null, buf = [], seen = [], step4Field = null;
 
     function flush() {
       if (cur === null) { if (buf.length) { fields.__unknown.push({ where: '(document/preamble)', text: joinBuf(buf) }); } buf = []; return; }
@@ -526,7 +524,6 @@ var PLX = (function () {
 
     for (var i = 0; i < body.length; i++) {
       var line = body[i];
-      line0 = line;
       if (RE_RULE.test(line)) continue;
       if (/^\s*#{2,4}\s*(frequently asked questions|faq)\b/i.test(line)) { flush(); cur = 'howto'; seen.push({ key: 'howto', label: 'FAQ', n: 9, head: line, line: i }); buf.push(line); continue; }
 
@@ -580,7 +577,7 @@ var PLX = (function () {
         fields[lead] = fields[lead] ? fields[lead] + '\n' + line : line;
         continue;
       }
-      if (cur !== null && RE_STEP4.test(line)) { step4Field = cur; step4Block = i; }
+      if (cur !== null && RE_STEP4.test(line)) step4Field = cur;
       buf.push(line);
     }
     flush();
@@ -1292,20 +1289,20 @@ var PLX = (function () {
   function toast(msg, bad) {
     var t = el('toast'); t.textContent = msg;
     t.style.background = bad ? '#7a2020' : '#1e7d54';
-    t.classList.add('show'); clearTimeout(toastT);
-    toastT = setTimeout(function () { t.classList.remove('show'); }, 1600);
+    t.classList.add('mgs-lib-show'); clearTimeout(toastT);
+    toastT = setTimeout(function () { t.classList.remove('mgs-lib-show'); }, 1600);
   }
   function restoreBtn(b) {
     if (!b) return;
     var o = b.getAttribute('data-label');
     if (o !== null) b.textContent = o;
-    b.classList.remove('copied');
+    b.classList.remove('mgs-lib-copied');
   }
   function copyText(text, btn) {
     if (btn && btn.getAttribute('data-label') === null) btn.setAttribute('data-label', btn.textContent);
     function done() {
       if (LASTBTN && LASTBTN !== btn) restoreBtn(LASTBTN);
-      if (btn) { btn.classList.add('copied'); btn.textContent = 'Copied'; }
+      if (btn) { btn.classList.add('mgs-lib-copied'); btn.textContent = 'Copied'; }
       LASTBTN = btn; toast('Copied');
     }
     if (btn && btn.getAttribute('data-blocked') === '1') { toast('Blocked by validation', true); return; }
@@ -2196,7 +2193,7 @@ var PLX = (function () {
       var val = ovr[key] !== undefined ? ovr[key] : base;
       var edited = ovr[key] !== undefined;
 
-      out.push('<div class="field' + (row.isBody ? ' body' : '') + '">');
+      out.push('<div class="mgs-lib-field' + (row.isBody ? ' mgs-lib-body' : '') + '">');
       out.push('<div class="mgs-lib-flab"><span>' + escT(row.label) + '</span>');
       out.push('<span class="mgs-lib-src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
         escT(row.sec) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : '')) + '</span></div>');
@@ -2357,9 +2354,9 @@ var PLX = (function () {
   var EXPORT_SCRIPT = [
     '<' + 'script>(function(){',
     'var last=null,tt;',
-    'function rb(b){if(!b)return;var o=b.getAttribute("data-label");if(o!==null)b.textContent=o;b.classList.remove("copied");}',
-    'function ok(b){if(last&&last!==b)rb(last);b.classList.add("copied");b.textContent="Copied";last=b;',
-    'var t=document.getElementById("toast");if(t){t.textContent="Copied";t.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("show")},1500);}}',
+    'function rb(b){if(!b)return;var o=b.getAttribute("data-label");if(o!==null)b.textContent=o;b.classList.remove("mgs-lib-copied");}',
+    'function ok(b){if(last&&last!==b)rb(last);b.classList.add("mgs-lib-copied");b.textContent="Copied";last=b;',
+    'var t=document.getElementById("toast");if(t){t.textContent="Copied";t.classList.add("mgs-lib-show");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("mgs-lib-show")},1500);}}',
     'function fb(x,b){var a=document.createElement("textarea");a.value=x;a.style.cssText="position:fixed;left:-9999px";document.body.appendChild(a);a.select();',
     'var y=false;try{y=document.execCommand("copy")}catch(e){}document.body.removeChild(a);if(y)ok(b);}',
     'document.addEventListener("click",function(e){var b=e.target.closest("[data-prompt]");if(!b)return;var v=b.getAttribute("data-prompt");',
@@ -2788,10 +2785,10 @@ var PLX = (function () {
     el('dropzone').addEventListener('click', function () { el('fileInput').click(); });
     el('fileInput').addEventListener('change', function (e) { readFiles(e.target.files); e.target.value = ''; });
     ['dragenter', 'dragover'].forEach(function (ev) {
-      el('dropzone').addEventListener(ev, function (e) { e.preventDefault(); e.currentTarget.classList.add('drag'); });
+      el('dropzone').addEventListener(ev, function (e) { e.preventDefault(); e.currentTarget.classList.add('mgs-lib-drag'); });
     });
     ['dragleave', 'drop'].forEach(function (ev) {
-      el('dropzone').addEventListener(ev, function (e) { e.preventDefault(); e.currentTarget.classList.remove('drag'); });
+      el('dropzone').addEventListener(ev, function (e) { e.preventDefault(); e.currentTarget.classList.remove('mgs-lib-drag'); });
     });
     el('dropzone').addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files.length) readFiles(e.dataTransfer.files); });
     el('pasteBtn').addEventListener('click', function () {
