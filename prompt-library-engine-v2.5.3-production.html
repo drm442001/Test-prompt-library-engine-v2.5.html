@@ -2229,6 +2229,15 @@ var PLX = (function () {
     return isDocument ? '<!DOCTYPE html>' + parsed.documentElement.outerHTML : parsed.body.innerHTML;
   }
 
+  /*
+   * Blogger/XML finalization. DOM serialization has already escaped text and
+   * attributes as &amp;, &lt; and &gt;; this final guard prevents a raw CDATA
+   * terminator from breaking an XML wrapper while preserving its decoded text.
+   */
+  function bloggerXmlSafeHTML(source) {
+    return String(source == null ? '' : source).replace(/\]\]>/g, ']]&gt;');
+  }
+
   function sectionBlockExport(label, text, copyLabel) {
     /* Empty source sections are omitted so Blogger receives no empty containers. */
     if (!hasText(text)) return '';
@@ -2293,7 +2302,7 @@ var PLX = (function () {
     parts.push('<div class="mgs-lib-toast" id="toast"></div>');
     parts.push(EXPORT_SCRIPT);
     parts.push('</div></body></html>');
-    return { doc: exportSanitizer(parts.join('\n')), secCount: blocks, nanCount: missing };
+    return { doc: bloggerXmlSafeHTML(exportSanitizer(parts.join('\n'))), secCount: blocks, nanCount: missing };
   }
     function postHTML(p) {
     var set = payload(p, 'copyFullBody'), st = imgState(p);
@@ -2313,7 +2322,7 @@ var PLX = (function () {
         parts.push('<ul>' + lines.map(function (l) { return '<li>' + escT(l.replace(/^[-*•+>]+\s*/, '')) + '</li>'; }).join('') + '</ul>');
       } else if (blk) parts.push('<p>' + escT(blk).replace(/\n/g, '<br />') + '</p>');
     });
-    return exportSanitizer(parts.join('\n'));
+    return bloggerXmlSafeHTML(exportSanitizer(parts.join('\n')));
   }
 
   /* ---------------- Universal Card v2.1 Compatibility Layer (PLE-11) - Engine only, do not modify Universal Card source ---------------- */
