@@ -994,8 +994,8 @@ var PLX = (function () {
     var extras = CFG.bodyExtras === 'v2.4';
     var parts = [];
     if (extras && (raw.intro || f.intro)) parts.push(normSection('intro', srcOf('intro'), legacy));
-    parts.push(banner(CFG.bannerStyle, 'Prompt', 6) + S6);
-    parts.push(banner(CFG.bannerStyle, 'Negative Prompt', 7) + S7);
+    if (S6) parts.push(banner(CFG.bannerStyle, 'Prompt', 6) + S6);
+    if (S7) parts.push(banner(CFG.bannerStyle, 'Negative Prompt', 7) + S7);
     if (extras && f.tools) parts.push(banner(CFG.bannerStyle, 'Compatible AI Tools', 8) + normSection('tools', srcOf('tools'), legacy));
     if (extras && S9) parts.push(banner(CFG.bannerStyle, 'How To Use This Prompt', 9) + S9);
     else if (S9) parts.push(banner(CFG.bannerStyle, 'How To Use This Prompt', 9) + S9);
@@ -1397,7 +1397,11 @@ var PLX = (function () {
     if (p.fields[key]) return '<span class="flag src">SOURCE</span>';
     return '<span class="flag miss">MISSING</span>';
   }
+  function hasText(value) {
+    return String(value == null ? '' : value).trim() !== '';
+  }
   function secBlock(o) {
+    if (o && o.when === false) return '';
     var parts = [];
     parts.push('<div class="sec' + (o.cls ? ' ' + o.cls : '') + '"' + (o.id ? ' id="' + escA(o.id) + '"' : '') + '>');
     parts.push('<div class="sectop"><span class="lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
@@ -1555,11 +1559,12 @@ var PLX = (function () {
       ]
     }));
 
-    /* 7 NEGATIVE PROMPT */
+    /* 7 NEGATIVE PROMPT — omit the complete block when there is no value. */
     out.push(secBlock({
+      when: hasText(set.copyNegative),
       cls: 'gen', label: 'Section 7 · Negative Prompt',
-      flag: p.fields.negative ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
-      value: set.copyNegative || '— missing —',
+      flag: '<span class="flag src">SOURCE</span>',
+      value: set.copyNegative,
       actions: [{ name: 'copyNegative', label: 'Copy Negative' }, { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }]
     }));
 
@@ -1814,9 +1819,10 @@ var PLX = (function () {
 
     /* SECTION 4 Negative Prompt - Display below Main Prompt */
     out.push(secBlock({
+      when: hasText(set.copyNegative),
       cls: 'after', label: '4 \u00b7 Negative Prompt', note: 'Section 7',
-      flag: p.fields.negative ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
-      value: set.copyNegative || '\u2014 missing \u2014'
+      flag: '<span class="flag src">SOURCE</span>',
+      value: set.copyNegative
     }));
 
     /* SECTION 5 Buttons */
@@ -2224,6 +2230,8 @@ var PLX = (function () {
   }
 
   function sectionBlockExport(label, text, copyLabel) {
+    /* Empty source sections are omitted so Blogger receives no empty containers. */
+    if (!hasText(text)) return '';
     var parts = [];
     parts.push('<div class="sec"><div class="sectop"><span class="lab">' + escT(label) + '</span>');
     if (text) parts.push('<button type="button" class="cbtn" data-copytext="' + escA(text) + '">' + escT(copyLabel || 'Copy') + '</button>');
