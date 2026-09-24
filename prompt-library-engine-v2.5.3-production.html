@@ -2418,8 +2418,8 @@ var PLX = (function () {
     parts.push('<h2>' + escT(p.fields.title) + '</h2>');
     if (p.fields.intro) parts.push('<p>' + escT(p.fields.intro) + '</p>');
     if (st.before || st.after) {
-      if (st.before) parts.push('<figure><img alt="' + escA(payload(p, 'copyBeforeAlt')) + '" src="BEFORE_IMAGE_URL" />' + (st.before.name ? '' : '') + '</figure>');
-      if (st.after) parts.push('<figure><img alt="' + escA(payload(p, 'copyAfterAlt')) + '" src="AFTER_IMAGE_URL" /></figure>');
+      if (st.before) parts.push('<figure><img alt="' + escA(payload(p, 'copyBeforeAlt') || p.fields.title || 'Before image') + '" src="BEFORE_IMAGE_URL" />' + (st.before.name ? '' : '') + '</figure>');
+      if (st.after) parts.push('<figure><img alt="' + escA(payload(p, 'copyAfterAlt') || p.fields.title || 'After image') + '" src="AFTER_IMAGE_URL" /></figure>');
     }
     String(set).split('\n\n').forEach(function (blk) {
       var head = /^(PROMPT|NEGATIVE PROMPT|HOW TO USE THIS PROMPT|[A-Z][A-Z &+]{3,}):\s*/.exec(blk);
@@ -2711,6 +2711,14 @@ var PLX = (function () {
     }
   });
   document.addEventListener('keydown', function (e) {
+    var copyTarget = e.target && e.target.closest
+      ? e.target.closest('[data-action="copy"]')
+      : null;
+    if (copyTarget && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      handleCopy(copyTarget.dataset.prompt, copyTarget);
+      return;
+    }
     if (e.key === 'Enter' && e.target && e.target.id === 'dropzone') { e.preventDefault(); el('fileInput').click(); }
     if (e.target && e.target.id === 'search') { }
     if (e.key === 'Escape') { var m = document.querySelector('.menu-list:not([hidden])'); if (m) { var w = m.parentElement.querySelector('button'); m.hidden = true; if (w) { w.setAttribute('aria-expanded', 'false'); w.focus(); } } }
