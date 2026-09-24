@@ -6,236 +6,236 @@
 <title>Prompt Library Engine v2.5.3 Production</title>
 <style>
 /* MGS Prompt Library Engine v2.5 - scoped styles. No internal scrolling on prompt text. */
-.mgsplx{--bg:#0f1220;--panel:#151932;--panel2:#101427;--line:#262c48;--line2:#2a2f45;--ink:#e8eaf2;
-  --ink2:#cdd5f5;--dim:#9aa3b8;--brand:#7c9cff;--brand2:#c084fc;--ok:#1e7d54;--err:#ff9b9b;--warn:#ffcf87;
+.mgs-lib-root{--mgs-lib-color-01:#0f1220;--mgs-lib-color-02:#151932;--mgs-lib-color-03:#101427;--mgs-lib-color-04:#262c48;--mgs-lib-color-05:#2a2f45;--mgs-lib-color-06:#e8eaf2;--mgs-lib-color-07:#cdd5f5;--mgs-lib-color-08:#9aa3b8;--mgs-lib-color-09:#7c9cff;--mgs-lib-color-10:#c084fc;--mgs-lib-color-11:#1e7d54;--mgs-lib-color-12:#ff9b9b;--mgs-lib-color-13:#ffcf87;--mgs-lib-color-14:#fff;--mgs-lib-color-15:#171b2e;--mgs-lib-color-16:#4a58a0;--mgs-lib-color-17:#7a2020;--mgs-lib-color-18:#7a5a20;--mgs-lib-color-19:#241a06;--mgs-lib-color-20:#3a4470;--mgs-lib-color-21:#12172f;--mgs-lib-color-22:#232a4d;--mgs-lib-color-23:#35406e;--mgs-lib-color-24:#2e3763;--mgs-lib-color-25:#c41d00;--mgs-lib-color-26:#a01700;--mgs-lib-color-27:#8fa0d8;--mgs-lib-color-28:#3a2a10;--mgs-lib-color-29:#3a1414;--mgs-lib-color-30:#141b2e;--mgs-lib-color-31:#2f3c66;--mgs-lib-color-32:#10281c;--mgs-lib-color-33:#a6e8c6;--mgs-lib-color-34:#1b2340;--mgs-lib-color-35:#1c2445;--mgs-lib-color-36:#242a44;--mgs-lib-color-37:#141527;--mgs-lib-color-38:#3d2a12;--mgs-lib-color-39:#2a1220;--mgs-lib-color-40:#ff9bcb;--mgs-lib-color-41:#6d2046;--mgs-lib-color-42:#12301f;--mgs-lib-color-43:#25a06c;--mgs-lib-color-44:#5a4fc0;--mgs-lib-color-45:#4a3fc0;--mgs-lib-color-46:#6a5fd4;--mgs-lib-color-47:#d3d9ee;--mgs-lib-color-48:#ff6b6b;--mgs-lib-color-49:#2a1414;--mgs-lib-color-50:#ffb3b3;--mgs-lib-color-51:#e0a13c;--mgs-lib-color-52:#5b7fd0;--mgs-lib-color-53:#131b30;--mgs-lib-color-54:#b9c9f5;--mgs-lib-color-55:#8b93ad;--mgs-lib-color-56:#ff5a3c;--mgs-lib-color-57:#2f9d6b;--mgs-lib-color-58:#0d1123;--mgs-lib-color-59:#0f1a18;--mgs-lib-color-60:#000;--mgs-lib-color-61:#ffe6a8;--mgs-lib-color-62:#1d1211;--mgs-lib-color-63:#7c849c;--bg:var(--mgs-lib-color-01);--panel:var(--mgs-lib-color-02);--panel2:var(--mgs-lib-color-03);--line:var(--mgs-lib-color-04);--line2:var(--mgs-lib-color-05);--ink:var(--mgs-lib-color-06);
+  --ink2:var(--mgs-lib-color-07);--dim:var(--mgs-lib-color-08);--brand:var(--mgs-lib-color-09);--brand2:var(--mgs-lib-color-10);--ok:var(--mgs-lib-color-11);--err:var(--mgs-lib-color-12);--warn:var(--mgs-lib-color-13);
   box-sizing:border-box;max-width:1080px;margin:0 auto;padding:1.3rem .85rem 6rem;color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
-.mgsplx *,.mgsplx *::before,.mgsplx *::after{box-sizing:border-box}
-.mgsplx h1,.mgsplx h2,.mgsplx h3,.mgsplx p,.mgsplx ul,.mgsplx figure{margin:0}
-.mgsplx ul{list-style:none;padding:0}
-.mgsplx header.hd{text-align:center;margin-bottom:1.1rem}
-.mgsplx header.hd h1{font-size:1.55rem;font-weight:800;background:linear-gradient(90deg,var(--brand),var(--brand2));
+.mgs-lib-root *,.mgs-lib-root *::before,.mgs-lib-root *::after{box-sizing:border-box}
+.mgs-lib-root h1,.mgs-lib-root h2,.mgs-lib-root h3,.mgs-lib-root p,.mgs-lib-root ul,.mgs-lib-root figure{margin:0}
+.mgs-lib-root ul{list-style:none;padding:0}
+.mgs-lib-root header.mgs-lib-hd{text-align:center;margin-bottom:1.1rem}
+.mgs-lib-root header.mgs-lib-hd h1{font-size:1.55rem;font-weight:800;background:linear-gradient(90deg,var(--brand),var(--brand2));
   -webkit-background-clip:text;background-clip:text;color:transparent}
-.mgsplx header.hd p{color:var(--dim);font-size:.85rem;margin-top:.35rem}
-.mgsplx .statusline{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem}
-.mgsplx .chip{font-size:.72rem;background:var(--panel);border:1px solid var(--line2);border-radius:999px;padding:.22rem .6rem;color:var(--ink2)}
-.mgsplx .chip b{color:#fff}
-.mgsplx .tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:0 0 1rem}
-.mgsplx .tab{display:inline-flex;align-items:center;gap:.45rem;background:#171b2e;border:1px solid var(--line2);
+.mgs-lib-root header.mgs-lib-hd p{color:var(--dim);font-size:.85rem;margin-top:.35rem}
+.mgs-lib-root .mgs-lib-statusline{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem}
+.mgs-lib-root .mgs-lib-chip{font-size:.72rem;background:var(--panel);border:1px solid var(--line2);border-radius:999px;padding:.22rem .6rem;color:var(--ink2)}
+.mgs-lib-root .mgs-lib-chip b{color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:0 0 1rem}
+.mgs-lib-root .mgs-lib-tab{display:inline-flex;align-items:center;gap:.45rem;background:var(--mgs-lib-color-15);border:1px solid var(--line2);
   border-radius:999px;padding:.5rem 1rem;font-size:.86rem;font-weight:650;color:var(--ink2);cursor:pointer;min-height:44px}
-.mgsplx .tab:hover{border-color:#4a58a0}
-.mgsplx .tab[aria-selected="true"]{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#0f1220;border-color:transparent}
-.mgsplx .tab .badge{font-size:.7rem;background:rgba(0,0,0,.22);border-radius:999px;padding:.05rem .45rem}
-.mgsplx .tab .badge.err{background:#7a2020;color:#fff}
-.mgsplx .tab .badge.warn{background:#7a5a20;color:#241a06}
-.mgsplx .panel{display:block}
-.mgsplx .panel[hidden]{display:none}
-.mgsplx .uploader{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem;margin-bottom:1rem}
-.mgsplx .dropzone{border:2px dashed #3a4470;border-radius:.9rem;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:.2s}
-.mgsplx .dropzone:hover,.mgsplx .dropzone.drag{border-color:var(--brand);background:#12172f}
-.mgsplx .dropzone .t{font-size:.95rem;font-weight:650;margin-top:.3rem}
-.mgsplx .dropzone .s{font-size:.78rem;color:var(--dim);margin-top:.25rem}
-.mgsplx .row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:.7rem}
-.mgsplx .btn{background:#232a4d;color:var(--ink2);border:1px solid #35406e;border-radius:.6rem;padding:.6rem .9rem;
+.mgs-lib-root .mgs-lib-tab:hover{border-color:var(--mgs-lib-color-16)}
+.mgs-lib-root .mgs-lib-tab[aria-selected="true"]{background:linear-gradient(135deg,var(--brand),var(--brand2));color:var(--mgs-lib-color-01);border-color:transparent}
+.mgs-lib-root .mgs-lib-tab .mgs-lib-badge{font-size:.7rem;background:rgba(0,0,0,.22);border-radius:999px;padding:.05rem .45rem}
+.mgs-lib-root .mgs-lib-tab .mgs-lib-badge.mgs-lib-err{background:var(--mgs-lib-color-17);color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-tab .mgs-lib-badge.mgs-lib-warn{background:var(--mgs-lib-color-18);color:var(--mgs-lib-color-19)}
+.mgs-lib-root .mgs-lib-panel{display:block}
+.mgs-lib-root .mgs-lib-panel[hidden]{display:none}
+.mgs-lib-root .mgs-lib-uploader{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem;margin-bottom:1rem}
+.mgs-lib-root .mgs-lib-dropzone{border:2px dashed var(--mgs-lib-color-20);border-radius:.9rem;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:.2s}
+.mgs-lib-root .mgs-lib-dropzone:hover,.mgs-lib-root .mgs-lib-dropzone.mgs-lib-drag{border-color:var(--brand);background:var(--mgs-lib-color-21)}
+.mgs-lib-root .mgs-lib-dropzone .mgs-lib-t{font-size:.95rem;font-weight:650;margin-top:.3rem}
+.mgs-lib-root .mgs-lib-dropzone .mgs-lib-s{font-size:.78rem;color:var(--dim);margin-top:.25rem}
+.mgs-lib-root .mgs-lib-row{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:.7rem}
+.mgs-lib-root .mgs-lib-btn{background:var(--mgs-lib-color-22);color:var(--ink2);border:1px solid var(--mgs-lib-color-23);border-radius:.6rem;padding:.6rem .9rem;
   font-size:.82rem;font-weight:650;cursor:pointer;min-height:44px}
-.mgsplx .btn:hover{background:#2e3763;border-color:#4a58a0}
-.mgsplx .btn.main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#0f1220;border-color:transparent}
-.mgsplx .btn.red{background:#c41d00;border-color:#a01700;color:#fff}
-.mgsplx .btn.ghost{background:transparent;border-style:dashed}
-.mgsplx details.paste{margin-top:.7rem}
-.mgsplx details.paste summary{cursor:pointer;font-size:.83rem;color:#8fa0d8;font-weight:650;padding:.3rem 0}
-.mgsplx textarea,.mgsplx input[type="text"],.mgsplx select{font:inherit;color:var(--ink);background:var(--panel2);
+.mgs-lib-root .mgs-lib-btn:hover{background:var(--mgs-lib-color-24);border-color:var(--mgs-lib-color-16)}
+.mgs-lib-root .mgs-lib-btn.mgs-lib-main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:var(--mgs-lib-color-01);border-color:transparent}
+.mgs-lib-root .mgs-lib-btn.mgs-lib-red{background:var(--mgs-lib-color-25);border-color:var(--mgs-lib-color-26);color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-btn.mgs-lib-ghost{background:transparent;border-style:dashed}
+.mgs-lib-root details.mgs-lib-paste{margin-top:.7rem}
+.mgs-lib-root details.mgs-lib-paste summary{cursor:pointer;font-size:.83rem;color:var(--mgs-lib-color-27);font-weight:650;padding:.3rem 0}
+.mgs-lib-root textarea,.mgs-lib-root input[type="text"],.mgs-lib-root select{font:inherit;color:var(--ink);background:var(--panel2);
   border:1px solid var(--line2);border-radius:.6rem;padding:.6rem;width:100%}
-.mgsplx input[type="text"],.mgsplx select{min-height:44px;font-size:16px}
-.mgsplx textarea{font-size:15px;min-height:120px;resize:vertical}
-.mgsplx .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem}
-.mgsplx .notice{border-radius:.7rem;font-size:.84rem;padding:.7rem .85rem;margin:0 0 1rem;display:none;background:var(--panel)}
-.mgsplx .notice[data-kind="warn"]{display:block;background:#3a2a10;border:1px solid #7a5a20;color:var(--warn)}
-.mgsplx .notice[data-kind="err"]{display:block;background:#3a1414;border:1px solid #7a2020;color:var(--err)}
-.mgsplx .notice[data-kind="info"]{display:block;background:#141b2e;border:1px solid #2f3c66;color:var(--ink2)}
-.mgsplx .notice[data-kind="ok"]{display:block;background:#10281c;border:1px solid var(--ok);color:#a6e8c6}
-.mgsplx .notice ul{margin:.4rem 0 0 1.1rem;list-style:disc}
-.mgsplx .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem}
-.mgsplx .libpill{display:inline-flex;align-items:center;gap:.4rem;background:#171b2e;border:1px solid var(--line2);
+.mgs-lib-root input[type="text"],.mgs-lib-root select{min-height:44px;font-size:16px}
+.mgs-lib-root textarea{font-size:15px;min-height:120px;resize:vertical}
+.mgs-lib-root .mgs-lib-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem}
+.mgs-lib-root .mgs-lib-notice{border-radius:.7rem;font-size:.84rem;padding:.7rem .85rem;margin:0 0 1rem;display:none;background:var(--panel)}
+.mgs-lib-root .mgs-lib-notice[data-kind="warn"]{display:block;background:var(--mgs-lib-color-28);border:1px solid var(--mgs-lib-color-18);color:var(--warn)}
+.mgs-lib-root .mgs-lib-notice[data-kind="err"]{display:block;background:var(--mgs-lib-color-29);border:1px solid var(--mgs-lib-color-17);color:var(--err)}
+.mgs-lib-root .mgs-lib-notice[data-kind="info"]{display:block;background:var(--mgs-lib-color-30);border:1px solid var(--mgs-lib-color-31);color:var(--ink2)}
+.mgs-lib-root .mgs-lib-notice[data-kind="ok"]{display:block;background:var(--mgs-lib-color-32);border:1px solid var(--ok);color:var(--mgs-lib-color-33)}
+.mgs-lib-root .mgs-lib-notice ul{margin:.4rem 0 0 1.1rem;list-style:disc}
+.mgs-lib-root .mgs-lib-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem}
+.mgs-lib-root .mgs-lib-libpill{display:inline-flex;align-items:center;gap:.4rem;background:var(--mgs-lib-color-15);border:1px solid var(--line2);
   border-radius:999px;padding:.35rem .4rem .35rem .8rem;font-size:.78rem;font-weight:600;color:var(--ink2);max-width:280px}
-.mgsplx .libpill[aria-pressed="true"]{border-color:var(--brand);color:#fff;background:#1b2340}
-.mgsplx .libpill .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
-.mgsplx .libpill button{background:transparent;border:0;color:var(--dim);cursor:pointer;font-size:.9rem;padding:.25rem .45rem;min-height:32px}
-.mgsplx .libpill button:hover{color:#fff}
-.mgsplx .layout{display:grid;grid-template-columns:255px minmax(0,1fr);gap:.85rem;align-items:start}
-.mgsplx .listwrap{background:var(--panel);border:1px solid var(--line);border-radius:.9rem;padding:.6rem;position:sticky;top:.6rem}
-.mgsplx .listwrap .search{margin-bottom:.5rem}
-.mgsplx .plist{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:.3rem;padding-right:.15rem}
-.mgsplx .pitem{display:block;width:100%;text-align:left;background:#101427;border:1px solid var(--line2);border-radius:.55rem;
+.mgs-lib-root .mgs-lib-libpill[aria-pressed="true"]{border-color:var(--brand);color:var(--mgs-lib-color-14);background:var(--mgs-lib-color-34)}
+.mgs-lib-root .mgs-lib-libpill .mgs-lib-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+.mgs-lib-root .mgs-lib-libpill button{background:transparent;border:0;color:var(--dim);cursor:pointer;font-size:.9rem;padding:.25rem .45rem;min-height:32px}
+.mgs-lib-root .mgs-lib-libpill button:hover{color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-layout{display:grid;grid-template-columns:255px minmax(0,1fr);gap:.85rem;align-items:start}
+.mgs-lib-root .mgs-lib-listwrap{background:var(--panel);border:1px solid var(--line);border-radius:.9rem;padding:.6rem;position:sticky;top:.6rem}
+.mgs-lib-root .mgs-lib-listwrap .mgs-lib-search{margin-bottom:.5rem}
+.mgs-lib-root .mgs-lib-plist{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:.3rem;padding-right:.15rem}
+.mgs-lib-root .mgs-lib-pitem{display:block;width:100%;text-align:left;background:var(--mgs-lib-color-03);border:1px solid var(--line2);border-radius:.55rem;
   padding:.5rem .6rem;color:var(--ink2);font-size:.8rem;font-weight:600;cursor:pointer;line-height:1.4}
-.mgsplx .pitem:hover{border-color:#4a58a0}
-.mgsplx .pitem[aria-current="true"]{border-color:var(--brand);background:#1c2445;color:#fff}
-.mgsplx .pitem .n{color:var(--brand2);font-weight:800;margin-right:.35rem}
-.mgsplx .count{font-size:.74rem;color:var(--dim);text-align:right;margin-top:.4rem}
-.mgsplx .card,.mgsplx .lane{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
-.mgsplx .cardhead{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.85rem}
-.mgsplx .num{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#0f1220;font-weight:800;font-size:.82rem;
+.mgs-lib-root .mgs-lib-pitem:hover{border-color:var(--mgs-lib-color-16)}
+.mgs-lib-root .mgs-lib-pitem[aria-current="true"]{border-color:var(--brand);background:var(--mgs-lib-color-35);color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-pitem .mgs-lib-n{color:var(--brand2);font-weight:800;margin-right:.35rem}
+.mgs-lib-root .mgs-lib-count{font-size:.74rem;color:var(--dim);text-align:right;margin-top:.4rem}
+.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+.mgs-lib-root .mgs-lib-cardhead{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.85rem}
+.mgs-lib-root .mgs-lib-num{background:linear-gradient(135deg,var(--brand),var(--brand2));color:var(--mgs-lib-color-01);font-weight:800;font-size:.82rem;
   padding:.22rem .6rem;border-radius:999px;white-space:nowrap}
-.mgsplx .tier{font-size:.7rem;color:var(--dim);border:1px solid var(--line2);border-radius:999px;padding:.12rem .5rem}
-.mgsplx .cardtitle{font-size:1.02rem;font-weight:750;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
-.mgsplx .sec{background:var(--panel2);border:1px solid #242a44;border-radius:.7rem;padding:.7rem .8rem;margin-bottom:.65rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.mgsplx .sec.gen{background:#12172f;border-color:#3a4470}
-.mgsplx .sec.miss{background:#141527;border-style:dashed;color:var(--dim)}
-.mgsplx .sectop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
-.mgsplx .lab{font-size:.75rem;font-weight:750;color:#8fa0d8;letter-spacing:.03em;text-transform:uppercase}
-.mgsplx .lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
-.mgsplx .flag{font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:.1rem .45rem;margin-left:.4rem}
-.mgsplx .flag.gen{background:#3d2a12;color:var(--warn);border:1px solid #7a5a20}
-.mgsplx .flag.miss{background:#2a1220;color:#ff9bcb;border:1px solid #6d2046}
-.mgsplx .flag.src{background:#12301f;color:#a6e8c6;border:1px solid #1e7d54}
-.mgsplx .cbtn{background:#232a4d;color:var(--ink2);border:1px solid #35406e;border-radius:.55rem;padding:.5rem .7rem;
+.mgs-lib-root .mgs-lib-tier{font-size:.7rem;color:var(--dim);border:1px solid var(--line2);border-radius:999px;padding:.12rem .5rem}
+.mgs-lib-root .mgs-lib-cardtitle{font-size:1.02rem;font-weight:750;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.mgs-lib-root .mgs-lib-sec{background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem;margin-bottom:.65rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mgs-lib-root .mgs-lib-sec.mgs-lib-gen{background:var(--mgs-lib-color-21);border-color:var(--mgs-lib-color-20)}
+.mgs-lib-root .mgs-lib-sec.mgs-lib-miss{background:var(--mgs-lib-color-37);border-style:dashed;color:var(--dim)}
+.mgs-lib-root .mgs-lib-sectop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.mgs-lib-root .mgs-lib-lab{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);letter-spacing:.03em;text-transform:uppercase}
+.mgs-lib-root .mgs-lib-lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
+.mgs-lib-root .mgs-lib-flag{font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:.1rem .45rem;margin-left:.4rem}
+.mgs-lib-root .mgs-lib-flag.mgs-lib-gen{background:var(--mgs-lib-color-38);color:var(--warn);border:1px solid var(--mgs-lib-color-18)}
+.mgs-lib-root .mgs-lib-flag.mgs-lib-miss{background:var(--mgs-lib-color-39);color:var(--mgs-lib-color-40);border:1px solid var(--mgs-lib-color-41)}
+.mgs-lib-root .mgs-lib-flag.mgs-lib-src{background:var(--mgs-lib-color-42);color:var(--mgs-lib-color-33);border:1px solid var(--mgs-lib-color-11)}
+.mgs-lib-root .mgs-lib-cbtn{background:var(--mgs-lib-color-22);color:var(--ink2);border:1px solid var(--mgs-lib-color-23);border-radius:.55rem;padding:.5rem .7rem;
   font-size:.78rem;font-weight:650;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:.35rem;min-height:40px}
-.mgsplx .cbtn:hover{background:#2e3763;border-color:#4a58a0}
-.mgsplx .cbtn.copied{background:var(--ok);border-color:#25a06c;color:#fff}
-.mgsplx .cbtn.spec{background:#5a4fc0;color:#fff;border-color:#4a3fc0}
-.mgsplx .cbtn.spec:hover{background:#6a5fd4}
-.mgsplx .val{font-size:.88rem;color:#d3d9ee;white-space:pre-wrap;overflow-wrap:anywhere}
-.mgsplx .mini{font-size:.74rem;font-weight:800;color:var(--brand2);text-transform:uppercase;letter-spacing:.03em;margin:.55rem 0 .2rem}
-.mgsplx .howto li{font-size:.83rem;color:#d3d9ee;margin-bottom:.18rem;padding-left:1rem;position:relative}
-.mgsplx .howto li::before{content:"\2022";position:absolute;left:.2rem;color:var(--brand)}
-.mgsplx .issue{font-size:.78rem;border-left:3px solid;border-radius:.35rem;padding:.28rem .5rem;margin-top:.35rem}
-.mgsplx .issue.error{border-color:#ff6b6b;background:#2a1414;color:#ffb3b3}
-.mgsplx .issue.warn{border-color:#e0a13c;background:#241a06;color:var(--warn)}
-.mgsplx .issue.info{border-color:#5b7fd0;background:#131b30;color:#b9c9f5}
-.mgsplx .empty{text-align:center;color:#8b93ad;padding:2.6rem 1rem;font-size:.9rem}
-.mgsplx .grid3{display:grid;grid-template-columns:1fr;gap:.85rem}
-.mgsplx .vflow{display:flex;flex-direction:column;gap:.85rem}
-.mgsplx .varwrap{display:flex;flex-direction:column;gap:.5rem;margin:.25rem 0 .55rem}
-.mgsplx .flag.ok{background:#10281c;border:1px solid var(--ok);color:#a6e8c6}
-.mgsplx .lane h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
-.mgsplx .lane.before{border-color:#ff5a3c}
-.mgsplx .lane.after{border-color:#2f9d6b}
-.mgsplx .lane.thumb{border-color:#5a4fc0}
-.mgsplx .kv{display:flex;gap:.5rem;flex-wrap:wrap;font-size:.78rem;color:var(--dim);margin:.35rem 0}
-.mgsplx .kv b{color:#d3d9ee;font-weight:650}
-.mgsplx .slot{border:1px dashed #3a4470;border-radius:.6rem;padding:.6rem;margin-bottom:.5rem;background:#0d1123}
-.mgsplx .slot[data-filled="true"]{border-style:solid;border-color:#2f9d6b;background:#0f1a18}
-.mgsplx .slot .fname{font-size:.78rem;overflow-wrap:anywhere;color:#d3d9ee;font-weight:650}
-.mgsplx .slot img{max-width:100%;border-radius:.4rem;display:block;margin-top:.45rem;max-height:190px;object-fit:contain;background:#000}
-.mgsplx .slot .who{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:var(--dim)}
-.mgsplx .btnrow{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.45rem}
-.mgsplx .varrow{display:grid;grid-template-columns:1fr;gap:.5rem;margin:.4rem 0 .6rem}
-.mgsplx .var{background:#0d1123;border:1px solid var(--line2);border-radius:.6rem;padding:.6rem}
-.mgsplx .var .vname{font-size:.8rem;font-weight:800;color:#ffe6a8;overflow-wrap:anywhere}
-.mgsplx .var .hint{font-size:.72rem;color:var(--dim);margin:.15rem 0 .4rem}
-.mgsplx .var select,.mgsplx .var input{width:100%}
-.mgsplx .var .occ{font-size:.68rem;color:var(--dim);margin-top:.3rem}
-.mgsplx .var .occ b{color:#a6e8c6}
-.mgsplx .var.bad{border-color:#7a2020;background:#1d1211}
-.mgsplx .menu{position:relative;display:inline-block}
-.mgsplx .menu-list{position:absolute;z-index:60;top:calc(100% + .25rem);left:0;min-width:220px;background:#171b2e;
+.mgs-lib-root .mgs-lib-cbtn:hover{background:var(--mgs-lib-color-24);border-color:var(--mgs-lib-color-16)}
+.mgs-lib-root .mgs-lib-cbtn.mgs-lib-copied{background:var(--ok);border-color:var(--mgs-lib-color-43);color:var(--mgs-lib-color-14)}
+.mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec{background:var(--mgs-lib-color-44);color:var(--mgs-lib-color-14);border-color:var(--mgs-lib-color-45)}
+.mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec:hover{background:var(--mgs-lib-color-46)}
+.mgs-lib-root .mgs-lib-val{font-size:.88rem;color:var(--mgs-lib-color-47);white-space:pre-wrap;overflow-wrap:anywhere}
+.mgs-lib-root .mgs-lib-mini{font-size:.74rem;font-weight:800;color:var(--brand2);text-transform:uppercase;letter-spacing:.03em;margin:.55rem 0 .2rem}
+.mgs-lib-root .mgs-lib-howto li{font-size:.83rem;color:var(--mgs-lib-color-47);margin-bottom:.18rem;padding-left:1rem;position:relative}
+.mgs-lib-root .mgs-lib-howto li::before{content:"\2022";position:absolute;left:.2rem;color:var(--brand)}
+.mgs-lib-root .mgs-lib-issue{font-size:.78rem;border-left:3px solid;border-radius:.35rem;padding:.28rem .5rem;margin-top:.35rem}
+.mgs-lib-root .mgs-lib-issue.mgs-lib-error{border-color:var(--mgs-lib-color-48);background:var(--mgs-lib-color-49);color:var(--mgs-lib-color-50)}
+.mgs-lib-root .mgs-lib-issue.mgs-lib-warn{border-color:var(--mgs-lib-color-51);background:var(--mgs-lib-color-19);color:var(--warn)}
+.mgs-lib-root .mgs-lib-issue.mgs-lib-info{border-color:var(--mgs-lib-color-52);background:var(--mgs-lib-color-53);color:var(--mgs-lib-color-54)}
+.mgs-lib-root .mgs-lib-empty{text-align:center;color:var(--mgs-lib-color-55);padding:2.6rem 1rem;font-size:.9rem}
+.mgs-lib-root .mgs-lib-grid3{display:grid;grid-template-columns:1fr;gap:.85rem}
+.mgs-lib-root .mgs-lib-vflow{display:flex;flex-direction:column;gap:.85rem}
+.mgs-lib-root .mgs-lib-varwrap{display:flex;flex-direction:column;gap:.5rem;margin:.25rem 0 .55rem}
+.mgs-lib-root .mgs-lib-flag.mgs-lib-ok{background:var(--mgs-lib-color-32);border:1px solid var(--ok);color:var(--mgs-lib-color-33)}
+.mgs-lib-root .mgs-lib-lane h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
+.mgs-lib-root .mgs-lib-lane.mgs-lib-before{border-color:var(--mgs-lib-color-56)}
+.mgs-lib-root .mgs-lib-lane.mgs-lib-after{border-color:var(--mgs-lib-color-57)}
+.mgs-lib-root .mgs-lib-lane.mgs-lib-thumb{border-color:var(--mgs-lib-color-44)}
+.mgs-lib-root .mgs-lib-kv{display:flex;gap:.5rem;flex-wrap:wrap;font-size:.78rem;color:var(--dim);margin:.35rem 0}
+.mgs-lib-root .mgs-lib-kv b{color:var(--mgs-lib-color-47);font-weight:650}
+.mgs-lib-root .mgs-lib-slot{border:1px dashed var(--mgs-lib-color-20);border-radius:.6rem;padding:.6rem;margin-bottom:.5rem;background:var(--mgs-lib-color-58)}
+.mgs-lib-root .mgs-lib-slot[data-filled="true"]{border-style:solid;border-color:var(--mgs-lib-color-57);background:var(--mgs-lib-color-59)}
+.mgs-lib-root .mgs-lib-slot .mgs-lib-fname{font-size:.78rem;overflow-wrap:anywhere;color:var(--mgs-lib-color-47);font-weight:650}
+.mgs-lib-root .mgs-lib-slot img{max-width:100%;border-radius:.4rem;display:block;margin-top:.45rem;max-height:190px;object-fit:contain;background:var(--mgs-lib-color-60)}
+.mgs-lib-root .mgs-lib-slot .mgs-lib-who{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:var(--dim)}
+.mgs-lib-root .mgs-lib-btnrow{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.45rem}
+.mgs-lib-root .mgs-lib-varrow{display:grid;grid-template-columns:1fr;gap:.5rem;margin:.4rem 0 .6rem}
+.mgs-lib-root .mgs-lib-var{background:var(--mgs-lib-color-58);border:1px solid var(--line2);border-radius:.6rem;padding:.6rem}
+.mgs-lib-root .mgs-lib-var .mgs-lib-vname{font-size:.8rem;font-weight:800;color:var(--mgs-lib-color-61);overflow-wrap:anywhere}
+.mgs-lib-root .mgs-lib-var .mgs-lib-hint{font-size:.72rem;color:var(--dim);margin:.15rem 0 .4rem}
+.mgs-lib-root .mgs-lib-var select,.mgs-lib-root .mgs-lib-var input{width:100%}
+.mgs-lib-root .mgs-lib-var .mgs-lib-occ{font-size:.68rem;color:var(--dim);margin-top:.3rem}
+.mgs-lib-root .mgs-lib-var .mgs-lib-occ b{color:var(--mgs-lib-color-33)}
+.mgs-lib-root .mgs-lib-var.mgs-lib-bad{border-color:var(--mgs-lib-color-17);background:var(--mgs-lib-color-62)}
+.mgs-lib-root .mgs-lib-menu{position:relative;display:inline-block}
+.mgs-lib-root .mgs-lib-menu-list{position:absolute;z-index:60;top:calc(100% + .25rem);left:0;min-width:220px;background:var(--mgs-lib-color-15);
   border:1px solid var(--line2);border-radius:.6rem;box-shadow:0 10px 28px rgba(0,0,0,.45);padding:.25rem;margin:0;
   display:flex;flex-direction:column;gap:.15rem;max-height:60vh;overflow:auto}
-.mgsplx .menu-list[hidden]{display:none}
-.mgsplx .menu-list li{margin:0}
-.mgsplx .menu-list button{display:flex;justify-content:space-between;gap:.6rem;width:100%;text-align:left;background:transparent;
+.mgs-lib-root .mgs-lib-menu-list[hidden]{display:none}
+.mgs-lib-root .mgs-lib-menu-list li{margin:0}
+.mgs-lib-root .mgs-lib-menu-list button{display:flex;justify-content:space-between;gap:.6rem;width:100%;text-align:left;background:transparent;
   border:0;border-radius:.4rem;padding:.5rem .6rem;color:var(--ink2);font-size:.8rem;cursor:pointer;min-height:40px}
-.mgsplx .menu-list button:hover,.mgsplx .menu-list button:focus{background:#232a4d;color:#fff;outline:2px solid var(--brand);outline-offset:-2px}
-.mgsplx .menu-list button[aria-checked="true"]{color:#fff;box-shadow:inset 2px 0 0 var(--brand2)}
-.mgsplx .fields{display:grid;grid-template-columns:1fr;gap:.6rem}
-.mgsplx .field{background:var(--panel2);border:1px solid #242a44;border-radius:.7rem;padding:.7rem .8rem}
-.mgsplx .field .flab{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem}
-.mgsplx .field .flab span{font-size:.75rem;font-weight:750;color:#8fa0d8;text-transform:uppercase;letter-spacing:.03em}
-.mgsplx .field .src{font-size:.68rem;color:var(--dim)}
-.mgsplx .field textarea{min-height:2.6em}
-.mgsplx .field.body textarea{min-height:9rem}
-.mgsplx .check{display:flex;gap:.5rem;align-items:flex-start;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
-.mgsplx .check input{width:18px;height:18px;margin-top:.1rem;accent-color:var(--brand)}
-.mgsplx .sum{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
-.mgsplx .sum .s{font-size:.72rem;border:1px solid var(--line2);border-radius:999px;padding:.2rem .55rem;color:var(--ink2);background:#101427}
-.mgsplx .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.mgsplx :focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-.mgsplx .foot{text-align:center;color:#7c849c;font-size:.74rem;margin-top:1.4rem}
-.toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ok,#1e7d54);
-  color:#fff;padding:.7rem 1.3rem;border-radius:999px;font-size:.86rem;font-weight:650;opacity:0;pointer-events:none;transition:.22s;z-index:120}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (max-width:900px){.mgsplx .layout{grid-template-columns:1fr}.mgsplx .listwrap{position:static}.mgsplx .plist{max-height:38vh}}
-@media (max-width:1366px){.mgsplx{max-width:1024px;padding:1.2rem .8rem 5rem}.mgsplx .layout{grid-template-columns:240px minmax(0,1fr)}}
-@media (max-width:1024px){.mgsplx{max-width:960px;padding:1.1rem .75rem 5rem}.mgsplx .layout{grid-template-columns:220px minmax(0,1fr);gap:.7rem}.mgsplx .card,.mgsplx .lane{padding:.9rem}}
-@media (max-width:768px){.mgsplx .layout{grid-template-columns:1fr}.mgsplx .listwrap{position:static;max-width:100%}.mgsplx .plist{max-height:38vh}.mgsplx .cardhead{flex-direction:column;align-items:flex-start}.mgsplx .sectop{flex-direction:column;align-items:flex-start}.mgsplx .btnrow{width:100%}.mgsplx .toolbar{width:100%}}
-@media (max-width:480px){.mgsplx{padding:1rem .6rem 5rem;overflow-x:hidden}.mgsplx header.hd h1{font-size:1.3rem}.mgsplx header.hd p{font-size:.8rem}.mgsplx .tab{flex:1 1 48%;font-size:.78rem;min-height:42px}.mgsplx .card,.mgsplx .lane,.mgsplx .sec,.mgsplx .field,.mgsplx .slot,.mgsplx .listwrap,.mgsplx .uploader{max-width:100%;overflow-wrap:anywhere}.mgsplx .cbtn{white-space:normal;word-break:break-word;flex:1 1 100%;justify-content:center;min-height:44px}.mgsplx .btn{flex:1 1 auto;min-width:0;white-space:normal;word-break:break-word}.mgsplx .libpill{max-width:100%;flex-wrap:wrap}.mgsplx .menu-list{min-width:180px;max-width:calc(100vw - 16px);left:0;right:auto}.mgsplx textarea,.mgsplx input[type="text"],.mgsplx select{max-width:100%;font-size:16px}.mgsplx .var select,.mgsplx .var input{max-width:100%}.mgsplx .val{max-width:100%;overflow-wrap:anywhere;word-break:break-word}}
-@media (max-width:360px){.mgsplx{padding:.8rem .5rem 5rem;max-width:100vw;overflow-x:hidden}.mgsplx header.hd h1{font-size:1.2rem}.mgsplx .tab{flex:1 1 100%;font-size:.8rem}.mgsplx .card,.mgsplx .lane{padding:.75rem;border-radius:.8rem}.mgsplx .sec,.mgsplx .field{padding:.6rem}.mgsplx .cbtn{font-size:.75rem;padding:.5rem .6rem;flex:1 1 100%}.mgsplx .btn{font-size:.78rem;padding:.5rem .7rem}.mgsplx .menu-list{min-width:160px;max-width:calc(100vw - 12px);font-size:.78rem}.mgsplx .listwrap{padding:.5rem}.mgsplx .plist{max-height:32vh}.mgsplx .count{font-size:.7rem}.mgsplx .val{font-size:.84rem}.mgsplx .lab{font-size:.7rem}}
-@media (max-width:560px){.mgsplx{padding:.9rem .55rem 5rem;overflow-x:hidden}.mgsplx header.hd h1{font-size:1.28rem}
-  .mgsplx .tab{flex:1 1 44%;justify-content:center;font-size:.8rem}.mgsplx .grid3{grid-template-columns:1fr}
-  .mgsplx .sectop{align-items:flex-start}.mgsplx .cbtn{flex:1 1 auto;justify-content:center;white-space:normal;word-break:break-word}.mgsplx .libpill{max-width:100%}}
+.mgs-lib-root .mgs-lib-menu-list button:hover,.mgs-lib-root .mgs-lib-menu-list button:focus{background:var(--mgs-lib-color-22);color:var(--mgs-lib-color-14);outline:2px solid var(--brand);outline-offset:-2px}
+.mgs-lib-root .mgs-lib-menu-list button[aria-checked="true"]{color:var(--mgs-lib-color-14);box-shadow:inset 2px 0 0 var(--brand2)}
+.mgs-lib-root .mgs-lib-fields{display:grid;grid-template-columns:1fr;gap:.6rem}
+.mgs-lib-root .mgs-lib-field{background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem}
+.mgs-lib-root .mgs-lib-field .mgs-lib-flab{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem}
+.mgs-lib-root .mgs-lib-field .mgs-lib-flab span{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
+.mgs-lib-root .mgs-lib-field .mgs-lib-src{font-size:.68rem;color:var(--dim)}
+.mgs-lib-root .mgs-lib-field textarea{min-height:2.6em}
+.mgs-lib-root .mgs-lib-field.mgs-lib-body textarea{min-height:9rem}
+.mgs-lib-root .mgs-lib-check{display:flex;gap:.5rem;align-items:flex-start;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
+.mgs-lib-root .mgs-lib-check input{width:18px;height:18px;margin-top:.1rem;accent-color:var(--brand)}
+.mgs-lib-root .mgs-lib-sum{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
+.mgs-lib-root .mgs-lib-sum .mgs-lib-s{font-size:.72rem;border:1px solid var(--line2);border-radius:999px;padding:.2rem .55rem;color:var(--ink2);background:var(--mgs-lib-color-03)}
+.mgs-lib-root .mgs-lib-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.mgs-lib-root :focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.mgs-lib-root .mgs-lib-foot{text-align:center;color:var(--mgs-lib-color-63);font-size:.74rem;margin-top:1.4rem}
+.mgs-lib-toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ok,var(--mgs-lib-color-11));
+  color:var(--mgs-lib-color-14);padding:.7rem 1.3rem;border-radius:999px;font-size:.86rem;font-weight:650;opacity:0;pointer-events:none;transition:.22s;z-index:120}
+.mgs-lib-toast.mgs-lib-show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:900px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static}.mgs-lib-root .mgs-lib-plist{max-height:38vh}}
+@media (max-width:1366px){.mgs-lib-root{max-width:1024px;padding:1.2rem .8rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:240px minmax(0,1fr)}}
+@media (max-width:1024px){.mgs-lib-root{max-width:960px;padding:1.1rem .75rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:220px minmax(0,1fr);gap:.7rem}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{padding:.9rem}}
+@media (max-width:768px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static;max-width:100%}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .mgs-lib-cardhead{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-sectop{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-btnrow{width:100%}.mgs-lib-root .mgs-lib-toolbar{width:100%}}
+@media (max-width:480px){.mgs-lib-root{padding:1rem .6rem 5rem;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.3rem}.mgs-lib-root header.mgs-lib-hd p{font-size:.8rem}.mgs-lib-root .mgs-lib-tab{flex:1 1 48%;font-size:.78rem;min-height:42px}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane,.mgs-lib-root .mgs-lib-sec,.mgs-lib-root .mgs-lib-field,.mgs-lib-root .mgs-lib-slot,.mgs-lib-root .mgs-lib-listwrap,.mgs-lib-root .mgs-lib-uploader{max-width:100%;overflow-wrap:anywhere}.mgs-lib-root .mgs-lib-cbtn{white-space:normal;word-break:break-word;flex:1 1 100%;justify-content:center;min-height:44px}.mgs-lib-root .mgs-lib-btn{flex:1 1 auto;min-width:0;white-space:normal;word-break:break-word}.mgs-lib-root .mgs-lib-libpill{max-width:100%;flex-wrap:wrap}.mgs-lib-root .mgs-lib-menu-list{min-width:180px;max-width:calc(100vw - 16px);left:0;right:auto}.mgs-lib-root textarea,.mgs-lib-root input[type="text"],.mgs-lib-root select{max-width:100%;font-size:16px}.mgs-lib-root .mgs-lib-var select,.mgs-lib-root .mgs-lib-var input{max-width:100%}.mgs-lib-root .mgs-lib-val{max-width:100%;overflow-wrap:anywhere;word-break:break-word}}
+@media (max-width:360px){.mgs-lib-root{padding:.8rem .5rem 5rem;max-width:100vw;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.2rem}.mgs-lib-root .mgs-lib-tab{flex:1 1 100%;font-size:.8rem}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{padding:.75rem;border-radius:.8rem}.mgs-lib-root .mgs-lib-sec,.mgs-lib-root .mgs-lib-field{padding:.6rem}.mgs-lib-root .mgs-lib-cbtn{font-size:.75rem;padding:.5rem .6rem;flex:1 1 100%}.mgs-lib-root .mgs-lib-btn{font-size:.78rem;padding:.5rem .7rem}.mgs-lib-root .mgs-lib-menu-list{min-width:160px;max-width:calc(100vw - 12px);font-size:.78rem}.mgs-lib-root .mgs-lib-listwrap{padding:.5rem}.mgs-lib-root .mgs-lib-plist{max-height:32vh}.mgs-lib-root .mgs-lib-count{font-size:.7rem}.mgs-lib-root .mgs-lib-val{font-size:.84rem}.mgs-lib-root .mgs-lib-lab{font-size:.7rem}}
+@media (max-width:560px){.mgs-lib-root{padding:.9rem .55rem 5rem;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.28rem}
+  .mgs-lib-root .mgs-lib-tab{flex:1 1 44%;justify-content:center;font-size:.8rem}.mgs-lib-root .mgs-lib-grid3{grid-template-columns:1fr}
+  .mgs-lib-root .mgs-lib-sectop{align-items:flex-start}.mgs-lib-root .mgs-lib-cbtn{flex:1 1 auto;justify-content:center;white-space:normal;word-break:break-word}.mgs-lib-root .mgs-lib-libpill{max-width:100%}}
 
 /* Global overflow prevention - PLE-10 */
-html,body{overflow-x:hidden;max-width:100vw}
-.mgsplx{width:100%;max-width:1080px;overflow-x:hidden}
-.mgsplx .card,.mgsplx .lane,.mgsplx .sec,.mgsplx .field,.mgsplx .slot,.mgsplx .listwrap,.mgsplx .uploader,.mgsplx .toolbar,.mgsplx .btnrow,.mgsplx .fields,.mgsplx .varrow,.mgsplx .vflow,.mgsplx .layout{max-width:100%;box-sizing:border-box}
-.mgsplx img{max-width:100%;height:auto}
-.mgsplx .menu-list{max-width:calc(100vw - 16px);overflow-wrap:anywhere;word-break:break-word}
-.mgsplx select{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.mgs-lib-root{overflow-x:hidden;max-width:100vw}
+.mgs-lib-root{width:100%;max-width:1080px;overflow-x:hidden}
+.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane,.mgs-lib-root .mgs-lib-sec,.mgs-lib-root .mgs-lib-field,.mgs-lib-root .mgs-lib-slot,.mgs-lib-root .mgs-lib-listwrap,.mgs-lib-root .mgs-lib-uploader,.mgs-lib-root .mgs-lib-toolbar,.mgs-lib-root .mgs-lib-btnrow,.mgs-lib-root .mgs-lib-fields,.mgs-lib-root .mgs-lib-varrow,.mgs-lib-root .mgs-lib-vflow,.mgs-lib-root .mgs-lib-layout{max-width:100%;box-sizing:border-box}
+.mgs-lib-root img{max-width:100%;height:auto}
+.mgs-lib-root .mgs-lib-menu-list{max-width:calc(100vw - 16px);overflow-wrap:anywhere;word-break:break-word}
+.mgs-lib-root select{max-width:100%;overflow:hidden;text-overflow:ellipsis}
 
-@media (prefers-reduced-motion:reduce){.mgsplx *,.mgsplx *::before,.mgsplx *::after{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){.mgs-lib-root *,.mgs-lib-root *::before,.mgs-lib-root *::after{transition:none;animation:none}}
 </style>
 </head>
 <body style="margin:0;background:#0f1220">
-<div class="mgsplx" id="app">
-  <header class="hd">
+<div class="mgs-lib-root" id="app">
+  <header class="mgs-lib-hd">
     <h1>Prompt Library Engine</h1>
     <p>Upload any prompt-library <b>.md</b> file &rarr; customize, generate images, publish to Blogger.</p>
-    <div class="statusline" id="statusline"></div>
+    <div class="mgs-lib-statusline" id="statusline"></div>
   </header>
 
-  <div class="tabbar" id="tabbar" role="tablist" aria-label="Engine workspaces"></div>
+  <div class="mgs-lib-tabbar" id="tabbar" role="tablist" aria-label="Engine workspaces"></div>
 
-  <div class="notice" id="notice" role="status" aria-live="polite"></div>
+  <div class="mgs-lib-notice" id="notice" role="status" aria-live="polite"></div>
 
-  <section class="panel" id="panel-library" role="tabpanel" aria-labelledby="tab-library" tabindex="-1">
-    <div class="uploader">
-      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Load prompt library files. Press Enter to browse.">
-        <div class="t">Drag &amp; drop your library <b>.md</b> here</div>
-        <div class="s">Markdown only &mdash; legacy 9-section and Template v5.0 13-section files are both accepted</div>
+  <section class="mgs-lib-panel" id="panel-library" role="tabpanel" aria-labelledby="tab-library" tabindex="-1">
+    <div class="mgs-lib-uploader">
+      <div class="mgs-lib-dropzone" id="dropzone" role="button" tabindex="0" aria-label="Load prompt library files. Press Enter to browse.">
+        <div class="mgs-lib-t">Drag &amp; drop your library <b>.md</b> here</div>
+        <div class="mgs-lib-s">Markdown only &mdash; legacy 9-section and Template v5.0 13-section files are both accepted</div>
       </div>
       <input type="file" id="fileInput" accept=".md,.markdown,.txt" multiple style="display:none" />
-      <div class="row">
-        <button type="button" class="btn main" id="browseBtn">Choose .md file(s)</button>
-        <button type="button" class="btn" id="templateBtn">Download template</button>
-        <button type="button" class="btn ghost" id="sampleBtn">Load built-in sample</button>
-        <button type="button" class="btn red" id="clearBtn">Clear all</button>
+      <div class="mgs-lib-row">
+        <button type="button" class="mgs-lib-btn mgs-lib-main" id="browseBtn">Choose .md file(s)</button>
+        <button type="button" class="mgs-lib-btn" id="templateBtn">Download template</button>
+        <button type="button" class="mgs-lib-btn mgs-lib-ghost" id="sampleBtn">Load built-in sample</button>
+        <button type="button" class="mgs-lib-btn mgs-lib-red" id="clearBtn">Clear all</button>
       </div>
-      <details class="paste">
+      <details class="mgs-lib-paste">
         <summary>or paste .md content directly</summary>
-        <label class="sr" for="pasteArea">Paste library markdown</label>
+        <label class="mgs-lib-sr" for="pasteArea">Paste library markdown</label>
         <textarea id="pasteArea" placeholder="Paste the full .md content here..." aria-label="Paste library markdown"></textarea>
-        <div class="row" style="justify-content:flex-start">
-          <label class="sr" for="pasteName">Category name</label>
-          <input type="text" class="btn" id="pasteName" placeholder="Category name (optional)" style="background:#101427;color:#e8eaf2;flex:1 1 180px" />
-          <button type="button" class="btn main" id="pasteBtn">Load pasted content</button>
+        <div class="mgs-lib-row" style="justify-content:flex-start">
+          <label class="mgs-lib-sr" for="pasteName">Category name</label>
+          <input type="text" class="mgs-lib-btn" id="pasteName" placeholder="Category name (optional)" style="background:#101427;color:#e8eaf2;flex:1 1 180px" />
+          <button type="button" class="mgs-lib-btn mgs-lib-main" id="pasteBtn">Load pasted content</button>
         </div>
       </details>
     </div>
-    <div class="toolbar" id="libbar"></div>
-    <div class="layout">
-      <div class="listwrap">
+    <div class="mgs-lib-toolbar" id="libbar"></div>
+    <div class="mgs-lib-layout">
+      <div class="mgs-lib-listwrap">
         <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.5rem">
-          <input type="text" class="search" id="search" placeholder="Search title or label..." aria-label="Search prompts by title or label" style="margin-bottom:0;flex:1" />
-          <button type="button" class="cbtn ghost" id="clearSearchBtn" aria-label="Clear search" title="Clear search">✕</button>
+          <input type="text" class="mgs-lib-search" id="search" placeholder="Search title or label..." aria-label="Search prompts by title or label" style="margin-bottom:0;flex:1" />
+          <button type="button" class="mgs-lib-cbtn mgs-lib-ghost" id="clearSearchBtn" aria-label="Clear search" title="Clear search">✕</button>
         </div>
-        <ul class="plist" id="plist"></ul>
-        <div class="count" id="count"></div>
+        <ul class="mgs-lib-plist" id="plist"></ul>
+        <div class="mgs-lib-count" id="count"></div>
       </div>
       <div id="libbody"></div>
     </div>
   </section>
 
-  <section class="panel" id="panel-image" role="tabpanel" aria-labelledby="tab-image" tabindex="-1" hidden>
+  <section class="mgs-lib-panel" id="panel-image" role="tabpanel" aria-labelledby="tab-image" tabindex="-1" hidden>
     <div id="imagebody"></div>
   </section>
 
-  <section class="panel" id="panel-publisher" role="tabpanel" aria-labelledby="tab-publisher" tabindex="-1" hidden>
+  <section class="mgs-lib-panel" id="panel-publisher" role="tabpanel" aria-labelledby="tab-publisher" tabindex="-1" hidden>
     <div id="pubbody"></div>
   </section>
 
-  <p class="foot">Prompt Library Engine v2.5.3 Production &middot; every button copies exactly the value shown in its section.</p>
+  <p class="mgs-lib-foot">Prompt Library Engine v2.5.3 Production &middot; every button copies exactly the value shown in its section.</p>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="mgs-lib-toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* ===== core ===== */
 /* ==========================================================================
@@ -1304,13 +1304,13 @@ var PLX = (function () {
     var tot = 0, errs = 0, warns = 0;
     S.libs.forEach(function (L) { tot += L.prompts.length; errs += L.errCount; warns += L.warnCount; });
     var bits = [
-      '<span class="chip">Engine <b>v' + PLX.VERSION + '</b></span>',
-      '<span class="chip">Libraries <b>' + S.libs.length + '</b></span>',
-      '<span class="chip">Prompts <b>' + tot + '</b></span>',
-      '<span class="chip">Validation <b>' + errs + ' error / ' + warns + ' warning</b></span>',
-      '<span class="chip">Storage <b>' + (LS.available ? 'on' : 'unavailable') + '</b></span>'
+      '<span class="mgs-lib-chip">Engine <b>v' + PLX.VERSION + '</b></span>',
+      '<span class="mgs-lib-chip">Libraries <b>' + S.libs.length + '</b></span>',
+      '<span class="mgs-lib-chip">Prompts <b>' + tot + '</b></span>',
+      '<span class="mgs-lib-chip">Validation <b>' + errs + ' error / ' + warns + ' warning</b></span>',
+      '<span class="mgs-lib-chip">Storage <b>' + (LS.available ? 'on' : 'unavailable') + '</b></span>'
     ];
-    if (TMAP.libraryIssues) bits.push('<span class="chip" title="Issues are grouped per library in the Validation panel">Diagnostics <b>' + TMAP.libraryIssues + '</b></span>');
+    if (TMAP.libraryIssues) bits.push('<span class="mgs-lib-chip" title="Issues are grouped per library in the Validation panel">Diagnostics <b>' + TMAP.libraryIssues + '</b></span>');
     el('statusline').innerHTML = bits.join('');
   }
 
@@ -1366,7 +1366,7 @@ var PLX = (function () {
     var bar = el('tabbar'); bar.innerHTML = '';
     var L = lib();
     TABS.forEach(function (t, i) {
-      var b = mk('button', 'tab');
+      var b = mk('button', 'mgs-lib-tab');
       b.type = 'button'; b.id = 'tab-' + t.id;
       b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', 'panel-' + t.id);
       b.setAttribute('aria-selected', String(S.tab === t.id)); b.tabIndex = S.tab === t.id ? 0 : -1;
@@ -1375,10 +1375,10 @@ var PLX = (function () {
         var p = selectedPrompt();
         if (p) {
           var bad = p.errCount;
-          if (bad) badge = '<span class="badge err">' + bad + '</span>';
+          if (bad) badge = '<span class="mgs-lib-badge mgs-lib-err">' + bad + '</span>';
         }
       }
-      b.innerHTML = escT(t.name) + (t.id === 'library' && L ? '<span class="badge">' + L.prompts.length + '</span>' : '') + badge;
+      b.innerHTML = escT(t.name) + (t.id === 'library' && L ? '<span class="mgs-lib-badge">' + L.prompts.length + '</span>' : '') + badge;
       b.addEventListener('click', function () { setTab(t.id); });
       b.dataset.idx = String(i);
       bar.appendChild(b);
@@ -1394,8 +1394,8 @@ var PLX = (function () {
 
   /* ---------------- shared section block ---------------- */
   function srcFlag(p, key) {
-    if (p.fields[key]) return '<span class="flag src">SOURCE</span>';
-    return '<span class="flag miss">MISSING</span>';
+    if (p.fields[key]) return '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>';
+    return '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>';
   }
   function hasText(value) {
     return String(value == null ? '' : value).trim() !== '';
@@ -1403,22 +1403,22 @@ var PLX = (function () {
   function secBlock(o) {
     if (o && o.when === false) return '';
     var parts = [];
-    parts.push('<div class="sec' + (o.cls ? ' ' + o.cls : '') + '"' + (o.id ? ' id="' + escA(o.id) + '"' : '') + '>');
-    parts.push('<div class="sectop"><span class="lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
+    parts.push('<div class="mgs-lib-sec' + (o.cls ? ' ' + o.cls : '') + '"' + (o.id ? ' id="' + escA(o.id) + '"' : '') + '>');
+    parts.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
     if (o.actions && o.actions.length) {
       parts.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
       o.actions.forEach(function (a) { parts.push(actionBtn(a)); });
       parts.push('</span>');
     }
     parts.push('</div>');
-    if (o.value !== undefined) parts.push('<div class="val">' + escT(o.value) + '</div>');
+    if (o.value !== undefined) parts.push('<div class="mgs-lib-val">' + escT(o.value) + '</div>');
     if (o.html) parts.push(o.html);
     if (o.issues && o.issues.length) o.issues.forEach(function (i) { parts.push(issueHTML(i)); });
     parts.push('</div>');
     return parts.join('');
   }
   function actionBtn(a) {
-    var parts = ['<button type="button" class="cbtn' + (a.spec ? ' spec' : '') + '"'];
+    var parts = ['<button type="button" class="mgs-lib-cbtn' + (a.spec ? ' mgs-lib-spec' : '') + '"'];
     parts.push(' data-action="copy"');
     parts.push(PLX.attr('data-prompt', a.name));
     if (a.filename) parts.push(' data-filename="1"');
@@ -1428,7 +1428,7 @@ var PLX = (function () {
     return parts.join('');
   }
   function issueHTML(i) {
-    return '<div class="issue ' + i.level + '"><b>' + i.level.toUpperCase() + '</b> · ' + escT(i.msg) + (i.fix ? ' <em>(fix: ' + escT(i.fix) + ')</em>' : '') + '</div>';
+    return '<div class="mgs-lib-issue mgs-lib-' + i.level + '"><b>' + i.level.toUpperCase() + '</b> · ' + escT(i.msg) + (i.fix ? ' <em>(fix: ' + escT(i.fix) + ')</em>' : '') + '</div>';
   }
 
   /* ---------------- TAB 1: Prompt Library ---------------- */
@@ -1443,30 +1443,30 @@ var PLX = (function () {
     list.innerHTML = '';
     if (!L) {
       el('count').textContent = '';
-      wrap.innerHTML = '<div class="card"><div class="empty">No library loaded yet. Drop a <b>.md</b> file, or use <b>Load built-in sample</b> to see a v5.0 13-section library with Step&nbsp;4 variables.</div></div>';
+      wrap.innerHTML = '<div class="mgs-lib-card"><div class="mgs-lib-empty">No library loaded yet. Drop a <b>.md</b> file, or use <b>Load built-in sample</b> to see a v5.0 13-section library with Step&nbsp;4 variables.</div></div>';
       return;
     }
     visible.forEach(function (p) {
       var li = mk('li');
-      var b = mk('button', 'pitem');
+      var b = mk('button', 'mgs-lib-pitem');
       b.type = 'button'; b.setAttribute('aria-current', String(selectedPrompt() && selectedPrompt().uid === p.uid));
-      b.innerHTML = '<span class="n">#' + escT(p.num) + '</span>' + escT(p.fields.title || '(untitled)') +
-        (p.errCount ? ' <span class="badge err" style="font-size:.66rem">' + p.errCount + '</span>' : '');
+      b.innerHTML = '<span class="mgs-lib-n">#' + escT(p.num) + '</span>' + escT(p.fields.title || '(untitled)') +
+        (p.errCount ? ' <span class="mgs-lib-badge mgs-lib-err" style="font-size:.66rem">' + p.errCount + '</span>' : '');
       b.addEventListener('click', function () { selectPrompt(p.uid); });
       li.appendChild(b); list.appendChild(li);
     });
     el('count').textContent = 'Showing ' + visible.length + ' of ' + L.prompts.length + ' prompts';
     var p = selectedPrompt();
-    if (!p) { wrap.innerHTML = '<div class="card"><div class="empty">No prompts in this library.</div></div>'; return; }
+    if (!p) { wrap.innerHTML = '<div class="mgs-lib-card"><div class="mgs-lib-empty">No prompts in this library.</div></div>'; return; }
     wrap.innerHTML = cardHTML(p, L);
     wireVarControls(p);
   }
   function renderLibbar() {
     var bar = el('libbar'); bar.innerHTML = '';
     S.libs.forEach(function (L) {
-      var s = mk('span', 'libpill');
-      s.innerHTML = '<span class="nm" title="' + escA(L.sourceName) + '">' + escT(L.sourceName) + '</span>' +
-        '<span class="badge" style="font-size:.66rem;background:rgba(255,255,255,.08);border-radius:999px;padding:.05rem .4rem">' + L.prompts.length + '</span>' +
+      var s = mk('span', 'mgs-lib-libpill');
+      s.innerHTML = '<span class="mgs-lib-nm" title="' + escA(L.sourceName) + '">' + escT(L.sourceName) + '</span>' +
+        '<span class="mgs-lib-badge" style="font-size:.66rem;background:rgba(255,255,255,.08);border-radius:999px;padding:.05rem .4rem">' + L.prompts.length + '</span>' +
         '<button type="button" aria-label="Remove ' + escA(L.sourceName) + '">✕</button>';
       s.setAttribute('role', 'group');
       s.querySelector('button').addEventListener('click', function () { removeLib(L.id); });
@@ -1476,7 +1476,7 @@ var PLX = (function () {
       bar.appendChild(s);
     });
     if (S.libs.length > 1) {
-      var d = mk('button', 'btn red'); d.type = 'button'; d.textContent = 'Clear all'; d.addEventListener('click', clearAll); bar.appendChild(d);
+      var d = mk('button', 'mgs-lib-btn mgs-lib-red'); d.type = 'button'; d.textContent = 'Clear all'; d.addEventListener('click', clearAll); bar.appendChild(d);
     }
   }
   function removeLib(id) {
@@ -1490,10 +1490,10 @@ var PLX = (function () {
   function cardHTML(p, L) {
     var out = [], pl = payloads(p), mode = currentMode(p), set = pl[mode];
     var isCust = mode === 'customized';
-    out.push('<article class="card">');
-    out.push('<div class="cardhead"><span class="num">#' + escT(p.num) + '</span><h2 class="cardtitle">' + escT(p.fields.title || '(untitled)') + '</h2>');
-    out.push('<span class="tier" title="Detected library shape">' + escT(tierLabel(L.tier)) + '</span>');
-    out.push('<span class="tier">' + (p.custom.present ? p.custom.vars.length + ' Step-4 var' + (p.custom.vars.length === 1 ? '' : 's') : 'no Step-4 variables') + '</span></div>');
+    out.push('<article class="mgs-lib-card">');
+    out.push('<div class="mgs-lib-cardhead"><span class="mgs-lib-num">#' + escT(p.num) + '</span><h2 class="mgs-lib-cardtitle">' + escT(p.fields.title || '(untitled)') + '</h2>');
+    out.push('<span class="mgs-lib-tier" title="Detected library shape">' + escT(tierLabel(L.tier)) + '</span>');
+    out.push('<span class="mgs-lib-tier">' + (p.custom.present ? p.custom.vars.length + ' Step-4 var' + (p.custom.vars.length === 1 ? '' : 's') : 'no Step-4 variables') + '</span></div>');
 
     out.push(modeSwitch(p));
 
@@ -1508,7 +1508,7 @@ var PLX = (function () {
     /* 2 INTRODUCTION */
     out.push(secBlock({
       label: 'Section 2 · Introduction', note: 'blog opening',
-      flag: p.fields.intro ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">unavailable in source</span>',
+      flag: p.fields.intro ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">unavailable in source</span>',
       value: p.raw.intro || p.fields.intro || '— not present in this library file —',
       actions: p.fields.intro ? [{ name: 'copyIntro', label: 'Copy Introduction' }] : []
     }));
@@ -1518,9 +1518,9 @@ var PLX = (function () {
 
     /* 3 BEFORE IMAGE PROMPT */
     out.push(secBlock({
-      cls: 'before', label: 'Section 3 · Before Image Prompt', note: 'image generator - never part of Full Body',
-      flag: p.fields.before ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
-      html: '<div class="val">' + escT(set.copyBeforePrompt) + '</div>',
+      cls: 'mgs-lib-before', label: 'Section 3 · Before Image Prompt', note: 'image generator - never part of Full Body',
+      flag: p.fields.before ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
+      html: '<div class="mgs-lib-val">' + escT(set.copyBeforePrompt) + '</div>',
       actions: [
         { name: 'copyBeforePrompt', label: isCust ? 'Copy Before Prompt (customized)' : 'Copy Before Prompt' },
         { name: 'copyBeforeFile', label: 'Copy Before Title', aria: 'Copy Before image filename', filename: true },
@@ -1533,7 +1533,7 @@ var PLX = (function () {
     out.push(secBlock({
       label: 'Section 4 · Alt Text — Thumbnail Image',
       note: p.fields.altThumb ? 'from library' : 'engine fallback',
-      flag: p.fields.altThumb ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
+      flag: p.fields.altThumb ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
       value: set.copyThumbAlt,
       actions: [{ name: 'copyThumbAlt', label: 'Copy Thumbnail Alt' }]
     }));
@@ -1541,17 +1541,17 @@ var PLX = (function () {
     /* 5 BEFORE / AFTER ALT */
     out.push(secBlock({
       label: 'Section 5 · Alt Text — Before / After Images',
-      flag: (p.fields.altBefore || p.fields.altAfter) ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
-      html: '<p class="mini">Before Alt</p><div class="val">' + escT(set.copyBeforeAlt || '— missing —') + '</div>' +
-        '<p class="mini">After Alt</p><div class="val">' + escT(set.copyAfterAlt || '— missing —') + '</div>',
+      flag: (p.fields.altBefore || p.fields.altAfter) ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
+      html: '<p class="mgs-lib-mini">Before Alt</p><div class="mgs-lib-val">' + escT(set.copyBeforeAlt || '— missing —') + '</div>' +
+        '<p class="mgs-lib-mini">After Alt</p><div class="mgs-lib-val">' + escT(set.copyAfterAlt || '— missing —') + '</div>',
       actions: [{ name: 'copyBeforeAlt', label: 'Copy Before Alt' }, { name: 'copyAfterAlt', label: 'Copy After Alt' }]
     }));
 
     /* 6 PROMPT */
     out.push(secBlock({
-      cls: 'gen', label: 'Section 6 · Prompt', note: 'main AI prompt',
-      flag: p.fields.prompt ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
-      html: '<div class="val">' + escT(set.copyPrompt) + '</div>',
+      cls: 'mgs-lib-gen', label: 'Section 6 · Prompt', note: 'main AI prompt',
+      flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
+      html: '<div class="mgs-lib-val">' + escT(set.copyPrompt) + '</div>',
       actions: [
         { name: 'copyPrompt', label: 'Copy Prompt' },
         { name: 'copyPromptOriginal', label: 'Copy Original Prompt' },
@@ -1562,8 +1562,8 @@ var PLX = (function () {
     /* 7 NEGATIVE PROMPT — omit the complete block when there is no value. */
     out.push(secBlock({
       when: hasText(set.copyNegative),
-      cls: 'gen', label: 'Section 7 · Negative Prompt',
-      flag: '<span class="flag src">SOURCE</span>',
+      cls: 'mgs-lib-gen', label: 'Section 7 · Negative Prompt',
+      flag: '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>',
       value: set.copyNegative,
       actions: [{ name: 'copyNegative', label: 'Copy Negative' }, { name: 'copyPromptNegative', label: 'Copy Prompt + Negative' }]
     }));
@@ -1571,24 +1571,24 @@ var PLX = (function () {
     /* 8 TOOLS */
     out.push(secBlock({
       label: 'Section 8 · Compatible AI Tools',
-      flag: p.fields.tools ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">not in source</span>',
+      flag: p.fields.tools ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">not in source</span>',
       value: p.fields.tools || '— this library does not declare AI tools for this prompt; the engine inserts none —',
       actions: p.fields.tools ? [{ name: 'copyTools', label: 'Copy Tools' }] : []
     }));
 
     /* 9 HOW TO USE */
     out.push(secBlock({
-      cls: 'gen', label: 'Section 9 · How To Use This Prompt',
-      flag: p.fields.howto ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      cls: 'mgs-lib-gen', label: 'Section 9 · How To Use This Prompt',
+      flag: p.fields.howto ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       html: howtoHTML(set.copyHowto || ''),
       actions: [{ name: 'copyHowto', label: 'Copy How To Use' }, { name: 'copyFullBody', label: 'Copy Full Body', spec: true }]
     }));
 
     /* 10 THUMBNAIL */
     out.push(secBlock({
-      cls: 'thumb', label: 'Section 10 · Thumbnail Image Generator Prompt',
+      cls: 'mgs-lib-thumb', label: 'Section 10 · Thumbnail Image Generator Prompt',
       note: set.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
-      flag: set.thumbFromLibrary ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
+      flag: set.thumbFromLibrary ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
       value: set.copyThumbPrompt,
       html: presetRowHTML(p),
       actions: [{ name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt' }, { name: 'copyThumbPromptProtected', label: 'Copy With Source-Image Protection' }]
@@ -1619,33 +1619,33 @@ var PLX = (function () {
   function canCustomize(p) { return !!payloads(p).customized; }
   function modeSwitch(p) {
     var hasCustom = canCustomize(p);
-    return '<div class="sectop" style="margin-bottom:.6rem"><span class="lab">Copy source <em>(Step 4 = source of truth)</em></span>' +
+    return '<div class="mgs-lib-sectop" style="margin-bottom:.6rem"><span class="mgs-lib-lab">Copy source <em>(Step 4 = source of truth)</em></span>' +
       '<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">' +
-      '<button type="button" class="cbtn" data-action="mode" data-mode="original"' + (S.mode === 'original' ? ' aria-pressed="true"' : '') + '>Original (verbatim)</button>' +
-      '<button type="button" class="cbtn' + (S.mode === 'customized' ? ' spec' : '') + '" data-action="mode" data-mode="customized"' +
+      '<button type="button" class="mgs-lib-cbtn" data-action="mode" data-mode="original"' + (S.mode === 'original' ? ' aria-pressed="true"' : '') + '>Original (verbatim)</button>' +
+      '<button type="button" class="mgs-lib-cbtn' + (S.mode === 'customized' ? ' mgs-lib-spec' : '') + '" data-action="mode" data-mode="customized"' +
       (hasCustom ? '' : ' disabled title="No customization values entered"') + (S.mode === 'customized' ? ' aria-pressed="true"' : '') + '>Customized</button>' +
       '</span></div>';
   }
   function howtoHTML(t) {
     var rows = String(t || '').split('\n').filter(function (l) { return trim(l); });
-    if (!rows.length) return '<div class="val">—</div>';
-    return '<ul class="howto">' + rows.map(function (l) { return '<li>' + escT(l.replace(/^\s*[-*+>•]+\s*/, '')) + '</li>'; }).join('') + '</ul>';
+    if (!rows.length) return '<div class="mgs-lib-val">—</div>';
+    return '<ul class="mgs-lib-howto">' + rows.map(function (l) { return '<li>' + escT(l.replace(/^\s*[-*+>•]+\s*/, '')) + '</li>'; }).join('') + '</ul>';
   }
   function presetRowHTML(p) {
     var opts = Object.keys(PLX.THUMB_TEMPLATES).map(function (k) {
       return '<option value="' + escA(k) + '"' + (k === S.preset ? ' selected' : '') + '>' + escT(PLX.PRESET_NAMES[k] || k) + '</option>';
     }).join('');
-    return '<div class="kv"><label for="preset-' + escA(p.uid) + '" style="font-weight:700;color:#8fa0d8">Style preset</label>' +
+    return '<div class="mgs-lib-kv"><label for="preset-' + escA(p.uid) + '" style="font-weight:700;color:#8fa0d8">Style preset</label>' +
       '<select id="preset-' + escA(p.uid) + '" data-action="preset" style="width:auto;min-width:210px">' + opts + '</select>' +
-      '<span class="src">regenerates only Section 10 — original library prompt preserved in source</span></div>';
+      '<span class="mgs-lib-src">regenerates only Section 10 — original library prompt preserved in source</span></div>';
   }
   function exportRow(p, L) {
     var f = payload(p, 'filenames'), fs = payload(p, 'filenamesShort');
-    return '<div class="sec"><div class="sectop"><span class="lab">File names <em>(copy to rename generated images)</em></span>' +
+    return '<div class="mgs-lib-sec"><div class="mgs-lib-sectop"><span class="mgs-lib-lab">File names <em>(copy to rename generated images)</em></span>' +
       '<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">' +
-      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
-      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyAfterFile">After: ' + escT(f.after) + '</button>' +
-      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
+      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
+      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyAfterFile">After: ' + escT(f.after) + '</button>' +
+      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
       '</span></div></div>';
   }
 
@@ -1662,9 +1662,9 @@ var PLX = (function () {
       var customSel = inCustom ? '__custom__' : selVal;
       var safe = v.name.replace(/[^a-zA-Z0-9]/g, '_');
       var idc = 'var-' + anchor + '-' + safe;
-      out.push('<div class="var">');
-      out.push('<div class="vname">[' + escT(v.name) + ']' + (v.duplicates ? ' <span class="badge err" style="font-size:.66rem">declared ' + (v.duplicates + 1) + '×</span>' : '') + '</div>');
-      if (v.hint) out.push('<div class="hint">' + escT(v.hint) + '</div>');
+      out.push('<div class="mgs-lib-var">');
+      out.push('<div class="mgs-lib-vname">[' + escT(v.name) + ']' + (v.duplicates ? ' <span class="mgs-lib-badge mgs-lib-err" style="font-size:.66rem">declared ' + (v.duplicates + 1) + '×</span>' : '') + '</div>');
+      if (v.hint) out.push('<div class="mgs-lib-hint">' + escT(v.hint) + '</div>');
       if (v.options.length) {
         out.push('<select id="' + idc + '" data-action="var" data-var="' + escA(v.name) + '" aria-label="Value for ' + escA(v.name) + '">');
         out.push('');
@@ -1680,19 +1680,19 @@ var PLX = (function () {
 
   function customizePanel(p) {
     var c = p.custom, out = [];
-    out.push('<div class="sec" id="customize-' + escA(p.uid) + '">');
-    out.push('<div class="sectop"><span class="lab">Customize Prompt <em>Step 4 · source of truth</em></span>');
-    if (c.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="cbtn ghost" data-action="clearvars">Reset to original</button></span>');
+    out.push('<div class="mgs-lib-sec" id="customize-' + escA(p.uid) + '">');
+    out.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 · source of truth</em></span>');
+    if (c.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
     out.push('</div>');
     if (!c.present) {
-      out.push('<div class="val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
+      out.push('<div class="mgs-lib-val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
       out.push('</div>'); return out.join('');
     }
     var an = c.analysis || { vars: [], malformed: [], orphan: [] };
-    if (!an.vars.length) out.push('<div class="val">Step 4 was found but no valid <code>[Variable Name]</code> definitions were parsed. Original text is untouched.</div>');
-    out.push('<div class="varrow">' + varControlsInner(p, 'panel') + '</div>');
+    if (!an.vars.length) out.push('<div class="mgs-lib-val">Step 4 was found but no valid <code>[Variable Name]</code> definitions were parsed. Original text is untouched.</div>');
+    out.push('<div class="mgs-lib-varrow">' + varControlsInner(p, 'panel') + '</div>');
     an.vars.forEach(function (v) {
-      out.push('<div class="occ">[' + escT(v.name) + '] — occurrences replaced: <b>S3 ' + v.occ.before + '</b> · <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' · <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' · left as-is elsewhere ' + v.occ.other : '') + '</div>');
+      out.push('<div class="mgs-lib-occ">[' + escT(v.name) + '] — occurrences replaced: <b>S3 ' + v.occ.before + '</b> · <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' · <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' · left as-is elsewhere ' + v.occ.other : '') + '</div>');
     });
     out.push('</div>');
     return out.join('');
@@ -1756,52 +1756,52 @@ var PLX = (function () {
   }
   function renderImageTab() {
     var wrap = el('imagebody'), p = selectedPrompt(), L = lib();
-    if (!p || !L) { wrap.innerHTML = '<div class="card"><div class="empty">Load a library and select a prompt first.</div></div>'; return; }
+    if (!p || !L) { wrap.innerHTML = '<div class="mgs-lib-card"><div class="mgs-lib-empty">Load a library and select a prompt first.</div></div>'; return; }
     var st = imgState(p), out = [];
     var set = payloads(p)[currentMode(p)] || payloads(p).original;
     var d = PLX.derive(p, { mode: currentMode(p), values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
 
-    out.push('<div class="toolbar" style="justify-content:space-between;align-items:flex-end">');
-    out.push('<div><span class="lab">Selected prompt</span><h2 class="cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' \u00b7 ' + escT(p.fields.title || '(untitled)') + '</h2></div>');
-    out.push('<div class="btnrow"><input type="file" id="imgInput" accept="image/*" multiple style="display:none" />' +
-      '<button type="button" class="btn main" data-action="pickimages">Add Before / After images</button>' +
-      '<button type="button" class="btn" data-action="swapslots">Swap Before \u2194 After</button>' +
-      '<button type="button" class="btn ghost" data-action="clearimages">Clear</button></div>');
+    out.push('<div class="mgs-lib-toolbar" style="justify-content:space-between;align-items:flex-end">');
+    out.push('<div><span class="mgs-lib-lab">Selected prompt</span><h2 class="mgs-lib-cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' \u00b7 ' + escT(p.fields.title || '(untitled)') + '</h2></div>');
+    out.push('<div class="mgs-lib-btnrow"><input type="file" id="imgInput" accept="image/*" multiple style="display:none" />' +
+      '<button type="button" class="mgs-lib-btn mgs-lib-main" data-action="pickimages">Add Before / After images</button>' +
+      '<button type="button" class="mgs-lib-btn" data-action="swapslots">Swap Before \u2194 After</button>' +
+      '<button type="button" class="mgs-lib-btn mgs-lib-ghost" data-action="clearimages">Clear</button></div>');
     out.push('</div>');
 
     /* PLE-08 LOCKED LAYOUT: vertical workflow, exact order 1-6, Customize above Section 2, no side-by-side */
-    out.push('<div class="vflow">');
+    out.push('<div class="mgs-lib-vflow">');
 
     /* SECTION 1 Prompt Title */
     out.push(secBlock({
       label: '1 \u00b7 Prompt Title',
       note: 'Section 1 \u00b7 Post Title' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
-      flag: p.fields.title ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      flag: p.fields.title ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       value: p.fields.title || '\u2014 missing \u2014',
       actions: [{ name: 'copyTitle', label: 'Copy Prompt Title' }]
     }));
 
     /* CUSTOMIZE PROMPT LOCATION: appears ABOVE Section 2 */
-    out.push('<div class="sec" id="customize-image-' + escA(p.uid) + '">');
-    out.push('<div class="sectop"><span class="lab">Customize Prompt <em>Step 4 \u00b7 source of truth</em></span>');
-    if (p.custom.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="cbtn ghost" data-action="clearvars">Reset to original</button></span>');
+    out.push('<div class="mgs-lib-sec" id="customize-image-' + escA(p.uid) + '">');
+    out.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 \u00b7 source of truth</em></span>');
+    if (p.custom.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
     out.push('</div>');
     if (!p.custom.present) {
-      out.push('<div class="val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
+      out.push('<div class="mgs-lib-val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
     } else {
       var an = p.custom.analysis || { vars: [] };
-      if (!an.vars.length) out.push('<div class="val">Step 4 was found but no valid <code>[Variable Name]</code> definitions were parsed. Original text is untouched.</div>');
-      out.push('<div class="varrow">' + varControlsInner(p, 'image') + '</div>');
+      if (!an.vars.length) out.push('<div class="mgs-lib-val">Step 4 was found but no valid <code>[Variable Name]</code> definitions were parsed. Original text is untouched.</div>');
+      out.push('<div class="mgs-lib-varrow">' + varControlsInner(p, 'image') + '</div>');
       an.vars.forEach(function (v) {
-        out.push('<div class="occ">[' + escT(v.name) + '] \u2014 occurrences replaced: <b>S3 ' + v.occ.before + '</b> \u00b7 <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' \u00b7 <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' \u00b7 left as-is elsewhere ' + v.occ.other : '') + '</div>');
+        out.push('<div class="mgs-lib-occ">[' + escT(v.name) + '] \u2014 occurrences replaced: <b>S3 ' + v.occ.before + '</b> \u00b7 <b>S6 ' + v.occ.prompt + '</b>' + (v.occ.thumb ? ' \u00b7 <b>S10 ' + v.occ.thumb + '</b>' : '') + (v.occ.other ? ' \u00b7 left as-is elsewhere ' + v.occ.other : '') + '</div>');
       });
     }
     out.push('</div>');
 
     /* SECTION 2 Before Image Prompt */
     out.push(secBlock({
-      cls: 'before', label: '2 \u00b7 Before Image Prompt', note: 'Section 3 \u00b7 raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
-      flag: p.fields.before ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      cls: 'mgs-lib-before', label: '2 \u00b7 Before Image Prompt', note: 'Section 3 \u00b7 raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      flag: p.fields.before ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       value: set.copyBeforePrompt,
       actions: [
         { name: 'copyBeforeOriginal', label: 'Copy Original Before Prompt' },
@@ -1812,16 +1812,16 @@ var PLX = (function () {
 
     /* SECTION 3 Main Prompt - Display customized preview */
     out.push(secBlock({
-      cls: 'after', label: '3 \u00b7 Main Prompt', note: 'Section 6 \u00b7 main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
-      flag: p.fields.prompt ? '<span class="flag src">SOURCE</span>' : '<span class="flag miss">MISSING</span>',
+      cls: 'mgs-lib-after', label: '3 \u00b7 Main Prompt', note: 'Section 6 \u00b7 main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       value: set.copyPrompt
     }));
 
     /* SECTION 4 Negative Prompt - Display below Main Prompt */
     out.push(secBlock({
       when: hasText(set.copyNegative),
-      cls: 'after', label: '4 \u00b7 Negative Prompt', note: 'Section 7',
-      flag: '<span class="flag src">SOURCE</span>',
+      cls: 'mgs-lib-after', label: '4 \u00b7 Negative Prompt', note: 'Section 7',
+      flag: '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>',
       value: set.copyNegative
     }));
 
@@ -1829,20 +1829,20 @@ var PLX = (function () {
     out.push(secBlock({
       label: '5 \u00b7 Buttons',
       note: 'Copy actions for Main and After',
-      html: '<div class="btnrow" style="margin-top:.2rem">' +
-        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyPromptOriginal">Copy Original Prompt</button>' +
-        '<button type="button" class="cbtn spec" data-action="copy" data-prompt="copyPromptCustom">Copy Customized Prompt</button>' +
-        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyPromptNegative">Copy Prompt + Negative</button>' +
-        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyAfterFile">Copy After Image Title</button>' +
+      html: '<div class="mgs-lib-btnrow" style="margin-top:.2rem">' +
+        '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyPromptOriginal">Copy Original Prompt</button>' +
+        '<button type="button" class="mgs-lib-cbtn mgs-lib-spec" data-action="copy" data-prompt="copyPromptCustom">Copy Customized Prompt</button>' +
+        '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyPromptNegative">Copy Prompt + Negative</button>' +
+        '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyAfterFile">Copy After Image Title</button>' +
         '</div>'
     }));
 
     /* SECTION 6 Thumbnail Image Generator Prompt - Keep existing controls */
     var thumbPromptAutoProtected = d.thumbWithProtection;
     out.push(secBlock({
-      cls: 'thumb', label: '6 \u00b7 Thumbnail Image Generator Prompt',
+      cls: 'mgs-lib-thumb', label: '6 \u00b7 Thumbnail Image Generator Prompt',
       note: d.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
-      flag: d.thumbFromLibrary ? '<span class="flag src">SOURCE</span>' : '<span class="flag gen">GENERATED</span>',
+      flag: d.thumbFromLibrary ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
       value: thumbPromptAutoProtected,
       html: presetRowHTML(p) + suffixMenuHTML(p),
       actions: [
@@ -1854,15 +1854,15 @@ var PLX = (function () {
 
     /* Thumbnail Controls - vertical, no side-by-side, below Section 6 */
     var role = slotStatus(st);
-    out.push('<div class="lane thumb"><h3>Thumbnail Controls</h3>');
+    out.push('<div class="mgs-lib-lane mgs-lib-thumb"><h3>Thumbnail Controls</h3>');
     out.push(roleBanner(st, role));
     out.push(thumbPreviewHTML(st));
-    out.push('<div class="sectop" style="margin-top:.7rem"><span class="lab">Thumbnail File Names</span>');
+    out.push('<div class="mgs-lib-sectop" style="margin-top:.7rem"><span class="mgs-lib-lab">Thumbnail File Names</span>');
     out.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
-    out.push('<button type="button" class="cbtn spec" data-action="copy" data-prompt="copyThumbFullTitle">Copy Thumbnail Full Title</button>');
-    out.push('<button type="button" class="cbtn" data-action="copy" data-prompt="copyThumbShortTitle">Copy Thumbnail Short Title</button>');
+    out.push('<button type="button" class="mgs-lib-cbtn mgs-lib-spec" data-action="copy" data-prompt="copyThumbFullTitle">Copy Thumbnail Full Title</button>');
+    out.push('<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyThumbShortTitle">Copy Thumbnail Short Title</button>');
     out.push('</span></div>');
-    out.push('<div class="val" style="font-size:.8rem;color:var(--dim)">Full: ' + escT(payload(p, 'filenames').thumb) + '<br>Short: ' + escT(payload(p, 'filenamesShort').thumb) + '</div>');
+    out.push('<div class="mgs-lib-val" style="font-size:.8rem;color:var(--dim)">Full: ' + escT(payload(p, 'filenames').thumb) + '<br>Short: ' + escT(payload(p, 'filenamesShort').thumb) + '</div>');
     out.push('</div>');
 
     out.push('</div>'); /* end .vflow */
@@ -1913,22 +1913,22 @@ var PLX = (function () {
     return parts.join('');
   }
   function slotHTML(slot, keyName) {
-    var parts = ['<div class="slot" data-filled="' + (slot ? 'true' : 'false') + '">'];
+    var parts = ['<div class="mgs-lib-slot" data-filled="' + (slot ? 'true' : 'false') + '">'];
     if (slot) {
-      parts.push('<div class="who">' + escT(keyName === 'thumb' ? 'Thumbnail file' : keyName) + '</div>');
-      parts.push('<div class="fname">' + escT(slot.name) + '</div>');
+      parts.push('<div class="mgs-lib-who">' + escT(keyName === 'thumb' ? 'Thumbnail file' : keyName) + '</div>');
+      parts.push('<div class="mgs-lib-fname">' + escT(slot.name) + '</div>');
       var badgeText = 'SOURCE ROLE NOT DETECTED';
       if (slot.role === 'before') badgeText = 'BEFORE IMAGE \u2014 SOURCE VERIFIED';
       else if (slot.role === 'after') badgeText = 'AFTER IMAGE \u2014 SOURCE VERIFIED';
       else if (slot.role === 'thumb') badgeText = 'THUMBNAIL \u2014 SOURCE VERIFIED';
-      parts.push('<div class="kv"><span><b>' + escT(badgeText) + '</b></span><span>from filename (not upload order)</span></div>');
+      parts.push('<div class="mgs-lib-kv"><span><b>' + escT(badgeText) + '</b></span><span>from filename (not upload order)</span></div>');
       if (slot.url) parts.push('<img alt="Attached ' + escA(keyName) + ' preview" src="' + escA(slot.url) + '" />');
-      parts.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="' + keyName + '">Replace</button>');
-      if (keyName !== 'thumb') parts.push('<button type="button" class="cbtn" data-action="assignother" data-slot="' + keyName + '">Send to ' + (keyName === 'before' ? 'After' : 'Before') + '</button>');
-      parts.push('<button type="button" class="cbtn ghost" data-action="unassign" data-slot="' + keyName + '">Remove</button></div>');
+      parts.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="assign" data-slot="' + keyName + '">Replace</button>');
+      if (keyName !== 'thumb') parts.push('<button type="button" class="mgs-lib-cbtn" data-action="assignother" data-slot="' + keyName + '">Send to ' + (keyName === 'before' ? 'After' : 'Before') + '</button>');
+      parts.push('<button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="unassign" data-slot="' + keyName + '">Remove</button></div>');
     } else {
-      parts.push('<div class="who">' + escT(keyName) + '</div><div class="fname" style="color:#8b93ad;font-weight:500">empty \u2014 no file assigned</div>');
-      parts.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="' + keyName + '">Choose file</button></div>');
+      parts.push('<div class="mgs-lib-who">' + escT(keyName) + '</div><div class="mgs-lib-fname" style="color:#8b93ad;font-weight:500">empty \u2014 no file assigned</div>');
+      parts.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="assign" data-slot="' + keyName + '">Choose file</button></div>');
     }
     parts.push('</div>');
     return parts.join('');
@@ -1940,43 +1940,43 @@ var PLX = (function () {
   }
   function roleBanner(st, status) {
     var parts = [];
-    if (st.dupBefore) parts.push('<div class="issue error"><b>ERROR</b> · Duplicate Before: multiple Before images detected.</div>');
-    if (st.dupAfter) parts.push('<div class="issue error"><b>ERROR</b> · Duplicate After: multiple After images detected.</div>');
-    if (!st.before) parts.push('<div class="issue warn"><b>VALIDATION</b> · Missing Before image.</div>');
-    if (!st.after) parts.push('<div class="issue warn"><b>VALIDATION</b> · Missing After image.</div>');
+    if (st.dupBefore) parts.push('<div class="mgs-lib-issue mgs-lib-error"><b>ERROR</b> · Duplicate Before: multiple Before images detected.</div>');
+    if (st.dupAfter) parts.push('<div class="mgs-lib-issue mgs-lib-error"><b>ERROR</b> · Duplicate After: multiple After images detected.</div>');
+    if (!st.before) parts.push('<div class="mgs-lib-issue mgs-lib-warn"><b>VALIDATION</b> · Missing Before image.</div>');
+    if (!st.after) parts.push('<div class="mgs-lib-issue mgs-lib-warn"><b>VALIDATION</b> · Missing After image.</div>');
     if (status === 'ok' && !st.dupBefore && !st.dupAfter) {
-      parts.push('<div class="issue info" style="background:#10281c;border-color:var(--ok);color:#a6e8c6"><b>VERIFIED</b> · Pair verified: BEFORE and AFTER roles both detected from filenames. <span class="flag ok">PAIR VERIFIED</span></div>');
+      parts.push('<div class="mgs-lib-issue mgs-lib-info" style="background:#10281c;border-color:var(--ok);color:#a6e8c6"><b>VERIFIED</b> · Pair verified: BEFORE and AFTER roles both detected from filenames. <span class="mgs-lib-flag mgs-lib-ok">PAIR VERIFIED</span></div>');
     } else if (status === 'conflict') {
-      parts.push('<div class="issue error"><b>ERROR</b> · Both attached files claim the same role. Resolve before generating the thumbnail.</div>');
+      parts.push('<div class="mgs-lib-issue mgs-lib-error"><b>ERROR</b> · Both attached files claim the same role. Resolve before generating the thumbnail.</div>');
     } else if (status === 'reversed') {
-      parts.push('<div class="issue error"><b>ERROR</b> · Roles look reversed (the BEFORE slot holds an “After” file). Use “Swap Before ↔ After”.</div>');
+      parts.push('<div class="mgs-lib-issue mgs-lib-error"><b>ERROR</b> · Roles look reversed (the BEFORE slot holds an “After” file). Use “Swap Before ↔ After”.</div>');
     }
     return parts.join('');
   }
   function thumbPreviewHTML(st) {
     var isOk = st.before && st.after && st.before.role === 'before' && st.after.role === 'after' && !st.dupBefore && !st.dupAfter;
     var out = [];
-    out.push('<div class="sec" style="margin-top:.6rem">');
-    out.push('<div class="sectop"><span class="lab">Thumbnail Source Image Preview</span>');
-    if (isOk) out.push('<span class="flag ok">PAIR VERIFIED</span>');
-    else out.push('<span class="flag miss">UNVERIFIED PAIR</span>');
+    out.push('<div class="mgs-lib-sec" style="margin-top:.6rem">');
+    out.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">Thumbnail Source Image Preview</span>');
+    if (isOk) out.push('<span class="mgs-lib-flag mgs-lib-ok">PAIR VERIFIED</span>');
+    else out.push('<span class="mgs-lib-flag mgs-lib-miss">UNVERIFIED PAIR</span>');
     out.push('</div>');
     out.push('<div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.4rem">');
     /* BEFORE box */
-    out.push('<div class="slot" data-filled="' + (st.before ? 'true' : 'false') + '">');
+    out.push('<div class="mgs-lib-slot" data-filled="' + (st.before ? 'true' : 'false') + '">');
     var beforeBadge = st.before && st.before.role === 'before' ? 'BEFORE IMAGE \u2014 SOURCE VERIFIED' : 'SOURCE ROLE NOT DETECTED';
-    out.push('<div class="who"><span class="badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> ' + escT(beforeBadge) + ' \u2014 Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
-    out.push('<div class="fname">' + (st.before ? escT(st.before.name) : 'No file (Missing Before image)') + '</div>');
+    out.push('<div class="mgs-lib-who"><span class="mgs-lib-badge" style="background:#852222;color:#fff;margin-right:.3rem">BEFORE</span> ' + escT(beforeBadge) + ' \u2014 Detected Role: ' + (st.before ? escT(st.before.roleLabel) : 'none') + '</div>');
+    out.push('<div class="mgs-lib-fname">' + (st.before ? escT(st.before.name) : 'No file (Missing Before image)') + '</div>');
     if (st.before && st.before.url) out.push('<img alt="Before preview" src="' + escA(st.before.url) + '" />');
-    out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="before">' + (st.before ? 'Replace' : 'Choose Before image') + '</button></div>');
+    out.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="assign" data-slot="before">' + (st.before ? 'Replace' : 'Choose Before image') + '</button></div>');
     out.push('</div>');
     /* AFTER box */
-    out.push('<div class="slot" data-filled="' + (st.after ? 'true' : 'false') + '">');
+    out.push('<div class="mgs-lib-slot" data-filled="' + (st.after ? 'true' : 'false') + '">');
     var afterBadge = st.after && st.after.role === 'after' ? 'AFTER IMAGE \u2014 SOURCE VERIFIED' : 'SOURCE ROLE NOT DETECTED';
-    out.push('<div class="who"><span class="badge" style="background:#1e7d54;color:#fff;margin-right:.3rem">AFTER</span> ' + escT(afterBadge) + ' \u2014 Detected Role: ' + (st.after ? escT(st.after.roleLabel) : 'none') + '</div>');
-    out.push('<div class="fname">' + (st.after ? escT(st.after.name) : 'No file (Missing After image)') + '</div>');
+    out.push('<div class="mgs-lib-who"><span class="mgs-lib-badge" style="background:#1e7d54;color:#fff;margin-right:.3rem">AFTER</span> ' + escT(afterBadge) + ' \u2014 Detected Role: ' + (st.after ? escT(st.after.roleLabel) : 'none') + '</div>');
+    out.push('<div class="mgs-lib-fname">' + (st.after ? escT(st.after.name) : 'No file (Missing After image)') + '</div>');
     if (st.after && st.after.url) out.push('<img alt="After preview" src="' + escA(st.after.url) + '" />');
-    out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="assign" data-slot="after">' + (st.after ? 'Replace' : 'Choose After image') + '</button></div>');
+    out.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="assign" data-slot="after">' + (st.after ? 'Replace' : 'Choose After image') + '</button></div>');
     out.push('</div>');
     out.push('</div></div>');
     return out.join('');
@@ -1987,8 +1987,8 @@ var PLX = (function () {
       return '<li role="none"><button type="button" role="menuitemradio" data-action="suffix" data-suffix="' + escA(s) + '" aria-checked="' + String(s === cur) + '">' +
         escT(s) + '<span>' + escT(PLX.shortTitle(p.fields.title) || '') + '</span></button></li>';
     }).join('');
-    return '<div class="menu"><button type="button" class="cbtn spec" data-action="menu" aria-haspopup="true" aria-expanded="false">Thumbnail suffix: ' + escT(cur) + '</button>' +
-      '<ul class="menu-list" role="menu" aria-label="Thumbnail filename suffix" hidden>' + items + '</ul></div>';
+    return '<div class="mgs-lib-menu"><button type="button" class="mgs-lib-cbtn mgs-lib-spec" data-action="menu" aria-haspopup="true" aria-expanded="false">Thumbnail suffix: ' + escT(cur) + '</button>' +
+      '<ul class="mgs-lib-menu-list" role="menu" aria-label="Thumbnail filename suffix" hidden>' + items + '</ul></div>';
   }
   var MENU_STATE = { closes: [] };
   function wireMenu(p) {
@@ -2055,21 +2055,21 @@ var PLX = (function () {
   /* ---------------- TAB 3: Blog Publisher ---------------- */
   function renderPublisherTab() {
     var wrap = el('pubbody'), p = selectedPrompt(), L = lib();
-    if (!p || !L) { wrap.innerHTML = '<div class="lane"><div class="empty">Load a library and select a prompt first.</div></div>'; return; }
+    if (!p || !L) { wrap.innerHTML = '<div class="mgs-lib-lane"><div class="mgs-lib-empty">Load a library and select a prompt first.</div></div>'; return; }
     var ovr = overridesFor(p), out = [], st = imgState(p), role = slotStatus(st);
     var blocked = C.blockPublishOnRoleError && (role === 'conflict' || role === 'reversed');
-    out.push('<div class="toolbar" style="justify-content:space-between;align-items:flex-end">');
-    out.push('<div><span class="lab">Publishing</span><h2 class="cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' · ' + escT(p.fields.title || '(untitled)') + '</h2>' +
-      '<div class="kv"><span>Full Body source: <b>Sections 6 + 7 + 9</b></span><span>Section 3 <b>never</b> included</span><span>mode: <b>' + escT(currentMode(p)) + '</b></span></div></div>');
-    out.push('<div class="btnrow">' +
-      '<button type="button" class="btn main" data-action="copy" data-prompt="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
-      '<button type="button" class="btn" data-action="downloadpost">Download post HTML</button>' +
-      '<button type="button" class="btn" data-action="downloadlibrary">Download library HTML</button>' +
-      '<button type="button" class="btn spec" data-action="downloaduniversal">Download Universal Card JSON</button>' +
+    out.push('<div class="mgs-lib-toolbar" style="justify-content:space-between;align-items:flex-end">');
+    out.push('<div><span class="mgs-lib-lab">Publishing</span><h2 class="mgs-lib-cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' · ' + escT(p.fields.title || '(untitled)') + '</h2>' +
+      '<div class="mgs-lib-kv"><span>Full Body source: <b>Sections 6 + 7 + 9</b></span><span>Section 3 <b>never</b> included</span><span>mode: <b>' + escT(currentMode(p)) + '</b></span></div></div>');
+    out.push('<div class="mgs-lib-btnrow">' +
+      '<button type="button" class="mgs-lib-btn mgs-lib-main" data-action="copy" data-prompt="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
+      '<button type="button" class="mgs-lib-btn" data-action="downloadpost">Download post HTML</button>' +
+      '<button type="button" class="mgs-lib-btn" data-action="downloadlibrary">Download library HTML</button>' +
+      '<button type="button" class="mgs-lib-btn mgs-lib-spec" data-action="downloaduniversal">Download Universal Card JSON</button>' +
       '</div></div>');
-    if (blocked) out.push('<div class="issue error"><b>ERROR</b> · ' + escT(role === 'reversed' ? 'Before/After roles look reversed.' : 'Both image slots claim the same role.') + ' Copying is blocked until the Image Studio pair is correct (configurable).</div>');
+    if (blocked) out.push('<div class="mgs-lib-issue mgs-lib-error"><b>ERROR</b> · ' + escT(role === 'reversed' ? 'Before/After roles look reversed.' : 'Both image slots claim the same role.') + ' Copying is blocked until the Image Studio pair is correct (configurable).</div>');
 
-    out.push('<div class="lane"><h3>Blogger field mapping</h3><div class="fields">');
+    out.push('<div class="mgs-lib-lane"><h3>Blogger field mapping</h3><div class="mgs-lib-fields">');
 
     /* PATCH-10: All 8 publisher blocks in locked order with exact copy button names */
     var pubBlocks = [
@@ -2090,34 +2090,34 @@ var PLX = (function () {
       var edited = ovr[key] !== undefined;
 
       out.push('<div class="field' + (row.isBody ? ' body' : '') + '">');
-      out.push('<div class="flab"><span>' + escT(row.label) + '</span>');
-      out.push('<span class="src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
+      out.push('<div class="mgs-lib-flab"><span>' + escT(row.label) + '</span>');
+      out.push('<span class="mgs-lib-src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
         escT(row.sec) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : '')) + '</span></div>');
       out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
-      out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
-      if (row.isBody) out.push('<button type="button" class="cbtn" data-action="copybodytext">Copy from this box</button>');
-      if (edited) out.push('<button type="button" class="cbtn ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>');
+      out.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
+      if (row.isBody) out.push('<button type="button" class="mgs-lib-cbtn" data-action="copybodytext">Copy from this box</button>');
+      if (edited) out.push('<button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>');
       out.push('</div></div>');
     });
 
     out.push('</div></div>');
 
-    out.push('<div class="sec"><div class="sectop"><span class="lab">Output options</span></div>');
-    out.push('<label class="check"><input type="checkbox" data-action="cfg" data-cfg="bodyExtras"' + (C.bodyExtras === 'v2.4' ? ' checked' : '') + ' />' +
+    out.push('<div class="mgs-lib-sec"><div class="mgs-lib-sectop"><span class="mgs-lib-lab">Output options</span></div>');
+    out.push('<label class="mgs-lib-check"><input type="checkbox" data-action="cfg" data-cfg="bodyExtras"' + (C.bodyExtras === 'v2.4' ? ' checked' : '') + ' />' +
       '<span>Include legacy extras in Full Body (Introduction, Section 8, Expected Output, Tips) — reproduces v2.4 payloads byte-for-byte</span></label>');
-    out.push('<label class="check"><input type="checkbox" data-action="cfg" data-cfg="bannerStyle"' + (C.bannerStyle === 'numbered' ? ' checked' : '') + ' />' +
+    out.push('<label class="mgs-lib-check"><input type="checkbox" data-action="cfg" data-cfg="bannerStyle"' + (C.bannerStyle === 'numbered' ? ' checked' : '') + ' />' +
       '<span>Use numbered section banners instead of NAME: labels</span></label>');
-    out.push('<label class="check"><input type="checkbox" data-action="cfg" data-cfg="blockPublishOnRoleError"' + (C.blockPublishOnRoleError ? ' checked' : '') + ' />' +
+    out.push('<label class="mgs-lib-check"><input type="checkbox" data-action="cfg" data-cfg="blockPublishOnRoleError"' + (C.blockPublishOnRoleError ? ' checked' : '') + ' />' +
       '<span>Block copy/export while the Before/After image pair has a role error</span></label>');
     out.push('</div>');
 
     /* validation + SEO */
-    out.push('<details class="sec"><summary class="sectop" style="cursor:pointer"><span class="lab">Validation Center <em>ERROR / WARNING / INFO</em></span>' +
-      '<span class="src">' + p.errCount + ' error · ' + p.warnCount + ' warning · ' + p.diagCount + ' info</span></summary>');
+    out.push('<details class="mgs-lib-sec"><summary class="mgs-lib-sectop" style="cursor:pointer"><span class="mgs-lib-lab">Validation Center <em>ERROR / WARNING / INFO</em></span>' +
+      '<span class="mgs-lib-src">' + p.errCount + ' error · ' + p.warnCount + ' warning · ' + p.diagCount + ' info</span></summary>');
     var vis = p.issues.filter(function (i) { return i.code !== 'MD_RESIDUE'; });
-    if (!vis.length) out.push('<div class="issue info">No issues for this prompt.</div>');
+    if (!vis.length) out.push('<div class="mgs-lib-issue mgs-lib-info">No issues for this prompt.</div>');
     vis.forEach(function (i) { out.push(issueHTML(i)); });
-    out.push('<div class="sum">' +
+    out.push('<div class="mgs-lib-sum">' +
       chip('Title', (p.fields.title || '').length + ' chars') + chip('Alt max', '125') +
       chip('Labels', String(p.fields.labels || '').split(',').map(trim).filter(Boolean).length + ' / max 5') +
       chip('Search', (p.fields.search || '').length + ' chars') + chip('Permalink', p.fields.permalink ? 'ok' : 'missing') +
@@ -2137,7 +2137,7 @@ var PLX = (function () {
       ['Image pair verified', role === 'ok'],
       ['Errors clear', p.errCount === 0]
     ];
-    out.push('<div class="sec"><div class="sectop"><span class="lab">Publish checklist</span></div><ul class="howto">' +
+    out.push('<div class="mgs-lib-sec"><div class="mgs-lib-sectop"><span class="mgs-lib-lab">Publish checklist</span></div><ul class="mgs-lib-howto">' +
       checklist.map(function (c) { return '<li>' + (c[1] ? '✓ ' : '✗ ') + escT(c[0]) + '</li>'; }).join('') + '</ul></div>');
     out.push('</div>');
     wrap.innerHTML = out.join('');
@@ -2146,7 +2146,7 @@ var PLX = (function () {
     });
   }
   function isOverrideNow(p, field) { var k = pkey(p); return !!(S.overrides[k] && S.overrides[k][field] !== undefined); }
-  function chip(k, v) { return '<span class="s">' + escT(k) + ': <b>' + escT(String(v)) + '</b></span>'; }
+  function chip(k, v) { return '<span class="mgs-lib-s">' + escT(k) + ': <b>' + escT(String(v)) + '</b></span>'; }
   function setOverride(p, field, value, node) {
     var k = pkey(p);
     if (!S.overrides[k]) S.overrides[k] = {};
@@ -2166,7 +2166,7 @@ var PLX = (function () {
     var row = box.querySelector('.btnrow'), btn = row ? row.querySelector('[data-action="revert"]') : null;
     if (isOverrideNow(p, f) && !btn && row) {
       btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'cbtn ghost'; btn.setAttribute('data-action', 'revert'); btn.setAttribute('data-field', f);
+      btn.type = 'button'; btn.className = 'mgs-lib-cbtn mgs-lib-ghost'; btn.setAttribute('data-action', 'revert'); btn.setAttribute('data-field', f);
       btn.textContent = 'Revert to library value';
       row.appendChild(btn);
     } else if (!isOverrideNow(p, f) && btn) btn.parentNode.removeChild(btn);
@@ -2197,7 +2197,7 @@ var PLX = (function () {
 
     function protectedNode(node, inherited) {
       if (inherited || !node || node.nodeType !== 1) return !!inherited;
-      return !!(protectedTags[node.tagName] || node.classList.contains('prompttextbox'));
+      return !!(protectedTags[node.tagName] || node.classList.contains('mgs-lib-prompttextbox'));
     }
     function clean(parent, inherited) {
       var protectedParent = inherited || protectedNode(parent, false);
@@ -2233,9 +2233,9 @@ var PLX = (function () {
     /* Empty source sections are omitted so Blogger receives no empty containers. */
     if (!hasText(text)) return '';
     var parts = [];
-    parts.push('<div class="sec"><div class="sectop"><span class="lab">' + escT(label) + '</span>');
-    if (text) parts.push('<button type="button" class="cbtn" data-prompt="' + escA(text) + '">' + escT(copyLabel || 'Copy') + '</button>');
-    parts.push('</div><div class="val">' + (text ? escT(text) : '<i>not available in the source file</i>') + '</div></div>');
+    parts.push('<div class="mgs-lib-sec"><div class="mgs-lib-sectop"><span class="mgs-lib-lab">' + escT(label) + '</span>');
+    if (text) parts.push('<button type="button" class="mgs-lib-cbtn" data-prompt="' + escA(text) + '">' + escT(copyLabel || 'Copy') + '</button>');
+    parts.push('</div><div class="mgs-lib-val">' + (text ? escT(text) : '<i>not available in the source file</i>') + '</div></div>');
     return parts.join('');
   }
   var EXPORT_SCRIPT = [
@@ -2259,15 +2259,15 @@ var PLX = (function () {
     parts.push('<title>' + escT(L.sourceName) + '</title>');
     parts.push('<style>body{background:#0f1220;margin:0}</style>');
     parts.push(css);
-    parts.push('</head><body style="background:#0f1220"><div class="mgsplx"><header class="hd"><h1>' + escT(L.sourceName) + '</h1>');
+    parts.push('</head><body style="background:#0f1220"><div class="mgs-lib-root"><header class="mgs-lib-hd"><h1>' + escT(L.sourceName) + '</h1>');
     parts.push('<p>' + L.prompts.length + ' prompts · exported by Prompt Library Engine v' + PLX.VERSION + ' · ' + escT(tierLabel(L.tier)) + '</p></header>');
-    parts.push('<div class="searchbar" style="position:sticky;top:0;background:#0f1220;padding:.5rem 0;z-index:5"><input type="text" id="search" placeholder="Search title or label..." aria-label="Search prompts" /><div class="count" id="count"></div></div>');
+    parts.push('<div class="mgs-lib-searchbar" style="position:sticky;top:0;background:#0f1220;padding:.5rem 0;z-index:5"><input type="text" id="search" placeholder="Search title or label..." aria-label="Search prompts" /><div class="mgs-lib-count" id="count"></div></div>');
     var missing = 0, blocks = 0;
     L.prompts.forEach(function (p) {
       var set = payloads(p).original;
       var card = [];
-      card.push('<article class="card" data-search="' + escA((p.fields.title + ' ' + p.fields.labels).toLowerCase()) + '">');
-      card.push('<div class="cardhead"><span class="num">#' + escT(p.num) + '</span><h2 class="cardtitle">' + escT(p.fields.title || '(untitled)') + '</h2></div>');
+      card.push('<article class="mgs-lib-card" data-search="' + escA((p.fields.title + ' ' + p.fields.labels).toLowerCase()) + '">');
+      card.push('<div class="mgs-lib-cardhead"><span class="mgs-lib-num">#' + escT(p.num) + '</span><h2 class="mgs-lib-cardtitle">' + escT(p.fields.title || '(untitled)') + '</h2></div>');
       card.push(sectionBlockExport('Section 1 · Title', set.copyTitle, 'Copy Title'));
       card.push(sectionBlockExport('Section 2 · Introduction', p.fields.intro, 'Copy Introduction'));
       card.push(sectionBlockExport('Section 3 · Before Image Prompt', set.copyBeforePrompt, 'Copy Before Prompt'));
@@ -2287,10 +2287,10 @@ var PLX = (function () {
       card.push('</article>');
       var html = card.join('');
       if (/NaN/.test(html)) missing++;
-      blocks += (html.match(/class="sec"/g) || []).length;
+      blocks += (html.match(/class="mgs-lib-sec"/g) || []).length;
       parts.push(html);
     });
-    parts.push('<div class="toast" id="toast"></div>');
+    parts.push('<div class="mgs-lib-toast" id="toast"></div>');
     parts.push(EXPORT_SCRIPT);
     parts.push('</div></body></html>');
     return { doc: exportSanitizer(parts.join('\n')), secCount: blocks, nanCount: missing };
