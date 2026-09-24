@@ -2344,6 +2344,10 @@ var PLX = (function () {
       labels: set.copyLabels || p.fields.labels || '',
       permalink: set.copyPermalink || p.fields.permalink || '',
       searchDescription: set.copySearchDesc || p.fields.search || '',
+      aiToolBadge: set.copyTools || p.fields.tools || '',
+      tips: set.copyTips || p.fields.tips || '',
+      warning: (p.issues || []).filter(function (i) { return i.level === 'warn'; }).map(function (i) { return i.msg || ''; }).filter(Boolean).join('\n'),
+      rating: p.rating || p.fields.rating || '',
       // Extended compatibility for Universal Card popup formatting
       thumbnailPrompt: set.copyThumbPromptProtected || d.thumbWithProtection || set.copyThumbPrompt || d.thumb || '',
       thumbnailAlt: set.copyThumbAlt || '',
@@ -2352,6 +2356,13 @@ var PLX = (function () {
       fullBody: set.copyFullBody || '',
       filenames: set.filenames || d.filenames || {},
       filenamesShort: set.filenamesShort || d.filenamesShort || {},
+      imageSliderUrls: (function () {
+        var images = imgState(p) || {};
+        return {
+          before: images.before && images.before.url || '',
+          after: images.after && images.after.url || ''
+        };
+      }()),
       mode: mode,
       promptNumber: p.num || '',
       sourceName: (lib() && lib().sourceName) || '',
@@ -2388,10 +2399,59 @@ var PLX = (function () {
       }
     };
   }
+  /*
+   * Universal Card v2.1 compatibility validator.
+   * This is intentionally payload-only: it does not inspect or modify any XML
+   * or Universal Card source markup.
+   */
+  function validateUniversalCardPayload(payload) {
+    var data = payload || {};
+    var cards = Array.isArray(data.cards)
+      ? data.cards
+      : (data.universalCard && Array.isArray(data.universalCard.cards) ? data.universalCard.cards : []);
+    var checks = [
+      { key: 'promptTitle', label: 'Prompt Title', required: true, type: 'string' },
+      { key: 'prompt', label: 'Prompt Text', required: true, type: 'string' },
+      { key: 'negativePrompt', label: 'Negative Prompt', required: false, type: 'string' },
+      { key: 'aiToolBadge', label: 'AI Tool Badge', required: false, type: 'string' },
+      { key: 'beforePrompt', label: 'Before Image Prompt', required: false, type: 'string' },
+      { key: 'tips', label: 'Tips', required: false, type: 'string' },
+      { key: 'warning', label: 'Warning', required: false, type: 'string' },
+      { key: 'rating', label: 'Rating', required: false, type: 'rating' },
+      { key: 'imageSliderUrls', label: 'Image Slider URLs', required: false, type: 'urls' }
+    ];
+    var results = cards.map(function (card, index) {
+      var item = { index: index, valid: true, checks: {} };
+      checks.forEach(function (check) {
+        var value = card[check.key];
+        var valid = true;
+        if (check.required && (value == null || String(value).trim() === '')) valid = false;
+        if (value != null && check.type === 'string' && typeof value !== 'string') valid = false;
+        if (value != null && check.type === 'array' && !Array.isArray(value)) valid = false;
+        if (value != null && check.type === 'rating' && typeof value !== 'string' && typeof value !== 'number') valid = false;
+        if (value != null && check.type === 'urls') {
+          valid = value && typeof value === 'object' &&
+            typeof (value.before || '') === 'string' &&
+            typeof (value.after || '') === 'string';
+        }
+        item.checks[check.key] = { label: check.label, valid: valid, present: value != null && value !== '' };
+        if (!valid) item.valid = false;
+      });
+      return item;
+    });
+    return {
+      version: '2.1',
+      valid: data.version === '2.1' && cards.length > 0 && results.every(function (r) { return r.valid; }),
+      payloadVersionValid: data.version === '2.1',
+      cardCount: cards.length,
+      cards: results
+    };
+  }
+
   function exportUniversalCard(L, opts) {
     opts = opts || {};
     var cards = (L.prompts || []).map(function (p) { return toUniversalCard(p, opts); });
-    return {
+    var data = {
       version: '2.1',
       engineVersion: PLX.VERSION,
       sourceName: L.sourceName || '',
@@ -2405,6 +2465,8 @@ var PLX = (function () {
         cards: cards
       }
     };
+    data.compatibilityValidation = validateUniversalCardPayload(data);
+    return data;
   }
   function exportUniversalCardJSON(L, opts) {
     var data = exportUniversalCard(L, opts);
@@ -2870,7 +2932,7 @@ var PLX = (function () {
   window.__PLX_APP = {
     S: S, C: C, el: el, render: render, setTab: setTab, selectPrompt: selectPrompt, addLibrary: addLibrary,
     payloads: payloads, payload: payload, derive: PLX.derive, PLX: PLX, copyText: copyText,
-    exportLibraryHTML: exportLibraryHTML, postHTML: postHTML, toUniversalCard: toUniversalCard, exportUniversalCard: exportUniversalCard, exportUniversalCardJSON: exportUniversalCardJSON, shortTitle: PLX.shortTitle,
+    exportLibraryHTML: exportLibraryHTML, postHTML: postHTML, toUniversalCard: toUniversalCard, validateUniversalCardPayload: validateUniversalCardPayload, exportUniversalCard: exportUniversalCard, exportUniversalCardJSON: exportUniversalCardJSON, shortTitle: PLX.shortTitle,
     detectRole: PLX.detectRole, filenames: PLX.filenames, setSlot: setSlot, assignFiles: assignFiles,
     imgState: imgState, samples: function () { return typeof SAMPLE === 'string' ? SAMPLE : (SAMPLE && SAMPLE.text) || ''; }, notice: notice, valuesFor: valuesFor,
     download: download, setPreset: function (k) { if (PLX.THUMB_TEMPLATES[k]) { S.preset = k; LS.set(C.lsPresetKey, k); touchAll(); S.dirty = { library: true, image: true, publisher: true }; render(); } },
