@@ -2150,6 +2150,55 @@ var PLX = (function () {
     document.body.appendChild(a); a.click();
     setTimeout(function () { try { URL.revokeObjectURL(a.href); } catch (e) { } document.body.removeChild(a); }, 1200);
   }
+  /*
+   * Blogger export sanitizer.  Export values are escaped with escT/escA while
+   * they are assembled; this final pass also lets the browser serializer
+   * escape text nodes that came from generated markup.
+   *
+   * Do not normalize pre/code/prompttextbox: those are value-bearing blocks
+   * and their whitespace is part of the prompt.  The same rule deliberately
+   * excludes script/style so the exported application remains executable.
+   */
+  function exportSanitizer(source) {
+    var isDocument = /^\s*<!doctype|^\s*<html[\s>]/i.test(String(source));
+    var parsed = new DOMParser().parseFromString(String(source), 'text/html');
+    var root = isDocument ? parsed.documentElement : parsed.body;
+    var protectedTags = { PRE: true, CODE: true, SCRIPT: true, STYLE: true, TEXTAREA: true };
+
+    function protectedNode(node, inherited) {
+      if (inherited || !node || node.nodeType !== 1) return !!inherited;
+      return !!(protectedTags[node.tagName] || node.classList.contains('prompttextbox'));
+    }
+    function clean(parent, inherited) {
+      var protectedParent = inherited || protectedNode(parent, false);
+      for (var child = parent.firstChild; child;) {
+        var next = child.nextSibling;
+        if (child.nodeType === 3) {
+          if (!protectedParent) {
+            if (!/\S/.test(child.nodeValue)) parent.removeChild(child);
+            else child.nodeValue = child.nodeValue.replace(/\n[ \t]*\n(?:[ \t]*\n)*/g, '\n');
+          }
+        } else if (child.nodeType === 1) {
+          var childProtected = protectedParent || protectedNode(child, false);
+          if (!childProtected) clean(child, false);
+          if (!childProtected && (child.tagName === 'P' || child.tagName === 'DIV') && !child.innerHTML.trim()) {
+            parent.removeChild(child);
+          }
+        }
+        child = next;
+      }
+      if (!protectedParent) {
+        for (var br = parent.firstElementChild; br;) {
+          var following = br.nextElementSibling;
+          if (br.tagName === 'BR' && following && following.tagName === 'BR') parent.removeChild(following);
+          br = following;
+        }
+      }
+    }
+    clean(root, false);
+    return isDocument ? '<!DOCTYPE html>' + parsed.documentElement.outerHTML : parsed.body.innerHTML;
+  }
+
   function sectionBlockExport(label, text, copyLabel) {
     var parts = [];
     parts.push('<div class="sec"><div class="sectop"><span class="lab">' + escT(label) + '</span>');
@@ -2212,7 +2261,7 @@ var PLX = (function () {
     parts.push('<div class="toast" id="toast"></div>');
     parts.push(EXPORT_SCRIPT);
     parts.push('</div></body></html>');
-    return { doc: parts.join('\n'), secCount: blocks, nanCount: missing };
+    return { doc: exportSanitizer(parts.join('\n')), secCount: blocks, nanCount: missing };
   }
     function postHTML(p) {
     var set = payload(p, 'copyFullBody'), st = imgState(p);
@@ -2232,7 +2281,7 @@ var PLX = (function () {
         parts.push('<ul>' + lines.map(function (l) { return '<li>' + escT(l.replace(/^[-*•+>]+\s*/, '')) + '</li>'; }).join('') + '</ul>');
       } else if (blk) parts.push('<p>' + escT(blk).replace(/\n/g, '<br />') + '</p>');
     });
-    return parts.join('\n');
+    return exportSanitizer(parts.join('\n'));
   }
 
   /* ---------------- Universal Card v2.1 Compatibility Layer (PLE-11) - Engine only, do not modify Universal Card source ---------------- */
