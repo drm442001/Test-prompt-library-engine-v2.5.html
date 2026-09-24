@@ -1113,12 +1113,74 @@ var PLX = (function () {
     return is;
   }
 
+  /* SEO validation is deliberately warning-only and never blocks export. */
+  function validateSEO(p, supplied) {
+    p = p || { fields: {} };
+    var f = p.fields || {};
+    var s = supplied || p.seo || {};
+    var warnings = [];
+    function warn(code, field, message) {
+      warnings.push({ level: 'warn', code: code, field: field, msg: message });
+    }
+    function text(value) { return String(value == null ? '' : value).trim(); }
+    function jsonValue(value) {
+      if (value && typeof value === 'object') return value;
+      if (!text(value)) return null;
+      try { return JSON.parse(value); } catch (e) { return false; }
+    }
+
+    var title = text(s.title || f.title);
+    if (!title) warn('SEO_TITLE_EMPTY', 'title', 'SEO title is empty.');
+    else if (title.length < 50 || title.length > 60) warn('SEO_TITLE_LENGTH', 'title', 'SEO title should be 50-60 characters; found ' + title.length + '.');
+
+    var description = text(s.metaDescription || s.description || f.search);
+    if (!description) warn('SEO_META_EMPTY', 'metaDescription', 'Meta description is empty.');
+    else if (description.length < CFG.searchMin || description.length > CFG.searchMax) {
+      warn('SEO_META_LENGTH', 'metaDescription', 'Meta description should be ' + CFG.searchMin + '-' + CFG.searchMax + ' characters; found ' + description.length + '.');
+    }
+
+    var faq = jsonValue(s.faqJsonLd || s.faq || '');
+    if (!faq) warn('SEO_FAQ_JSONLD_EMPTY', 'faqJsonLd', 'FAQ JSON-LD is missing.');
+    else if (faq === false || faq['@type'] !== 'FAQPage' || !Array.isArray(faq.mainEntity)) {
+      warn('SEO_FAQ_JSONLD_INVALID', 'faqJsonLd', 'FAQ JSON-LD must contain @type FAQPage and a mainEntity array.');
+    }
+
+    var breadcrumb = jsonValue(s.breadcrumbJsonLd || s.breadcrumb || '');
+    if (!breadcrumb) warn('SEO_BREADCRUMB_JSONLD_EMPTY', 'breadcrumbJsonLd', 'Breadcrumb JSON-LD is missing.');
+    else if (breadcrumb === false || breadcrumb['@type'] !== 'BreadcrumbList' || !Array.isArray(breadcrumb.itemListElement)) {
+      warn('SEO_BREADCRUMB_JSONLD_INVALID', 'breadcrumbJsonLd', 'Breadcrumb JSON-LD must contain @type BreadcrumbList and an itemListElement array.');
+    }
+
+    var alt = text(s.imageAlt || s.alt || f.altThumb || f.altBefore || f.altAfter);
+    if (!alt) warn('SEO_IMAGE_ALT_EMPTY', 'imageAlt', 'Image alt text is empty.');
+    else if (alt.length > CFG.altMax) warn('SEO_IMAGE_ALT_LONG', 'imageAlt', 'Image alt text exceeds ' + CFG.altMax + ' characters.');
+
+    var canonical = text(s.canonicalUrl || s.canonical);
+    if (!canonical) warn('SEO_CANONICAL_EMPTY', 'canonicalUrl', 'Canonical URL is missing.');
+    else if (!/^https?:\/\/[^\s]+$/i.test(canonical)) warn('SEO_CANONICAL_INVALID', 'canonicalUrl', 'Canonical URL must be an absolute HTTP or HTTPS URL.');
+
+    var og = s.ogTags || s.openGraph || {};
+    if (typeof og === 'string') {
+      og = {
+        'og:title': /property=["']og:title["']/i.test(og),
+        'og:description': /property=["']og:description["']/i.test(og),
+        'og:image': /property=["']og:image["']/i.test(og),
+        'og:url': /property=["']og:url["']/i.test(og)
+      };
+    }
+    ['og:title', 'og:description', 'og:image', 'og:url'].forEach(function (key) {
+      if (!og || !og[key]) warn('SEO_OG_MISSING', key, 'Open Graph tag ' + key + ' is missing.');
+    });
+
+    return warnings;
+  }
+
   return {
     VERSION: VERSION, CFG: CFG, SECTIONS: SECTIONS, EXTRA: EXTRA, LEGACY_KEYS: LEGACY_KEYS,
     parseMarkdown: parseMarkdown, classifyHeading: classifyHeading, normHeading: normHeading,
     extractStep4: extractStep4, analyzeCustomization: analyzeCustomization, applyValues: applyValues,
     countIn: countIn, shortTitle: shortTitle, sanitizeFileName: sanitizeFileName, filenames: filenames,
-    detectRole: detectRole, derive: derive, validate: validate, thumbnailAltFromTitle: thumbnailAltFromTitle,
+    detectRole: detectRole, derive: derive, validate: validate, validateSEO: validateSEO, thumbnailAltFromTitle: thumbnailAltFromTitle,
     extractFeatures: extractFeatures, cleanTitle: cleanTitle, cleanInline: cleanInline,
     stripBullets: stripBullets, normSection: normSection, PRESET_NAMES: PRESET_NAMES, THUMB_TEMPLATES: THUMB_TEMPLATES,
     PROTECTION: PROTECTION, escT: escT, escA: escA, attr: attr, escRe: escRe, jsSafe: jsSafe, trim: trim,
@@ -2940,7 +3002,7 @@ var PLX = (function () {
   /* ---------------- public surface for the test harness ---------------- */
   window.__PLX_APP = {
     S: S, C: C, el: el, render: render, setTab: setTab, selectPrompt: selectPrompt, addLibrary: addLibrary,
-    payloads: payloads, payload: payload, derive: PLX.derive, PLX: PLX, copyText: copyText,
+    payloads: payloads, payload: payload, derive: PLX.derive, validateSEO: PLX.validateSEO, PLX: PLX, copyText: copyText,
     exportLibraryHTML: exportLibraryHTML, postHTML: postHTML, toUniversalCard: toUniversalCard, validateUniversalCardPayload: validateUniversalCardPayload, exportUniversalCard: exportUniversalCard, exportUniversalCardJSON: exportUniversalCardJSON, shortTitle: PLX.shortTitle,
     detectRole: PLX.detectRole, filenames: PLX.filenames, setSlot: setSlot, assignFiles: assignFiles,
     imgState: imgState, samples: function () { return typeof SAMPLE === 'string' ? SAMPLE : (SAMPLE && SAMPLE.text) || ''; }, notice: notice, valuesFor: valuesFor,
