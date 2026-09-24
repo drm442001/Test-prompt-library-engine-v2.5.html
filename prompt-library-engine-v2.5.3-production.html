@@ -1175,12 +1175,57 @@ var PLX = (function () {
     return warnings;
   }
 
+  /* Responsive audit is read-only: it measures rendered UI and reports only. */
+  function responsiveLayoutAudit(root, widths) {
+    root = root || document.querySelector('.mgs-lib-root');
+    widths = widths || [320, 360, 390, 768, 1024, 1366];
+    var groups = {
+      cards: '.mgs-lib-card, .mgs-lib-lane',
+      promptBox: '.mgs-lib-val, .mgs-lib-field textarea',
+      copyButton: '.mgs-lib-cbtn, .mgs-lib-btn',
+      faq: '.mgs-lib-faq, details.mgs-lib-paste',
+      parameterBadge: '.mgs-lib-badge, .mgs-lib-flag, .mgs-lib-tier'
+    };
+    function inspect(node, rootBox) {
+      if (!node) return null;
+      var box = node.getBoundingClientRect();
+      var style = window.getComputedStyle(node);
+      var horizontalOverflow = node.scrollWidth > node.clientWidth + 1 || box.right > rootBox.right + 1;
+      var verticalScroll = /auto|scroll/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1;
+      var cutText = (style.textOverflow === 'ellipsis' || style.overflow === 'hidden' || style.overflowX === 'hidden') && horizontalOverflow;
+      return { overflow: !!horizontalOverflow, scroll: !!verticalScroll, cutText: !!cutText };
+    }
+    function report(width) {
+      if (!root) return { width: width, available: false, overflow: [], scroll: [], cutText: [] };
+      var rootBox = root.getBoundingClientRect(), out = { width: width, available: true, overflow: [], scroll: [], cutText: [] };
+      Object.keys(groups).forEach(function (group) {
+        root.querySelectorAll(groups[group]).forEach(function (node) {
+          var result = inspect(node, rootBox), label = group;
+          if (result.overflow) out.overflow.push(label);
+          if (result.scroll) out.scroll.push(label);
+          if (result.cutText) out.cutText.push(label);
+        });
+      });
+      return out;
+    }
+    return {
+      requestedWidths: widths.slice(),
+      viewportWidth: typeof window !== 'undefined' ? window.innerWidth : null,
+      note: 'Measurements use the current rendered viewport; call once per target viewport width.',
+      reports: widths.map(report),
+      pass: widths.every(function (width) {
+        var item = report(width);
+        return !item.overflow.length && !item.scroll.length && !item.cutText.length;
+      })
+    };
+  }
+
   return {
     VERSION: VERSION, CFG: CFG, SECTIONS: SECTIONS, EXTRA: EXTRA, LEGACY_KEYS: LEGACY_KEYS,
     parseMarkdown: parseMarkdown, classifyHeading: classifyHeading, normHeading: normHeading,
     extractStep4: extractStep4, analyzeCustomization: analyzeCustomization, applyValues: applyValues,
     countIn: countIn, shortTitle: shortTitle, sanitizeFileName: sanitizeFileName, filenames: filenames,
-    detectRole: detectRole, derive: derive, validate: validate, validateSEO: validateSEO, thumbnailAltFromTitle: thumbnailAltFromTitle,
+    detectRole: detectRole, derive: derive, validate: validate, validateSEO: validateSEO, responsiveLayoutAudit: responsiveLayoutAudit, thumbnailAltFromTitle: thumbnailAltFromTitle,
     extractFeatures: extractFeatures, cleanTitle: cleanTitle, cleanInline: cleanInline,
     stripBullets: stripBullets, normSection: normSection, PRESET_NAMES: PRESET_NAMES, THUMB_TEMPLATES: THUMB_TEMPLATES,
     PROTECTION: PROTECTION, escT: escT, escA: escA, attr: attr, escRe: escRe, jsSafe: jsSafe, trim: trim,
@@ -3002,7 +3047,7 @@ var PLX = (function () {
   /* ---------------- public surface for the test harness ---------------- */
   window.__PLX_APP = {
     S: S, C: C, el: el, render: render, setTab: setTab, selectPrompt: selectPrompt, addLibrary: addLibrary,
-    payloads: payloads, payload: payload, derive: PLX.derive, validateSEO: PLX.validateSEO, PLX: PLX, copyText: copyText,
+    payloads: payloads, payload: payload, derive: PLX.derive, validateSEO: PLX.validateSEO, responsiveLayoutAudit: PLX.responsiveLayoutAudit, PLX: PLX, copyText: copyText,
     exportLibraryHTML: exportLibraryHTML, postHTML: postHTML, toUniversalCard: toUniversalCard, validateUniversalCardPayload: validateUniversalCardPayload, exportUniversalCard: exportUniversalCard, exportUniversalCardJSON: exportUniversalCardJSON, shortTitle: PLX.shortTitle,
     detectRole: PLX.detectRole, filenames: PLX.filenames, setSlot: setSlot, assignFiles: assignFiles,
     imgState: imgState, samples: function () { return typeof SAMPLE === 'string' ? SAMPLE : (SAMPLE && SAMPLE.text) || ''; }, notice: notice, valuesFor: valuesFor,
