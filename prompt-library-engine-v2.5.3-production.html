@@ -1420,7 +1420,7 @@ var PLX = (function () {
   function actionBtn(a) {
     var parts = ['<button type="button" class="cbtn' + (a.spec ? ' spec' : '') + '"'];
     parts.push(' data-action="copy"');
-    parts.push(PLX.attr('data-copy', a.name));
+    parts.push(PLX.attr('data-prompt', a.name));
     if (a.filename) parts.push(' data-filename="1"');
     if (a.blocked) parts.push(' data-blocked="1" title="' + escA(a.blocked) + '"');
     parts.push(PLX.attr('aria-label', (a.aria || a.label)));
@@ -1643,9 +1643,9 @@ var PLX = (function () {
     var f = payload(p, 'filenames'), fs = payload(p, 'filenamesShort');
     return '<div class="sec"><div class="sectop"><span class="lab">File names <em>(copy to rename generated images)</em></span>' +
       '<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">' +
-      '<button type="button" class="cbtn" data-action="copy" data-copy="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
-      '<button type="button" class="cbtn" data-action="copy" data-copy="copyAfterFile">After: ' + escT(f.after) + '</button>' +
-      '<button type="button" class="cbtn" data-action="copy" data-copy="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
+      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
+      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyAfterFile">After: ' + escT(f.after) + '</button>' +
+      '<button type="button" class="cbtn" data-action="copy" data-prompt="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
       '</span></div></div>';
   }
 
@@ -1830,10 +1830,10 @@ var PLX = (function () {
       label: '5 \u00b7 Buttons',
       note: 'Copy actions for Main and After',
       html: '<div class="btnrow" style="margin-top:.2rem">' +
-        '<button type="button" class="cbtn" data-action="copy" data-copy="copyPromptOriginal">Copy Original Prompt</button>' +
-        '<button type="button" class="cbtn spec" data-action="copy" data-copy="copyPromptCustom">Copy Customized Prompt</button>' +
-        '<button type="button" class="cbtn" data-action="copy" data-copy="copyPromptNegative">Copy Prompt + Negative</button>' +
-        '<button type="button" class="cbtn" data-action="copy" data-copy="copyAfterFile">Copy After Image Title</button>' +
+        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyPromptOriginal">Copy Original Prompt</button>' +
+        '<button type="button" class="cbtn spec" data-action="copy" data-prompt="copyPromptCustom">Copy Customized Prompt</button>' +
+        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyPromptNegative">Copy Prompt + Negative</button>' +
+        '<button type="button" class="cbtn" data-action="copy" data-prompt="copyAfterFile">Copy After Image Title</button>' +
         '</div>'
     }));
 
@@ -1859,8 +1859,8 @@ var PLX = (function () {
     out.push(thumbPreviewHTML(st));
     out.push('<div class="sectop" style="margin-top:.7rem"><span class="lab">Thumbnail File Names</span>');
     out.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
-    out.push('<button type="button" class="cbtn spec" data-action="copy" data-copy="copyThumbFullTitle">Copy Thumbnail Full Title</button>');
-    out.push('<button type="button" class="cbtn" data-action="copy" data-copy="copyThumbShortTitle">Copy Thumbnail Short Title</button>');
+    out.push('<button type="button" class="cbtn spec" data-action="copy" data-prompt="copyThumbFullTitle">Copy Thumbnail Full Title</button>');
+    out.push('<button type="button" class="cbtn" data-action="copy" data-prompt="copyThumbShortTitle">Copy Thumbnail Short Title</button>');
     out.push('</span></div>');
     out.push('<div class="val" style="font-size:.8rem;color:var(--dim)">Full: ' + escT(payload(p, 'filenames').thumb) + '<br>Short: ' + escT(payload(p, 'filenamesShort').thumb) + '</div>');
     out.push('</div>');
@@ -2062,7 +2062,7 @@ var PLX = (function () {
     out.push('<div><span class="lab">Publishing</span><h2 class="cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' · ' + escT(p.fields.title || '(untitled)') + '</h2>' +
       '<div class="kv"><span>Full Body source: <b>Sections 6 + 7 + 9</b></span><span>Section 3 <b>never</b> included</span><span>mode: <b>' + escT(currentMode(p)) + '</b></span></div></div>');
     out.push('<div class="btnrow">' +
-      '<button type="button" class="btn main" data-action="copy" data-copy="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
+      '<button type="button" class="btn main" data-action="copy" data-prompt="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
       '<button type="button" class="btn" data-action="downloadpost">Download post HTML</button>' +
       '<button type="button" class="btn" data-action="downloadlibrary">Download library HTML</button>' +
       '<button type="button" class="btn spec" data-action="downloaduniversal">Download Universal Card JSON</button>' +
@@ -2094,7 +2094,7 @@ var PLX = (function () {
       out.push('<span class="src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
         escT(row.sec) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : '')) + '</span></div>');
       out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
-      out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-copy="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
+      out.push('<div class="btnrow"><button type="button" class="cbtn" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
       if (row.isBody) out.push('<button type="button" class="cbtn" data-action="copybodytext">Copy from this box</button>');
       if (edited) out.push('<button type="button" class="cbtn ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>');
       out.push('</div></div>');
@@ -2234,7 +2234,7 @@ var PLX = (function () {
     if (!hasText(text)) return '';
     var parts = [];
     parts.push('<div class="sec"><div class="sectop"><span class="lab">' + escT(label) + '</span>');
-    if (text) parts.push('<button type="button" class="cbtn" data-copytext="' + escA(text) + '">' + escT(copyLabel || 'Copy') + '</button>');
+    if (text) parts.push('<button type="button" class="cbtn" data-prompt="' + escA(text) + '">' + escT(copyLabel || 'Copy') + '</button>');
     parts.push('</div><div class="val">' + (text ? escT(text) : '<i>not available in the source file</i>') + '</div></div>');
     return parts.join('');
   }
@@ -2246,7 +2246,7 @@ var PLX = (function () {
     'var t=document.getElementById("toast");if(t){t.textContent="Copied";t.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("show")},1500);}}',
     'function fb(x,b){var a=document.createElement("textarea");a.value=x;a.style.cssText="position:fixed;left:-9999px";document.body.appendChild(a);a.select();',
     'var y=false;try{y=document.execCommand("copy")}catch(e){}document.body.removeChild(a);if(y)ok(b);}',
-    'document.addEventListener("click",function(e){var b=e.target.closest("[data-copytext]");if(!b)return;var v=b.getAttribute("data-copytext");',
+    'document.addEventListener("click",function(e){var b=e.target.closest("[data-prompt]");if(!b)return;var v=b.getAttribute("data-prompt");',
     'if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){ok(b)},function(){fb(v,b)});}else{fb(v,b);}});',
     'var s=document.getElementById("search"),cs=[].slice.call(document.querySelectorAll(".card")),c=document.getElementById("count");',
     'if(s)s.addEventListener("input",function(){var q=s.value.trim().toLowerCase(),n=0;cs.forEach(function(x){var m=!q||x.getAttribute("data-search").indexOf(q)!==-1;x.style.display=m?"":"none";if(m)n++;});if(c)c.textContent="Showing "+n+" of "+cs.length+" prompts";});',
@@ -2459,7 +2459,7 @@ var PLX = (function () {
     var t = e.target.closest ? e.target.closest('[data-action]') : null;
     if (!t) return;
     var a = t.dataset.action, p = selectedPrompt();
-    if (a === 'copy') { handleCopy(t.dataset.copy, t); return; }
+    if (a === 'copy') { handleCopy(t.dataset.prompt, t); return; }
     if (a === 'mode') {
       if (t.disabled) return;
       S.mode = t.dataset.mode; S.dirty = { library: true, image: true, publisher: true }; render(); return;
