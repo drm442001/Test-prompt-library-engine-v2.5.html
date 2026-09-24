@@ -410,6 +410,7 @@ var PLX = (function () {
   }
 
   function parseMarkdown(md) {
+    /* Normalize once at the parser boundary; all later section parsing is line based. */
     var raw = String(md == null ? '' : md).replace(/\r\n?/g, '\n');
     var lines = raw.split('\n');
     var parsedName = 'Prompt Library';
@@ -531,7 +532,18 @@ var PLX = (function () {
 
       var hm = RE_HEAD_BOLD.exec(line);
       var hashm = RE_HEAD_HASH.exec(line);
-      if (hm) { openHeading(hm[1], i, line); continue; }
+      if (hm) {
+        var boldKey = classifyHeading(hm[1]);
+        if (!boldKey && (cur === 'prompt' || cur === 'negative')) {
+          /* Prompt and Negative Prompt are bounded by the next heading, even
+             when that heading is not one of the known section aliases. */
+          flush();
+          cur = null;
+        }
+        openHeading(hm[1], i, line);
+        if (hm[2] && trim(hm[2])) buf.push(trim(hm[2]));
+        continue;
+      }
       var lm = RE_HEAD_LOOSE.exec(line);
       if (lm && cur === 'altpair') {
         /* inside Section 5 a "**Before Image Alt:** x" style line still maps to the pair */
@@ -540,8 +552,16 @@ var PLX = (function () {
       }
       if (hashm) {
         var k2 = classifyHeading(hashm[1]);
-        if (k2) open(k2, trim(hashm[1]), i);
-        else fields.__unknown.push({ where: trim(hashm[1]), text: '', line: i });
+        if (k2) {
+          open(k2, trim(hashm[1]), i);
+        } else {
+          if (cur === 'prompt' || cur === 'negative') {
+            /* Any following heading closes these two free-form sections. */
+            flush();
+            cur = null;
+          }
+          fields.__unknown.push({ where: trim(hashm[1]), text: '', line: i });
+        }
         continue;
       }
       var im = RE_INLINE_ALT.exec(line);
@@ -574,6 +594,10 @@ var PLX = (function () {
       raw: {}, fields: {}
     };
     Object.keys(fields.__raw).forEach(function (kk) { if (fields.__raw[kk]) p.raw[kk] = fields.__raw[kk]; });
+    /* Every parsed field has a stable string value, including absent sections. */
+    SECTIONS.concat(EXTRA).concat([{ key: 'altBefore' }, { key: 'altAfter' }]).forEach(function (x) {
+      if (p.raw[x.key] == null) p.raw[x.key] = '';
+    });
     SECTIONS.concat(EXTRA).concat([{ key: 'altBefore' }, { key: 'altAfter' }]).forEach(function (x) {
       if (x.key === 'altpair' || x.key === '__unknown') return;
       p.fields[x.key] = trim(fields[x.key] || '');
