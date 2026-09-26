@@ -89,6 +89,14 @@
 .mgs-lib-root .mgs-lib-sec.mgs-lib-gen{background:var(--mgs-lib-color-21);border-color:var(--mgs-lib-color-20)}
 .mgs-lib-root .mgs-lib-sec.mgs-lib-miss{background:var(--mgs-lib-color-37);border-style:dashed;color:var(--dim)}
 .mgs-lib-root .mgs-lib-sectop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.mgs-lib-root .merged-prompt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.mgs-lib-root .mgs-lib-prompt-part-title{font-size:.74rem;font-weight:800;color:var(--brand2);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.3rem}
+.mgs-lib-root .mgs-lib-prompt-divider{border-top:1px solid #ddd;margin:10px 0}
+.mgs-lib-root .thumbnail-top-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.mgs-lib-root .mgs-lib-preset-control{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+.mgs-lib-root .mgs-lib-preset-control label{font-weight:700;color:#8fa0d8}
+.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px}
+.mgs-lib-root .mgs-lib-thumbnail-preset-note{font-size:.74rem;color:var(--dim);margin:-4px 0 10px}
 .mgs-lib-root .mgs-lib-lab{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);letter-spacing:.03em;text-transform:uppercase}
 .mgs-lib-root .mgs-lib-lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
 .mgs-lib-root .mgs-lib-flag{font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:.1rem .45rem;margin-left:.4rem}
@@ -1614,13 +1622,14 @@ var PLX = (function () {
     if (o && o.when === false) return '';
     var parts = [];
     parts.push('<div class="mgs-lib-sec' + (o.cls ? ' ' + o.cls : '') + '"' + (o.id ? ' id="' + escA(o.id) + '"' : '') + '>');
-    parts.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
+    parts.push('<div class="mgs-lib-sectop' + (o.headerCls ? ' ' + escA(o.headerCls) : '') + '"><span class="mgs-lib-lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
     if (o.actions && o.actions.length) {
       parts.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
       o.actions.forEach(function (a) { parts.push(actionBtn(a)); });
       parts.push('</span>');
     }
     parts.push('</div>');
+    if (o.beforeHTML) parts.push(o.beforeHTML);
     var previewAttr = o.previewRole ? ' data-preview-role="' + escA(o.previewRole) + '"' : '';
     if (o.valueHTML !== undefined) parts.push('<div class="mgs-lib-val"' + previewAttr + '>' + o.valueHTML + '</div>');
     else if (o.value !== undefined) parts.push('<div class="mgs-lib-val"' + previewAttr + '>' + escT(o.value) + '</div>');
@@ -1638,6 +1647,22 @@ var PLX = (function () {
     if (a.blocked) parts.push(' data-blocked="1" title="' + escA(a.blocked) + '"');
     parts.push(PLX.attr('aria-label', (a.aria || a.label)));
     parts.push('>' + escT(a.label) + '</button>');
+    return parts.join('');
+  }
+  function mergedPromptContentHTML(p, set) {
+    var parts = [
+      '<div class="mgs-lib-prompt-part">',
+      '<div class="mgs-lib-prompt-part-title">Main Prompt</div>',
+      '<div class="mgs-lib-val" data-preview-role="prompt">' + highlightPromptHTML(p, 'prompt', set.copyPrompt) + '</div>',
+      '</div>'
+    ];
+    if (hasText(set.copyNegative)) {
+      parts.push('<div class="mgs-lib-prompt-divider" aria-hidden="true"></div>');
+      parts.push('<div class="mgs-lib-prompt-part">');
+      parts.push('<div class="mgs-lib-prompt-part-title">Negative Prompt</div>');
+      parts.push('<div class="mgs-lib-val" data-preview-role="negative">' + highlightPromptHTML(p, 'negative', set.copyNegative) + '</div>');
+      parts.push('</div>');
+    }
     return parts.join('');
   }
   function issueHTML(i) {
@@ -1754,20 +1779,14 @@ var PLX = (function () {
       actions: [{ name: 'copyBeforeAlt', label: 'Copy Before Alt' }, { name: 'copyAfterAlt', label: 'Copy After Alt' }]
     }));
 
-    /* 6 PROMPT */
+    /* 6 + 7 MAIN / NEGATIVE PROMPT — unified live preview and copy action. */
     out.push(secBlock({
-      cls: 'mgs-lib-gen', label: 'Section 6 · Prompt', note: 'main AI prompt',
+      cls: 'mgs-lib-gen mgs-lib-merged-prompt',
+      headerCls: 'merged-prompt-header',
+      label: 'Main Prompt & Negative Prompt', note: 'Sections 6 + 7 · live preview',
       flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
-      valueHTML: highlightPromptHTML(p, 'prompt', set.copyPrompt), previewRole: 'prompt',
+      html: mergedPromptContentHTML(p, set),
       actions: [{ name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' }]
-    }));
-
-    /* 7 NEGATIVE PROMPT — omit the complete block when there is no value. */
-    out.push(secBlock({
-      when: hasText(set.copyNegative),
-      cls: 'mgs-lib-gen', label: 'Section 7 · Negative Prompt',
-      flag: '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>',
-      valueHTML: highlightPromptHTML(p, 'negative', set.copyNegative), previewRole: 'negative'
     }));
 
     /* 8 TOOLS */
@@ -1833,12 +1852,14 @@ var PLX = (function () {
     if (!rows.length) return '<div class="mgs-lib-val">—</div>';
     return '<ul class="mgs-lib-howto">' + rows.map(function (l) { return '<li>' + escT(l.replace(/^\s*[-*+>•]+\s*/, '')) + '</li>'; }).join('') + '</ul>';
   }
-  function presetRowHTML(p) {
+  function presetRowHTML(p, compact) {
     var opts = Object.keys(PLX.THUMB_TEMPLATES).map(function (k) {
       return '<option value="' + escA(k) + '"' + (k === S.preset ? ' selected' : '') + '>' + escT(PLX.PRESET_NAMES[k] || k) + '</option>';
     }).join('');
-    return '<div class="mgs-lib-kv"><label for="preset-' + escA(p.uid) + '" style="font-weight:700;color:#8fa0d8">Style preset</label>' +
-      '<select id="preset-' + escA(p.uid) + '" data-action="preset" style="width:auto;min-width:210px">' + opts + '</select>' +
+    var control = '<div class="mgs-lib-preset-control"><label for="preset-' + escA(p.uid) + '">Style preset</label>' +
+      '<select id="preset-' + escA(p.uid) + '" data-action="preset">' + opts + '</select></div>';
+    if (compact) return control;
+    return '<div class="mgs-lib-kv">' + control +
       '<span class="mgs-lib-src">regenerates only Section 10 — original library prompt preserved in source</span></div>';
   }
   function exportRow(p, L) {
@@ -2014,39 +2035,27 @@ var PLX = (function () {
       actions: [{ name: 'copyBeforePrompt', label: 'Copy Before Prompt', preview: 'before' }]
     }));
 
-    /* SECTION 3 Main Prompt - Display customized preview */
+    /* SECTION 3 Main + Negative Prompt — one unified card, no redundant copy-preview section. */
     out.push(secBlock({
-      cls: 'mgs-lib-after', label: '3 \u00b7 Main Prompt', note: 'Section 6 \u00b7 main prompt' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
+      cls: 'mgs-lib-after mgs-lib-merged-prompt',
+      headerCls: 'merged-prompt-header',
+      label: 'Main Prompt & Negative Prompt', note: 'Sections 6 + 7' + (currentMode(p) === 'customized' ? ' · customized' : ''),
       flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
-      valueHTML: highlightPromptHTML(p, 'prompt', set.copyPrompt), previewRole: 'prompt'
-    }));
-
-    /* SECTION 4 Negative Prompt - Display below Main Prompt */
-    out.push(secBlock({
-      when: hasText(set.copyNegative),
-      cls: 'mgs-lib-after', label: '4 \u00b7 Negative Prompt', note: 'Section 7',
-      flag: '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>',
-      valueHTML: highlightPromptHTML(p, 'negative', set.copyNegative), previewRole: 'negative'
-    }));
-
-    /* SECTION 5 Consolidated Prompt Copy */
-    out.push(secBlock({
-      label: '5 \u00b7 Copy Prompt', note: 'current Main + Negative preview',
+      html: mergedPromptContentHTML(p, set),
       actions: [{ name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' }]
     }));
 
-    /* SECTION 6 Thumbnail Image Generator Prompt - Keep existing controls */
+    /* SECTION 4 Thumbnail Image Generator Prompt — controls precede the live preview. */
     var thumbPromptAutoProtected = d.thumbWithProtection;
     out.push(secBlock({
-      cls: 'mgs-lib-thumb', label: '6 \u00b7 Thumbnail Image Generator Prompt',
+      cls: 'mgs-lib-thumb', label: '4 \u00b7 Thumbnail Image Generator Prompt',
       note: d.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
       flag: d.thumbFromLibrary ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
-      valueHTML: highlightPromptHTML(p, 'thumb', thumbPromptAutoProtected), previewRole: 'thumbnail',
-      html: presetRowHTML(p) + thumbnailTitleMenuHTML(p),
-      actions: [{ name: 'copyThumbPromptProtected', label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }]
+      beforeHTML: thumbnailTopControlsHTML(p),
+      valueHTML: highlightPromptHTML(p, 'thumb', thumbPromptAutoProtected), previewRole: 'thumbnail'
     }));
 
-    /* Thumbnail Controls - vertical, no side-by-side, below Section 6 */
+    /* Thumbnail Controls - vertical, no side-by-side, below the prompt section */
     var role = slotStatus(st);
     out.push('<div class="mgs-lib-lane mgs-lib-thumb"><h3>Thumbnail Controls</h3>');
     out.push(roleBanner(st, role));
@@ -2189,6 +2198,13 @@ var PLX = (function () {
     ].join('');
     return '<div class="mgs-lib-menu"><button type="button" class="mgs-lib-cbtn mgs-lib-spec" data-action="menu" aria-haspopup="true" aria-controls="' + escA(menuId) + '" aria-expanded="false">Copy Thumbnail Title <span aria-hidden="true">▾</span></button>' +
       '<ul class="mgs-lib-menu-list" id="' + escA(menuId) + '" role="menu" aria-label="Copy Thumbnail Title" hidden>' + items + '</ul></div>';
+  }
+  function thumbnailTopControlsHTML(p) {
+    return '<div class="thumbnail-top-controls">' +
+      presetRowHTML(p, true) +
+      actionBtn({ name: 'copyThumbPromptProtected', label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }) +
+      thumbnailTitleMenuHTML(p) +
+      '</div><div class="mgs-lib-thumbnail-preset-note">Style preset regenerates only Section 10 — original library prompt preserved in source.</div>';
   }
   var MENU_STATE = { closes: [] };
   function wireMenu(p) {
