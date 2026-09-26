@@ -61,6 +61,8 @@
 .mgs-lib-root .mgs-lib-notice[data-kind="ok"]{display:block;background:var(--mgs-lib-color-32);border:1px solid var(--ok);color:var(--mgs-lib-color-33)}
 .mgs-lib-root .mgs-lib-notice ul{margin:.4rem 0 0 1.1rem;list-style:disc}
 .mgs-lib-root .mgs-lib-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem}
+.mgs-lib-root .mgs-lib-image-prompt-picker{flex:1 1 340px;max-width:560px;min-width:0}
+.mgs-lib-root .mgs-lib-image-prompt-picker select{margin-top:.3rem}
 .mgs-lib-root .mgs-lib-libpill{display:inline-flex;align-items:center;gap:.4rem;background:var(--mgs-lib-color-15);border:1px solid var(--line2);
   border-radius:999px;padding:.35rem .4rem .35rem .8rem;font-size:.78rem;font-weight:600;color:var(--ink2);max-width:280px}
 .mgs-lib-root .mgs-lib-libpill[aria-pressed="true"]{border-color:var(--brand);color:var(--mgs-lib-color-14);background:var(--mgs-lib-color-34)}
@@ -99,7 +101,7 @@
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-copied{background:var(--ok);border-color:var(--mgs-lib-color-43);color:var(--mgs-lib-color-14)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec{background:var(--mgs-lib-color-44);color:var(--mgs-lib-color-14);border-color:var(--mgs-lib-color-45)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec:hover{background:var(--mgs-lib-color-46)}
-.mgs-lib-root .copied{background:#28a745 !important;background-color:#28a745 !important;border-color:#28a745 !important;color:white !important}
+.mgs-lib-root .copied,.mgs-lib-root .btn-success{background:#28a745 !important;background-color:#28a745 !important;border-color:#28a745 !important;color:white !important}
 .mgs-lib-root .mgs-lib-val{font-size:.88rem;color:var(--mgs-lib-color-47);white-space:pre-wrap;overflow-wrap:anywhere}
 .mgs-lib-root .bracket-default{background:#FFF3CD;color:#856404;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .mgs-lib-root .bracket-replaced{background:#D4EDDA;color:#155724;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -1315,6 +1317,7 @@ var PLX = (function () {
     else if (originalText !== null) b.textContent = originalText;
     b.classList.remove('mgs-lib-copied');
     b.classList.remove('copied');
+    b.classList.remove('btn-success');
   }
   function copyText(text, btn) {
     var feedbackBtn = btn;
@@ -1328,13 +1331,14 @@ var PLX = (function () {
     }
     var requestSeq = ++copySeq;
     clearTimeout(copyResetT);
-    document.querySelectorAll('.mgs-lib-root button.copied, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
+    document.querySelectorAll('.mgs-lib-root button.copied, .mgs-lib-root button.btn-success, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
     if (LASTBTN) restoreBtn(LASTBTN);
     LASTBTN = null;
     function done() {
       if (requestSeq !== copySeq) return;
       if (feedbackBtn) {
         feedbackBtn.classList.add('copied');
+        feedbackBtn.classList.add('btn-success');
         feedbackBtn.textContent = 'Copied!';
       }
       if (btn && btn.dataset.copyFeedback === 'menu' && feedbackMenu) {
@@ -1961,7 +1965,12 @@ var PLX = (function () {
     var d = PLX.derive(p, { mode: currentMode(p), values: valuesFor(p), preset: S.preset, suffix: p.suffix || C.defaultSuffix });
 
     out.push('<div class="mgs-lib-toolbar" style="justify-content:space-between;align-items:flex-end">');
-    out.push('<div><span class="mgs-lib-lab">Selected prompt</span><h2 class="mgs-lib-cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' \u00b7 ' + escT(p.fields.title || '(untitled)') + '</h2></div>');
+    out.push('<div class="mgs-lib-image-prompt-picker"><label class="mgs-lib-lab" for="imagePromptSelector">Selected prompt</label>');
+    out.push('<select id="imagePromptSelector" class="mgs-lib-prompt-selector" data-action="selectprompt" aria-label="Select the active Image Studio prompt">');
+    L.prompts.forEach(function (optionPrompt) {
+      out.push('<option value="' + escA(optionPrompt.uid) + '"' + (optionPrompt.uid === p.uid ? ' selected' : '') + '>#' + escT(optionPrompt.num) + ' \u00b7 ' + escT(optionPrompt.fields.title || '(untitled)') + '</option>');
+    });
+    out.push('</select><h2 class="mgs-lib-cardtitle" style="margin-top:.35rem">#' + escT(p.num) + ' \u00b7 ' + escT(p.fields.title || '(untitled)') + '</h2></div>');
     out.push('<div class="mgs-lib-btnrow"><input type="file" id="imgInput" accept="image/*" multiple style="display:none" />' +
       '<button type="button" class="mgs-lib-btn mgs-lib-main" data-action="pickimages">Add Before / After images</button>' +
       '<button type="button" class="mgs-lib-btn" data-action="swapslots">Swap Before \u2194 After</button>' +
@@ -2049,6 +2058,8 @@ var PLX = (function () {
     out.push('</div>'); /* end .vflow */
 
     wrap.innerHTML = out.join('');
+    var imagePromptSelector = el('imagePromptSelector');
+    if (imagePromptSelector) imagePromptSelector.addEventListener('change', function () { selectPrompt(imagePromptSelector.value); });
     wireMenu(p);
     wireVarControlsImage(p);
   }
@@ -2163,7 +2174,10 @@ var PLX = (function () {
     return out.join('');
   }
   function cleanThumbnailTitle(title) {
-    return PLX.cleanTitle(title || '').replace(/\.(?:jpe?g|png|webp|gif|avif|bmp|tiff?|svg|pdf)\s*$/i, '').replace(/\s+$/, '');
+    var clean = PLX.cleanTitle(title || '').replace(/\s+$/, '');
+    clean = clean.replace(/\.[a-z][a-z0-9]{1,9}\s*$/i, '');
+    clean = clean.replace(/_cover\s*$/i, '');
+    return clean.replace(/\s+$/, '');
   }
   function thumbnailTitleMenuHTML(p) {
     var fullTitle = cleanThumbnailTitle(p && p.fields ? p.fields.title : '');
