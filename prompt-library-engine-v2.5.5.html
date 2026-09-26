@@ -94,10 +94,11 @@
 .mgs-lib-root .merged-prompt-header{margin-bottom:12px}
 .mgs-lib-root .mgs-lib-prompt-part-title{font-size:.74rem;font-weight:800;color:var(--brand2);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.3rem}
 .mgs-lib-root .mgs-lib-prompt-divider{border-top:1px solid #ddd;margin:10px 0}
-.mgs-lib-root .mgs-lib-preset-control{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+.mgs-lib-root .mgs-lib-preset-control{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center;min-width:210px}
 .mgs-lib-root .mgs-lib-preset-control label{font-weight:700;color:#8fa0d8}
-.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px;min-height:44px;background:#FFFFFF;color:#212529;border:1px solid #CCCCCC;border-radius:.6rem;padding:6px 12px;font-family:inherit;font-size:16px;font-weight:400;cursor:pointer}
+.mgs-lib-root .mgs-lib-preset-control select{width:100%}
 .mgs-lib-root .mgs-lib-thumbnail-preset-note{font-size:.74rem;color:var(--dim);margin:0 0 10px}
+.mgs-lib-root .mgs-lib-sec.mgs-lib-thumb{position:relative;z-index:70;overflow:visible !important}
 .mgs-lib-root .mgs-lib-lab{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);letter-spacing:.03em;text-transform:uppercase}
 .mgs-lib-root .mgs-lib-lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
 .mgs-lib-root .mgs-lib-flag{font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:.1rem .45rem;margin-left:.4rem}
@@ -156,6 +157,7 @@
 .mgs-lib-root .mgs-lib-menu-list{position:absolute;z-index:60;top:calc(100% + .25rem);left:0;min-width:220px;background:var(--mgs-lib-color-15);
   border:1px solid var(--line2);border-radius:.6rem;box-shadow:0 10px 28px rgba(0,0,0,.45);padding:.25rem;margin:0;
   display:flex;flex-direction:column;gap:.15rem;max-height:60vh;overflow:auto}
+.mgs-lib-root .thumbnail-title-dropdown-menu{position:absolute;z-index:9999;left:auto;right:0;min-width:250px;max-height:none;overflow:visible;background:#FFFFFF;border:1px solid #D1D5DB;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .mgs-lib-root .mgs-lib-menu-list[hidden]{display:none}
 .mgs-lib-root .mgs-lib-menu-list li{margin:0}
 .mgs-lib-root .mgs-lib-menu-list button{display:flex;justify-content:space-between;align-items:center;gap:.6rem;width:100%;text-align:left;background:transparent;
@@ -173,11 +175,11 @@
 .mgs-lib-root .mgs-lib-field .mgs-lib-src{display:block;font-size:.68rem;color:var(--dim);font-weight:500;text-transform:none;letter-spacing:0;margin-top:.1rem}
 .mgs-lib-root .mgs-lib-field textarea{min-height:2.6em}
 .mgs-lib-root .mgs-lib-field.mgs-lib-body textarea{min-height:9rem}
-.mgs-lib-root .alt-sections-container{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-.mgs-lib-root .alt-section{flex:1 1 30%;min-width:250px;background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.mgs-lib-root .alt-section h4{margin:0;font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
-.mgs-lib-root .alt-section textarea,.mgs-lib-root .alt-section input{width:100%;box-sizing:border-box}
-.mgs-lib-root .alt-section .mgs-lib-src{color:var(--dim)}
+.mgs-lib-root .alt-sections-container,.mgs-lib-root .meta-sections-container{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.mgs-lib-root .alt-section,.mgs-lib-root .meta-section{flex:1 1 30%;min-width:250px;background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mgs-lib-root .alt-section h4,.mgs-lib-root .meta-section h4{margin:0;font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
+.mgs-lib-root .alt-section textarea,.mgs-lib-root .alt-section input,.mgs-lib-root .meta-section textarea,.mgs-lib-root .meta-section input{width:100%;box-sizing:border-box}
+.mgs-lib-root .alt-section .mgs-lib-src,.mgs-lib-root .meta-section .mgs-lib-src{color:var(--dim)}
 .mgs-lib-root .mgs-lib-check{display:flex;gap:.5rem;align-items:flex-start;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
 .mgs-lib-root .mgs-lib-check input{width:18px;height:18px;margin-top:.1rem;accent-color:var(--brand)}
 .mgs-lib-root .mgs-lib-sum{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
@@ -188,7 +190,7 @@
 .mgs-lib-toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ok,var(--mgs-lib-color-11));
   color:var(--mgs-lib-color-14);padding:.7rem 1.3rem;border-radius:999px;font-size:.86rem;font-weight:650;opacity:0;pointer-events:none;transition:.22s;z-index:120}
 .mgs-lib-toast.mgs-lib-show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (max-width:900px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .alt-section{flex:1 1 100%}}
+@media (max-width:900px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .alt-section,.mgs-lib-root .meta-section{flex:1 1 100%}}
 @media (max-width:1366px){.mgs-lib-root{max-width:1024px;padding:1.2rem .8rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:240px minmax(0,1fr)}}
 @media (max-width:1024px){.mgs-lib-root{max-width:960px;padding:1.1rem .75rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:220px minmax(0,1fr);gap:.7rem}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{padding:.9rem}}
 @media (max-width:768px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static;max-width:100%}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .mgs-lib-cardhead{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-sectop:not(.section-header){flex-direction:column;align-items:flex-start}.mgs-lib-root .section-header-buttons{width:100%;margin-left:0;justify-content:flex-end}.mgs-lib-root .mgs-lib-btnrow{width:100%}.mgs-lib-root .mgs-lib-toolbar{width:100%}}
@@ -1325,7 +1327,7 @@ var PLX = (function () {
   }
 
   /* ---------------- toast + clipboard ---------------- */
-  var toastT, copyResetT, copySeq = 0;
+  var toastT, copySeq = 0;
   function toast(msg, bad) {
     var t = el('toast'); t.textContent = msg;
     t.style.background = bad ? '#7a2020' : '#1e7d54';
@@ -1354,7 +1356,6 @@ var PLX = (function () {
       feedbackBtn.setAttribute('data-label-html', feedbackBtn.innerHTML);
     }
     var requestSeq = ++copySeq;
-    clearTimeout(copyResetT);
     document.querySelectorAll('.mgs-lib-root button.btn-copied, .mgs-lib-root button.copied, .mgs-lib-root button.btn-success, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
     if (LASTBTN) restoreBtn(LASTBTN);
     LASTBTN = null;
@@ -1373,11 +1374,6 @@ var PLX = (function () {
         feedbackBtn.focus();
       }
       LASTBTN = feedbackBtn;
-      copyResetT = setTimeout(function () {
-        if (requestSeq !== copySeq) return;
-        restoreBtn(feedbackBtn);
-        if (LASTBTN === feedbackBtn) LASTBTN = null;
-      }, 2500);
       toast('Copied!');
     }
     if (btn && btn.getAttribute('data-blocked') === '1') { toast('Blocked by validation', true); return; }
@@ -2245,7 +2241,7 @@ var PLX = (function () {
         '<span class="mgs-lib-menu-suffix">' + escT(suffix) + '</span><span class="mgs-lib-menu-preview">' + escT(result) + '</span></button></li>';
     }).join('');
     return '<div class="mgs-lib-menu"><button type="button" class="mgs-lib-cbtn btn-copy-title" data-action="menu" aria-haspopup="true" aria-controls="' + escA(menuId) + '" aria-expanded="false">Copy Thumbnail Title <span aria-hidden="true">▾</span></button>' +
-      '<ul class="mgs-lib-menu-list" id="' + escA(menuId) + '" role="menu" aria-label="Copy Thumbnail Title suffix options" hidden>' + items + '</ul></div>';
+      '<ul class="mgs-lib-menu-list thumbnail-title-dropdown-menu" id="' + escA(menuId) + '" role="menu" aria-label="Copy Thumbnail Title suffix options" hidden>' + items + '</ul></div>';
   }
   function thumbnailHeaderControlsHTML(p, promptCopyName, context) {
     return actionBtn({ name: promptCopyName, label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }) +
@@ -2346,6 +2342,7 @@ var PLX = (function () {
     pubBlocks.forEach(function (row, rowIndex) {
       var key = row.key;
       var isAlt = key === 'altThumb' || key === 'altBefore' || key === 'altAfter';
+      var isMeta = key === 'labels' || key === 'permalink' || key === 'search';
       var base = (key === '__body') ? payload(p, 'copyFullBody') : payload(p, row.copyKey);
       var val = ovr[key] !== undefined ? ovr[key] : base;
       var edited = ovr[key] !== undefined;
@@ -2353,9 +2350,10 @@ var PLX = (function () {
       var currentLabel = row.sec + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : ''));
 
       if (rowIndex === 1) out.push('<div class="alt-sections-container">');
-      out.push('<div class="mgs-lib-field' + (row.isBody ? ' mgs-lib-body' : '') + (isAlt ? ' alt-section' : '') + '">');
+      if (rowIndex === 5) out.push('<div class="meta-sections-container">');
+      out.push('<div class="mgs-lib-field' + (row.isBody ? ' mgs-lib-body' : '') + (isAlt ? ' alt-section' : '') + (isMeta ? ' meta-section' : '') + '">');
       out.push('<div class="mgs-lib-flab section-header"><div class="mgs-lib-field-heading">');
-      if (isAlt) out.push('<h4>' + escT(row.label) + '</h4>');
+      if (isAlt || isMeta) out.push('<h4>' + escT(row.label) + '</h4>');
       else out.push('<span class="mgs-lib-field-title">' + escT(row.label) + '</span>');
       out.push('<span class="mgs-lib-src" data-base-label="' + escA(baseLabel) + '">' + escT(currentLabel) + '</span></div>');
       out.push('<div class="section-header-buttons"><button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
@@ -2365,6 +2363,7 @@ var PLX = (function () {
       out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
       out.push('</div>');
       if (rowIndex === 3) out.push('</div>');
+      if (rowIndex === 7) out.push('</div>');
     });
 
     out.push('</div></div>');
