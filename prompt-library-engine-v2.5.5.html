@@ -88,15 +88,17 @@
 .mgs-lib-root .mgs-lib-sec{background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem;margin-bottom:.65rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .mgs-lib-root .mgs-lib-sec.mgs-lib-gen{background:var(--mgs-lib-color-21);border-color:var(--mgs-lib-color-20)}
 .mgs-lib-root .mgs-lib-sec.mgs-lib-miss{background:var(--mgs-lib-color-37);border-style:dashed;color:var(--dim)}
-.mgs-lib-root .mgs-lib-sectop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
-.mgs-lib-root .merged-prompt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.mgs-lib-root .mgs-lib-sectop{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.4rem}
+.mgs-lib-root .section-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.mgs-lib-root .section-header-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-left:auto}
+.mgs-lib-root .merged-prompt-header{margin-bottom:12px}
 .mgs-lib-root .mgs-lib-prompt-part-title{font-size:.74rem;font-weight:800;color:var(--brand2);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.3rem}
 .mgs-lib-root .mgs-lib-prompt-divider{border-top:1px solid #ddd;margin:10px 0}
-.mgs-lib-root .thumbnail-top-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
 .mgs-lib-root .mgs-lib-preset-control{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
 .mgs-lib-root .mgs-lib-preset-control label{font-weight:700;color:#8fa0d8}
-.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px}
-.mgs-lib-root .mgs-lib-thumbnail-preset-note{font-size:.74rem;color:var(--dim);margin:-4px 0 10px}
+.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px;background:#E9ECEF;color:#495057;border:1px solid #DEE2E6;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s ease}
+.mgs-lib-root .mgs-lib-preset-control select:hover,.mgs-lib-root .mgs-lib-preset-control select:focus{background:#DEE2E6;border-color:#DEE2E6;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root .mgs-lib-thumbnail-preset-note{font-size:.74rem;color:var(--dim);margin:0 0 10px}
 .mgs-lib-root .mgs-lib-lab{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);letter-spacing:.03em;text-transform:uppercase}
 .mgs-lib-root .mgs-lib-lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
 .mgs-lib-root .mgs-lib-flag{font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:.1rem .45rem;margin-left:.4rem}
@@ -109,7 +111,12 @@
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-copied{background:var(--ok);border-color:var(--mgs-lib-color-43);color:var(--mgs-lib-color-14)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec{background:var(--mgs-lib-color-44);color:var(--mgs-lib-color-14);border-color:var(--mgs-lib-color-45)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec:hover{background:var(--mgs-lib-color-46)}
-.mgs-lib-root .copied,.mgs-lib-root .btn-success{background:#28a745 !important;background-color:#28a745 !important;border-color:#28a745 !important;color:white !important}
+.mgs-lib-root button.btn-copy-title,.mgs-lib-root button.btn-copy-prompt{padding:6px 14px !important;border-radius:6px !important;font-size:13px !important;font-weight:500 !important;cursor:pointer;transition:all 0.2s ease !important;box-shadow:none}
+.mgs-lib-root button.btn-copy-title{background:#FFF3CD !important;color:#856404 !important;border:1px solid #FFEAA7 !important}
+.mgs-lib-root button.btn-copy-title:hover{background:#FFE69C !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root button.btn-copy-prompt{background:#D4EDDA !important;color:#155724 !important;border:1px solid #C3E6CB !important}
+.mgs-lib-root button.btn-copy-prompt:hover{background:#B8DFC0 !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root button.btn-copied,.mgs-lib-root button.btn-copied:hover,.mgs-lib-root button.btn-copied:focus,.mgs-lib-root button.copied,.mgs-lib-root button.btn-success{background:#28A745 !important;background-color:#28A745 !important;border:1px solid #1E7E34 !important;color:#FFFFFF !important;box-shadow:none !important}
 .mgs-lib-root .mgs-lib-val{font-size:.88rem;color:var(--mgs-lib-color-47);white-space:pre-wrap;overflow-wrap:anywhere}
 .mgs-lib-root .bracket-default{background:#FFF3CD;color:#856404;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .mgs-lib-root .bracket-replaced{background:#D4EDDA;color:#155724;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -152,17 +159,25 @@
   display:flex;flex-direction:column;gap:.15rem;max-height:60vh;overflow:auto}
 .mgs-lib-root .mgs-lib-menu-list[hidden]{display:none}
 .mgs-lib-root .mgs-lib-menu-list li{margin:0}
-.mgs-lib-root .mgs-lib-menu-list button{display:flex;justify-content:space-between;gap:.6rem;width:100%;text-align:left;background:transparent;
-  border:0;border-radius:.4rem;padding:.5rem .6rem;color:var(--ink2);font-size:.8rem;cursor:pointer;min-height:40px}
-.mgs-lib-root .mgs-lib-menu-list button:hover,.mgs-lib-root .mgs-lib-menu-list button:focus{background:var(--mgs-lib-color-22);color:var(--mgs-lib-color-14);outline:2px solid var(--brand);outline-offset:-2px}
+.mgs-lib-root .mgs-lib-menu-list button{display:flex;justify-content:space-between;align-items:center;gap:.6rem;width:100%;text-align:left;background:transparent;
+  border:0;border-radius:.4rem;padding:.5rem .6rem;color:var(--ink2);font-size:.8rem;cursor:pointer;min-height:40px;transition:all 0.2s ease}
+.mgs-lib-root .mgs-lib-menu-list button:hover,.mgs-lib-root .mgs-lib-menu-list button:focus{background:#E7F1FF !important;color:#1f3f66 !important;outline:2px solid #b8d4ff;outline-offset:-2px;box-shadow:0 2px 4px rgba(0,0,0,.1)}
 .mgs-lib-root .mgs-lib-menu-list button[aria-checked="true"]{color:var(--mgs-lib-color-14);box-shadow:inset 2px 0 0 var(--brand2)}
+.mgs-lib-root .mgs-lib-menu-suffix{font-weight:700;white-space:pre;color:inherit}
+.mgs-lib-root .mgs-lib-menu-preview{font-size:.68rem;font-weight:500;white-space:normal;text-align:right;opacity:.82;max-width:190px;overflow-wrap:anywhere}
 .mgs-lib-root .mgs-lib-fields{display:grid;grid-template-columns:1fr;gap:.6rem}
 .mgs-lib-root .mgs-lib-field{background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem}
-.mgs-lib-root .mgs-lib-field .mgs-lib-flab{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem}
-.mgs-lib-root .mgs-lib-field .mgs-lib-flab span{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
-.mgs-lib-root .mgs-lib-field .mgs-lib-src{font-size:.68rem;color:var(--dim)}
+.mgs-lib-root .mgs-lib-field .mgs-lib-flab{margin-bottom:.35rem}
+.mgs-lib-root .mgs-lib-field-heading{min-width:0;flex:1 1 190px}
+.mgs-lib-root .mgs-lib-field-title{display:block;font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
+.mgs-lib-root .mgs-lib-field .mgs-lib-src{display:block;font-size:.68rem;color:var(--dim);font-weight:500;text-transform:none;letter-spacing:0;margin-top:.1rem}
 .mgs-lib-root .mgs-lib-field textarea{min-height:2.6em}
 .mgs-lib-root .mgs-lib-field.mgs-lib-body textarea{min-height:9rem}
+.mgs-lib-root .alt-sections-container{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.mgs-lib-root .alt-section{flex:1 1 30%;min-width:250px;background:#F8F9FA;padding:12px;border-radius:8px;border:1px solid #E9ECEF;color:#343a40}
+.mgs-lib-root .alt-section h4{margin-top:0;margin-bottom:0;font-size:14px;color:#343a40}
+.mgs-lib-root .alt-section textarea,.mgs-lib-root .alt-section input{width:100%;box-sizing:border-box}
+.mgs-lib-root .alt-section .mgs-lib-src{color:#6c757d}
 .mgs-lib-root .mgs-lib-check{display:flex;gap:.5rem;align-items:flex-start;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
 .mgs-lib-root .mgs-lib-check input{width:18px;height:18px;margin-top:.1rem;accent-color:var(--brand)}
 .mgs-lib-root .mgs-lib-sum{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
@@ -173,10 +188,10 @@
 .mgs-lib-toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ok,var(--mgs-lib-color-11));
   color:var(--mgs-lib-color-14);padding:.7rem 1.3rem;border-radius:999px;font-size:.86rem;font-weight:650;opacity:0;pointer-events:none;transition:.22s;z-index:120}
 .mgs-lib-toast.mgs-lib-show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (max-width:900px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static}.mgs-lib-root .mgs-lib-plist{max-height:38vh}}
+@media (max-width:900px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .alt-section{flex:1 1 100%}}
 @media (max-width:1366px){.mgs-lib-root{max-width:1024px;padding:1.2rem .8rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:240px minmax(0,1fr)}}
 @media (max-width:1024px){.mgs-lib-root{max-width:960px;padding:1.1rem .75rem 5rem}.mgs-lib-root .mgs-lib-layout{grid-template-columns:220px minmax(0,1fr);gap:.7rem}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{padding:.9rem}}
-@media (max-width:768px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static;max-width:100%}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .mgs-lib-cardhead{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-sectop{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-btnrow{width:100%}.mgs-lib-root .mgs-lib-toolbar{width:100%}}
+@media (max-width:768px){.mgs-lib-root .mgs-lib-layout{grid-template-columns:1fr}.mgs-lib-root .mgs-lib-listwrap{position:static;max-width:100%}.mgs-lib-root .mgs-lib-plist{max-height:38vh}.mgs-lib-root .mgs-lib-cardhead{flex-direction:column;align-items:flex-start}.mgs-lib-root .mgs-lib-sectop:not(.section-header){flex-direction:column;align-items:flex-start}.mgs-lib-root .section-header-buttons{width:100%;margin-left:0;justify-content:flex-end}.mgs-lib-root .mgs-lib-btnrow{width:100%}.mgs-lib-root .mgs-lib-toolbar{width:100%}}
 @media (max-width:480px){.mgs-lib-root{padding:1rem .6rem 5rem;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.3rem}.mgs-lib-root header.mgs-lib-hd p{font-size:.8rem}.mgs-lib-root .mgs-lib-tab{flex:1 1 48%;font-size:.78rem;min-height:42px}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane,.mgs-lib-root .mgs-lib-sec,.mgs-lib-root .mgs-lib-field,.mgs-lib-root .mgs-lib-slot,.mgs-lib-root .mgs-lib-listwrap,.mgs-lib-root .mgs-lib-uploader{max-width:100%;overflow-wrap:anywhere}.mgs-lib-root .mgs-lib-cbtn{white-space:normal;word-break:break-word;flex:1 1 100%;justify-content:center;min-height:44px}.mgs-lib-root .mgs-lib-btn{flex:1 1 auto;min-width:0;white-space:normal;word-break:break-word}.mgs-lib-root .mgs-lib-libpill{max-width:100%;flex-wrap:wrap}.mgs-lib-root .mgs-lib-menu-list{min-width:180px;max-width:calc(100vw - 16px);left:0;right:auto}.mgs-lib-root textarea,.mgs-lib-root input[type="text"],.mgs-lib-root select{max-width:100%;font-size:16px}.mgs-lib-root .mgs-lib-var select,.mgs-lib-root .mgs-lib-var input{max-width:100%}.mgs-lib-root .mgs-lib-val{max-width:100%;overflow-wrap:anywhere;word-break:break-word}}
 @media (max-width:360px){.mgs-lib-root{padding:.8rem .5rem 5rem;max-width:100vw;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.2rem}.mgs-lib-root .mgs-lib-tab{flex:1 1 100%;font-size:.8rem}.mgs-lib-root .mgs-lib-card,.mgs-lib-root .mgs-lib-lane{padding:.75rem;border-radius:.8rem}.mgs-lib-root .mgs-lib-sec,.mgs-lib-root .mgs-lib-field{padding:.6rem}.mgs-lib-root .mgs-lib-cbtn{font-size:.75rem;padding:.5rem .6rem;flex:1 1 100%}.mgs-lib-root .mgs-lib-btn{font-size:.78rem;padding:.5rem .7rem}.mgs-lib-root .mgs-lib-menu-list{min-width:160px;max-width:calc(100vw - 12px);font-size:.78rem}.mgs-lib-root .mgs-lib-listwrap{padding:.5rem}.mgs-lib-root .mgs-lib-plist{max-height:32vh}.mgs-lib-root .mgs-lib-count{font-size:.7rem}.mgs-lib-root .mgs-lib-val{font-size:.84rem}.mgs-lib-root .mgs-lib-lab{font-size:.7rem}}
 @media (max-width:560px){.mgs-lib-root{padding:.9rem .55rem 5rem;overflow-x:hidden}.mgs-lib-root header.mgs-lib-hd h1{font-size:1.28rem}
@@ -1326,6 +1341,7 @@ var PLX = (function () {
     b.classList.remove('mgs-lib-copied');
     b.classList.remove('copied');
     b.classList.remove('btn-success');
+    b.classList.remove('btn-copied');
   }
   function copyText(text, btn) {
     var feedbackBtn = btn;
@@ -1339,7 +1355,7 @@ var PLX = (function () {
     }
     var requestSeq = ++copySeq;
     clearTimeout(copyResetT);
-    document.querySelectorAll('.mgs-lib-root button.copied, .mgs-lib-root button.btn-success, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
+    document.querySelectorAll('.mgs-lib-root button.btn-copied, .mgs-lib-root button.copied, .mgs-lib-root button.btn-success, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
     if (LASTBTN) restoreBtn(LASTBTN);
     LASTBTN = null;
     function done() {
@@ -1347,6 +1363,7 @@ var PLX = (function () {
       if (feedbackBtn) {
         feedbackBtn.classList.add('copied');
         feedbackBtn.classList.add('btn-success');
+        feedbackBtn.classList.add('btn-copied');
         feedbackBtn.textContent = 'Copied!';
       }
       if (btn && btn.dataset.copyFeedback === 'menu' && feedbackMenu) {
@@ -1622,11 +1639,12 @@ var PLX = (function () {
     if (o && o.when === false) return '';
     var parts = [];
     parts.push('<div class="mgs-lib-sec' + (o.cls ? ' ' + o.cls : '') + '"' + (o.id ? ' id="' + escA(o.id) + '"' : '') + '>');
-    parts.push('<div class="mgs-lib-sectop' + (o.headerCls ? ' ' + escA(o.headerCls) : '') + '"><span class="mgs-lib-lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
-    if (o.actions && o.actions.length) {
-      parts.push('<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">');
-      o.actions.forEach(function (a) { parts.push(actionBtn(a)); });
-      parts.push('</span>');
+    parts.push('<div class="mgs-lib-sectop section-header' + (o.headerCls ? ' ' + escA(o.headerCls) : '') + '"><span class="mgs-lib-lab">' + escT(o.label) + (o.note ? ' <em>' + escT(o.note) + '</em>' : '') + (o.flag || '') + '</span>');
+    if ((o.actions && o.actions.length) || o.headerControlsHTML) {
+      parts.push('<div class="section-header-buttons">');
+      if (o.actions && o.actions.length) o.actions.forEach(function (a) { parts.push(actionBtn(a)); });
+      if (o.headerControlsHTML) parts.push(o.headerControlsHTML);
+      parts.push('</div>');
     }
     parts.push('</div>');
     if (o.beforeHTML) parts.push(o.beforeHTML);
@@ -1639,7 +1657,8 @@ var PLX = (function () {
     return parts.join('');
   }
   function actionBtn(a) {
-    var parts = ['<button type="button" class="mgs-lib-cbtn' + (a.spec ? ' mgs-lib-spec' : '') + '"'];
+    var toneClass = a.kind === 'title' ? ' btn-copy-title' : ' btn-copy-prompt';
+    var parts = ['<button type="button" class="mgs-lib-cbtn' + (a.spec ? ' mgs-lib-spec' : '') + toneClass + '"'];
     parts.push(' data-action="copy"');
     parts.push(PLX.attr('data-prompt', a.name));
     if (a.preview) parts.push(PLX.attr('data-copy-preview', a.preview));
@@ -1697,6 +1716,7 @@ var PLX = (function () {
     var p = selectedPrompt();
     if (!p) { wrap.innerHTML = '<div class="mgs-lib-card"><div class="mgs-lib-empty">No prompts in this library.</div></div>'; return; }
     wrap.innerHTML = cardHTML(p, L);
+    wireMenu(wrap);
     wireVarControls(p);
   }
   function renderLibbar() {
@@ -1758,7 +1778,10 @@ var PLX = (function () {
       cls: 'mgs-lib-before', label: 'Section 3 · Before Image Prompt', note: 'image generator - never part of Full Body',
       flag: p.fields.before ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       valueHTML: highlightPromptHTML(p, 'before', set.copyBeforePrompt), previewRole: 'before',
-      actions: [{ name: 'copyBeforePrompt', label: 'Copy Before Prompt', preview: 'before' }]
+      actions: [
+        { name: 'copyBeforePrompt', label: 'Copy Before Prompt', preview: 'before' },
+        { name: 'copyBeforeTitle', label: 'Copy Before Title', kind: 'title' }
+      ]
     }));
 
     /* 4 THUMBNAIL ALT */
@@ -1786,7 +1809,10 @@ var PLX = (function () {
       label: 'Main Prompt & Negative Prompt', note: 'Sections 6 + 7 · live preview',
       flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       html: mergedPromptContentHTML(p, set),
-      actions: [{ name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' }]
+      actions: [
+        { name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' },
+        { name: 'copyAfterTitle', label: 'Copy After Title', kind: 'title' }
+      ]
     }));
 
     /* 8 TOOLS */
@@ -1810,9 +1836,9 @@ var PLX = (function () {
       cls: 'mgs-lib-thumb', label: 'Section 10 · Thumbnail Image Generator Prompt',
       note: set.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
       flag: set.thumbFromLibrary ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
-      valueHTML: highlightPromptHTML(p, 'thumb', set.copyThumbPrompt), previewRole: 'thumbnail',
-      html: presetRowHTML(p),
-      actions: [{ name: 'copyThumbPrompt', label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }]
+      headerControlsHTML: thumbnailHeaderControlsHTML(p, 'copyThumbPrompt', 'library'),
+      beforeHTML: '<div class="mgs-lib-thumbnail-preset-note">Style preset regenerates only Section 10 — original library prompt preserved in source.</div>',
+      valueHTML: highlightPromptHTML(p, 'thumb', set.copyThumbPrompt), previewRole: 'thumbnail'
     }));
 
     /* 11/12/13 */
@@ -1840,8 +1866,8 @@ var PLX = (function () {
   function canCustomize(p) { return !!payloads(p).customized; }
   function modeSwitch(p) {
     var hasCustom = canCustomize(p);
-    return '<div class="mgs-lib-sectop" style="margin-bottom:.6rem"><span class="mgs-lib-lab">Copy source <em>(Step 4 = source of truth)</em></span>' +
-      '<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">' +
+    return '<div class="mgs-lib-sectop section-header" style="margin-bottom:.6rem"><span class="mgs-lib-lab">Copy source <em>(Step 4 = source of truth)</em></span>' +
+      '<span class="section-header-buttons">' +
       '<button type="button" class="mgs-lib-cbtn" data-action="mode" data-mode="original"' + (S.mode === 'original' ? ' aria-pressed="true"' : '') + '>Original (verbatim)</button>' +
       '<button type="button" class="mgs-lib-cbtn' + (S.mode === 'customized' ? ' mgs-lib-spec' : '') + '" data-action="mode" data-mode="customized"' +
       (hasCustom ? '' : ' disabled title="No customization values entered"') + (S.mode === 'customized' ? ' aria-pressed="true"' : '') + '>Customized</button>' +
@@ -1852,23 +1878,24 @@ var PLX = (function () {
     if (!rows.length) return '<div class="mgs-lib-val">—</div>';
     return '<ul class="mgs-lib-howto">' + rows.map(function (l) { return '<li>' + escT(l.replace(/^\s*[-*+>•]+\s*/, '')) + '</li>'; }).join('') + '</ul>';
   }
-  function presetRowHTML(p, compact) {
+  function presetRowHTML(p, compact, context) {
     var opts = Object.keys(PLX.THUMB_TEMPLATES).map(function (k) {
       return '<option value="' + escA(k) + '"' + (k === S.preset ? ' selected' : '') + '>' + escT(PLX.PRESET_NAMES[k] || k) + '</option>';
     }).join('');
-    var control = '<div class="mgs-lib-preset-control"><label for="preset-' + escA(p.uid) + '">Style preset</label>' +
-      '<select id="preset-' + escA(p.uid) + '" data-action="preset">' + opts + '</select></div>';
+    var presetId = 'preset-' + p.uid + (context ? '-' + context : '');
+    var control = '<div class="mgs-lib-preset-control"><label for="' + escA(presetId) + '">Style preset</label>' +
+      '<select id="' + escA(presetId) + '" data-action="preset">' + opts + '</select></div>';
     if (compact) return control;
     return '<div class="mgs-lib-kv">' + control +
       '<span class="mgs-lib-src">regenerates only Section 10 — original library prompt preserved in source</span></div>';
   }
   function exportRow(p, L) {
     var f = payload(p, 'filenames'), fs = payload(p, 'filenamesShort');
-    return '<div class="mgs-lib-sec"><div class="mgs-lib-sectop"><span class="mgs-lib-lab">File names <em>(copy to rename generated images)</em></span>' +
-      '<span style="display:inline-flex;gap:.4rem;flex-wrap:wrap">' +
-      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
-      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyAfterFile">After: ' + escT(f.after) + '</button>' +
-      '<button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
+    return '<div class="mgs-lib-sec"><div class="mgs-lib-sectop section-header"><span class="mgs-lib-lab">File names <em>(copy to rename generated images)</em></span>' +
+      '<span class="section-header-buttons">' +
+      '<button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copy" data-prompt="copyBeforeFile">Before: ' + escT(f.before) + '</button>' +
+      '<button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copy" data-prompt="copyAfterFile">After: ' + escT(f.after) + '</button>' +
+      '<button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copy" data-prompt="copyThumbFile">Thumb: ' + escT(fs.thumb) + '</button>' +
       '</span></div></div>';
   }
 
@@ -1904,8 +1931,8 @@ var PLX = (function () {
   function customizePanel(p) {
     var c = p.custom, out = [];
     out.push('<div class="mgs-lib-sec" id="customize-' + escA(p.uid) + '">');
-    out.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 · source of truth</em></span>');
-    if (c.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
+    out.push('<div class="mgs-lib-sectop section-header"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 · source of truth</em></span>');
+    if (c.present) out.push('<span class="section-header-buttons"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
     out.push('</div>');
     if (!c.present) {
       out.push('<div class="mgs-lib-val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
@@ -2012,8 +2039,8 @@ var PLX = (function () {
 
     /* CUSTOMIZE PROMPT LOCATION: appears ABOVE Section 2 */
     out.push('<div class="mgs-lib-sec" id="customize-image-' + escA(p.uid) + '">');
-    out.push('<div class="mgs-lib-sectop"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 \u00b7 source of truth</em></span>');
-    if (p.custom.present) out.push('<span style="display:inline-flex;gap:.4rem"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
+    out.push('<div class="mgs-lib-sectop section-header"><span class="mgs-lib-lab">Customize Prompt <em>Step 4 \u00b7 source of truth</em></span>');
+    if (p.custom.present) out.push('<span class="section-header-buttons"><button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="clearvars">Reset to original</button></span>');
     out.push('</div>');
     if (!p.custom.present) {
       out.push('<div class="mgs-lib-val">This prompt has no <b>Step 4: Customize these variables</b> block. Nothing is replaced and every copy stays byte-identical to the library text.</div>');
@@ -2032,7 +2059,10 @@ var PLX = (function () {
       cls: 'mgs-lib-before', label: '2 \u00b7 Before Image Prompt', note: 'Section 3 \u00b7 raw / problem state' + (currentMode(p) === 'customized' ? ' (customized)' : ''),
       flag: p.fields.before ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       valueHTML: highlightPromptHTML(p, 'before', set.copyBeforePrompt), previewRole: 'before',
-      actions: [{ name: 'copyBeforePrompt', label: 'Copy Before Prompt', preview: 'before' }]
+      actions: [
+        { name: 'copyBeforePrompt', label: 'Copy Before Prompt', preview: 'before' },
+        { name: 'copyBeforeTitle', label: 'Copy Before Title', kind: 'title' }
+      ]
     }));
 
     /* SECTION 3 Main + Negative Prompt — one unified card, no redundant copy-preview section. */
@@ -2042,7 +2072,10 @@ var PLX = (function () {
       label: 'Main Prompt & Negative Prompt', note: 'Sections 6 + 7' + (currentMode(p) === 'customized' ? ' · customized' : ''),
       flag: p.fields.prompt ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-miss">MISSING</span>',
       html: mergedPromptContentHTML(p, set),
-      actions: [{ name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' }]
+      actions: [
+        { name: 'copyPromptNegative', label: 'Copy Prompt + Negative', preview: 'prompt-negative' },
+        { name: 'copyAfterTitle', label: 'Copy After Title', kind: 'title' }
+      ]
     }));
 
     /* SECTION 4 Thumbnail Image Generator Prompt — controls precede the live preview. */
@@ -2051,7 +2084,8 @@ var PLX = (function () {
       cls: 'mgs-lib-thumb', label: '4 \u00b7 Thumbnail Image Generator Prompt',
       note: d.thumbFromLibrary ? 'from library (Section 10)' : 'engine style preset (Section 10 unavailable)',
       flag: d.thumbFromLibrary ? '<span class="mgs-lib-flag mgs-lib-src">SOURCE</span>' : '<span class="mgs-lib-flag mgs-lib-gen">GENERATED</span>',
-      beforeHTML: thumbnailTopControlsHTML(p),
+      headerControlsHTML: thumbnailHeaderControlsHTML(p, 'copyThumbPromptProtected', 'image'),
+      beforeHTML: '<div class="mgs-lib-thumbnail-preset-note">Style preset regenerates only Section 10 — original library prompt preserved in source.</div>',
       valueHTML: highlightPromptHTML(p, 'thumb', thumbPromptAutoProtected), previewRole: 'thumbnail'
     }));
 
@@ -2069,7 +2103,7 @@ var PLX = (function () {
     wrap.innerHTML = out.join('');
     var imagePromptSelector = el('imagePromptSelector');
     if (imagePromptSelector) imagePromptSelector.addEventListener('change', function () { selectPrompt(imagePromptSelector.value); });
-    wireMenu(p);
+    wireMenu(wrap);
     wireVarControlsImage(p);
   }
   function wireVarControlsImage(p) {
@@ -2182,33 +2216,43 @@ var PLX = (function () {
     out.push('</div></div>');
     return out.join('');
   }
-  function cleanThumbnailTitle(title) {
-    var clean = PLX.cleanTitle(title || '').replace(/\s+$/, '');
-    clean = clean.replace(/\.[a-z][a-z0-9]{1,9}\s*$/i, '');
-    clean = clean.replace(/_cover\s*$/i, '');
-    return clean.replace(/\s+$/, '');
+  var THUMB_TITLE_SUFFIXES = ['_cover.jpg', ' cover.jpg', '-cover.jpg', ' thumb.jpg', '_thumb.jpg', '-thumb.jpg'];
+  function numberedPromptTitle(p) {
+    var title = trim(p && p.fields ? p.fields.title : '');
+    var num = trim(p && p.num != null ? p.num : '');
+    if (!num) return title;
+    var leading = /^(\d+)(?=\s|[.·\-–—)]|$)/.exec(title);
+    return leading && leading[1] === num ? title : num + (title ? ' ' + title : '');
   }
-  function thumbnailTitleMenuHTML(p) {
-    var fullTitle = cleanThumbnailTitle(p && p.fields ? p.fields.title : '');
-    var shortTitle = PLX.shortTitle(fullTitle);
-    var menuId = 'thumb-title-menu-' + p.uid;
-    var items = [
-      '<li role="none"><button type="button" role="menuitem" data-action="copy" data-prompt="copyThumbFullTitle" data-copy-feedback="menu">Copy Full Title<span>' + escT(fullTitle) + '</span></button></li>',
-      '<li role="none"><button type="button" role="menuitem" data-action="copy" data-prompt="copyThumbShortTitle" data-copy-feedback="menu">Copy Short Title<span>' + escT(shortTitle) + '</span></button></li>'
-    ].join('');
-    return '<div class="mgs-lib-menu"><button type="button" class="mgs-lib-cbtn mgs-lib-spec" data-action="menu" aria-haspopup="true" aria-controls="' + escA(menuId) + '" aria-expanded="false">Copy Thumbnail Title <span aria-hidden="true">▾</span></button>' +
-      '<ul class="mgs-lib-menu-list" id="' + escA(menuId) + '" role="menu" aria-label="Copy Thumbnail Title" hidden>' + items + '</ul></div>';
+  function shortFormPromptTitle(p) {
+    var words = numberedPromptTitle(p).split(/\s+/).filter(Boolean), out = [], i = 0;
+    while (i < words.length && /^\d+(?:[.,]\d+)*(?:[.)])?$/.test(words[i])) out.push(words[i++]);
+    for (; i < words.length; i++) {
+      var initials = words[i].split(/[-–—]+/).map(function (part) {
+        var letter = /[A-Za-z]/.exec(part);
+        return letter ? letter[0].toUpperCase() : '';
+      }).filter(Boolean);
+      if (initials.length) out.push(initials.join('-'));
+    }
+    return out.join(' ');
   }
-  function thumbnailTopControlsHTML(p) {
-    return '<div class="thumbnail-top-controls">' +
-      presetRowHTML(p, true) +
-      actionBtn({ name: 'copyThumbPromptProtected', label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }) +
-      thumbnailTitleMenuHTML(p) +
-      '</div><div class="mgs-lib-thumbnail-preset-note">Style preset regenerates only Section 10 — original library prompt preserved in source.</div>';
+  function thumbnailTitleMenuHTML(p, context) {
+    var shortTitle = shortFormPromptTitle(p);
+    var menuId = 'thumb-title-menu-' + p.uid + '-' + (context || 'default');
+    var items = THUMB_TITLE_SUFFIXES.map(function (suffix) {
+      var result = shortTitle + suffix;
+      return '<li role="none"><button type="button" class="btn-copy-title" role="menuitem" data-action="copy" data-prompt="copyThumbTitleSuffix" data-suffix="' + escA(suffix) + '" data-copy-feedback="menu">' +
+        '<span class="mgs-lib-menu-suffix">' + escT(suffix) + '</span><span class="mgs-lib-menu-preview">' + escT(result) + '</span></button></li>';
+    }).join('');
+    return '<div class="mgs-lib-menu"><button type="button" class="mgs-lib-cbtn btn-copy-title" data-action="menu" aria-haspopup="true" aria-controls="' + escA(menuId) + '" aria-expanded="false">Copy Thumbnail Title <span aria-hidden="true">▾</span></button>' +
+      '<ul class="mgs-lib-menu-list" id="' + escA(menuId) + '" role="menu" aria-label="Copy Thumbnail Title suffix options" hidden>' + items + '</ul></div>';
+  }
+  function thumbnailHeaderControlsHTML(p, promptCopyName, context) {
+    return actionBtn({ name: promptCopyName, label: 'Copy Thumbnail Prompt', preview: 'thumbnail' }) +
+      presetRowHTML(p, true, context) + thumbnailTitleMenuHTML(p, context);
   }
   var MENU_STATE = { closes: [] };
-  function wireMenu(p) {
-    var wrap = el('imagebody');
+  function wireMenu(wrap) {
     if (!wrap) return;
     MENU_STATE.closes = [];
     wrap.querySelectorAll('.mgs-lib-menu').forEach(function (menu) {
@@ -2278,7 +2322,7 @@ var PLX = (function () {
     out.push('<div><span class="mgs-lib-lab">Publishing</span><h2 class="mgs-lib-cardtitle" style="margin-top:.2rem">#' + escT(p.num) + ' · ' + escT(p.fields.title || '(untitled)') + '</h2>' +
       '<div class="mgs-lib-kv"><span>Full Body source: <b>Sections 6 + 7 + 9</b></span><span>Section 3 <b>never</b> included</span><span>mode: <b>' + escT(currentMode(p)) + '</b></span></div></div>');
     out.push('<div class="mgs-lib-btnrow">' +
-      '<button type="button" class="mgs-lib-btn mgs-lib-main" data-action="copy" data-prompt="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
+      '<button type="button" class="mgs-lib-btn mgs-lib-main btn-copy-prompt" data-action="copy" data-prompt="copyFullBody"' + (blocked ? ' data-blocked="1"' : '') + '>Copy Full Body</button>' +
       '<button type="button" class="mgs-lib-btn" data-action="downloadpost">Download post HTML</button>' +
       '<button type="button" class="mgs-lib-btn" data-action="downloadlibrary">Download library HTML</button>' +
       '<button type="button" class="mgs-lib-btn mgs-lib-spec" data-action="downloaduniversal">Download Universal Card JSON</button>' +
@@ -2299,21 +2343,28 @@ var PLX = (function () {
       { key: 'search', label: 'Search Description', sec: 'Section 13', copyKey: 'copySearchDesc', btnLabel: 'Copy Search Description', rows: 2 }
     ];
 
-    pubBlocks.forEach(function (row) {
+    pubBlocks.forEach(function (row, rowIndex) {
       var key = row.key;
+      var isAlt = key === 'altThumb' || key === 'altBefore' || key === 'altAfter';
       var base = (key === '__body') ? payload(p, 'copyFullBody') : payload(p, row.copyKey);
       var val = ovr[key] !== undefined ? ovr[key] : base;
       var edited = ovr[key] !== undefined;
+      var baseLabel = row.sec + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '');
+      var currentLabel = row.sec + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : ''));
 
-      out.push('<div class="mgs-lib-field' + (row.isBody ? ' mgs-lib-body' : '') + '">');
-      out.push('<div class="mgs-lib-flab"><span>' + escT(row.label) + '</span>');
-      out.push('<span class="mgs-lib-src" data-base-label="' + escA(row.sec) + (key === 'altThumb' && !p.fields.altThumb ? ' \u00b7 GENERATED fallback' : '') + '">' +
-        escT(row.sec) + (edited ? ' · manually edited' : (key === 'altThumb' && !p.fields.altThumb ? ' · GENERATED fallback' : '')) + '</span></div>');
-      out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
-      out.push('<div class="mgs-lib-btnrow"><button type="button" class="mgs-lib-cbtn" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
-      if (row.isBody) out.push('<button type="button" class="mgs-lib-cbtn" data-action="copybodytext">Copy from this box</button>');
+      if (rowIndex === 1) out.push('<div class="alt-sections-container">');
+      out.push('<div class="mgs-lib-field' + (row.isBody ? ' mgs-lib-body' : '') + (isAlt ? ' alt-section' : '') + '">');
+      out.push('<div class="mgs-lib-flab section-header"><div class="mgs-lib-field-heading">');
+      if (isAlt) out.push('<h4>' + escT(row.label) + '</h4>');
+      else out.push('<span class="mgs-lib-field-title">' + escT(row.label) + '</span>');
+      out.push('<span class="mgs-lib-src" data-base-label="' + escA(baseLabel) + '">' + escT(currentLabel) + '</span></div>');
+      out.push('<div class="section-header-buttons"><button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copy" data-prompt="' + row.copyKey + '"' + (blocked ? ' data-blocked="1"' : '') + '>' + escT(row.btnLabel) + '</button>');
+      if (row.isBody) out.push('<button type="button" class="mgs-lib-cbtn btn-copy-prompt" data-action="copybodytext">Copy from this box</button>');
       if (edited) out.push('<button type="button" class="mgs-lib-cbtn mgs-lib-ghost" data-action="revert" data-field="' + key + '">Revert to library value</button>');
       out.push('</div></div>');
+      out.push('<textarea rows="' + row.rows + '" data-action="ovr" data-field="' + key + '" aria-label="' + escA(row.label) + ' for Blogger">' + escA(val) + '</textarea>');
+      out.push('</div>');
+      if (rowIndex === 3) out.push('</div>');
     });
 
     out.push('</div></div>');
@@ -2376,10 +2427,10 @@ var PLX = (function () {
   function refreshFieldRow(node, p) {
     if (!node || !node.parentNode) return;
     var box = node.parentNode, f = node.dataset.field;
-    var flag = box.querySelector('.src');
+    var flag = box.querySelector('.mgs-lib-src');
     if (f === '__body') { if (flag) flag.textContent = 'Sections 6 + 7 + 9 \u00b7 ' + node.value.length + ' chars' + (isOverrideNow(p, f) ? ' \u00b7 manually edited' : ''); }
     else { if (flag) flag.textContent = flag.getAttribute('data-base-label') + (isOverrideNow(p, f) ? ' \u00b7 manually edited' : ''); }
-    var row = box.querySelector('.btnrow'), btn = row ? row.querySelector('[data-action="revert"]') : null;
+    var row = box.querySelector('.section-header-buttons'), btn = row ? row.querySelector('[data-action="revert"]') : null;
     if (isOverrideNow(p, f) && !btn && row) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'mgs-lib-cbtn mgs-lib-ghost'; btn.setAttribute('data-action', 'revert'); btn.setAttribute('data-field', f);
@@ -2748,12 +2799,17 @@ var PLX = (function () {
       copyText(displayed, btn); return;
     }
     if (name === 'copyTools') { var t = p.fields.tools || ''; if (!t) { toast('No Section 8 data', true); return; } copyText(t, btn); return; }
-    if (name === 'copyBeforeFile' || name === 'copyBeforeTitle') { copyText(payload(p, 'filenames').before, btn); return; }
-    if (name === 'copyAfterFile' || name === 'copyAfterTitle') { copyText(payload(p, 'filenames').after, btn); return; }
+    if (name === 'copyBeforeFile') { copyText(payload(p, 'filenames').before, btn); return; }
+    if (name === 'copyAfterFile') { copyText(payload(p, 'filenames').after, btn); return; }
+    if (name === 'copyBeforeTitle') { copyText(numberedPromptTitle(p) + ' Before.jpg', btn); return; }
+    if (name === 'copyAfterTitle') { copyText(numberedPromptTitle(p) + ' After.jpg', btn); return; }
     if (name === 'copyThumbFile') { copyText(payload(p, 'filenames').thumb, btn); return; }
     if (name === 'copyThumbFileShort') { copyText(payload(p, 'filenamesShort').thumb, btn); return; }
-    if (name === 'copyThumbFullTitle') { copyText(cleanThumbnailTitle(p.fields.title), btn); return; }
-    if (name === 'copyThumbShortTitle') { copyText(PLX.shortTitle(cleanThumbnailTitle(p.fields.title)), btn); return; }
+    if (name === 'copyThumbTitleSuffix') {
+      var suffix = btn && btn.dataset ? btn.dataset.suffix : '';
+      if (THUMB_TITLE_SUFFIXES.indexOf(suffix) === -1) { toast('Unknown thumbnail title suffix', true); return; }
+      copyText(shortFormPromptTitle(p) + suffix, btn); return;
+    }
     /* PATCH-03: explicit Original / Customized copy buttons */
     if (name === 'copyBeforeOriginal') { copyText(p.raw.before || p.fields.before, btn); return; }
     if (name === 'copyBeforeCustom') { var cb = payloads(p).customized; copyText(cb ? cb.copyBeforePrompt : (p.raw.before || p.fields.before), btn); return; }
