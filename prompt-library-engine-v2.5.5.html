@@ -96,8 +96,7 @@
 .mgs-lib-root .mgs-lib-prompt-divider{border-top:1px solid #ddd;margin:10px 0}
 .mgs-lib-root .mgs-lib-preset-control{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
 .mgs-lib-root .mgs-lib-preset-control label{font-weight:700;color:#8fa0d8}
-.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px;background:#E9ECEF;color:#495057;border:1px solid #DEE2E6;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s ease}
-.mgs-lib-root .mgs-lib-preset-control select:hover,.mgs-lib-root .mgs-lib-preset-control select:focus{background:#DEE2E6;border-color:#DEE2E6;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root .mgs-lib-preset-control select{width:auto;min-width:210px;min-height:44px;background:#FFFFFF;color:#212529;border:1px solid #CCCCCC;border-radius:.6rem;padding:6px 12px;font-family:inherit;font-size:16px;font-weight:400;cursor:pointer}
 .mgs-lib-root .mgs-lib-thumbnail-preset-note{font-size:.74rem;color:var(--dim);margin:0 0 10px}
 .mgs-lib-root .mgs-lib-lab{font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);letter-spacing:.03em;text-transform:uppercase}
 .mgs-lib-root .mgs-lib-lab em{font-weight:500;text-transform:none;color:var(--dim);font-style:normal}
@@ -112,11 +111,11 @@
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec{background:var(--mgs-lib-color-44);color:var(--mgs-lib-color-14);border-color:var(--mgs-lib-color-45)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec:hover{background:var(--mgs-lib-color-46)}
 .mgs-lib-root button.btn-copy-title,.mgs-lib-root button.btn-copy-prompt{padding:6px 14px !important;border-radius:6px !important;font-size:13px !important;font-weight:500 !important;cursor:pointer;transition:all 0.2s ease !important;box-shadow:none}
-.mgs-lib-root button.btn-copy-title{background:#FFF3CD !important;color:#856404 !important;border:1px solid #FFEAA7 !important}
-.mgs-lib-root button.btn-copy-title:hover{background:#FFE69C !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-.mgs-lib-root button.btn-copy-prompt{background:#D4EDDA !important;color:#155724 !important;border:1px solid #C3E6CB !important}
-.mgs-lib-root button.btn-copy-prompt:hover{background:#B8DFC0 !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-.mgs-lib-root button.btn-copied,.mgs-lib-root button.btn-copied:hover,.mgs-lib-root button.btn-copied:focus,.mgs-lib-root button.copied,.mgs-lib-root button.btn-success{background:#28A745 !important;background-color:#28A745 !important;border:1px solid #1E7E34 !important;color:#FFFFFF !important;box-shadow:none !important}
+.mgs-lib-root button.btn-copy-title{background:#FCD12A !important;color:#1F1A00 !important;border:1px solid #D4AC0D !important}
+.mgs-lib-root button.btn-copy-title:hover{background:#F39C12 !important;color:#000000 !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root button.btn-copy-prompt{background:#82E0AA !important;color:#0E3A20 !important;border:1px solid #28B463 !important}
+.mgs-lib-root button.btn-copy-prompt:hover{background:#52BE80 !important;color:#000000 !important;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.mgs-lib-root button.btn-copied,.mgs-lib-root button.btn-copied:hover,.mgs-lib-root button.btn-copied:focus,.mgs-lib-root button.copied,.mgs-lib-root button.btn-success{background:#218838 !important;background-color:#218838 !important;border:1px solid #1E7E34 !important;color:#FFFFFF !important;box-shadow:none !important}
 .mgs-lib-root .mgs-lib-val{font-size:.88rem;color:var(--mgs-lib-color-47);white-space:pre-wrap;overflow-wrap:anywhere}
 .mgs-lib-root .bracket-default{background:#FFF3CD;color:#856404;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .mgs-lib-root .bracket-replaced{background:#D4EDDA;color:#155724;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -161,6 +160,7 @@
 .mgs-lib-root .mgs-lib-menu-list li{margin:0}
 .mgs-lib-root .mgs-lib-menu-list button{display:flex;justify-content:space-between;align-items:center;gap:.6rem;width:100%;text-align:left;background:transparent;
   border:0;border-radius:.4rem;padding:.5rem .6rem;color:var(--ink2);font-size:.8rem;cursor:pointer;min-height:40px;transition:all 0.2s ease}
+.mgs-lib-root .mgs-lib-menu-list button.btn-copy-title{background:#FCD12A !important;color:#1F1A00 !important;border:1px solid #D4AC0D !important}
 .mgs-lib-root .mgs-lib-menu-list button:hover,.mgs-lib-root .mgs-lib-menu-list button:focus{background:#E7F1FF !important;color:#1f3f66 !important;outline:2px solid #b8d4ff;outline-offset:-2px;box-shadow:0 2px 4px rgba(0,0,0,.1)}
 .mgs-lib-root .mgs-lib-menu-list button[aria-checked="true"]{color:var(--mgs-lib-color-14);box-shadow:inset 2px 0 0 var(--brand2)}
 .mgs-lib-root .mgs-lib-menu-suffix{font-weight:700;white-space:pre;color:inherit}
@@ -174,10 +174,10 @@
 .mgs-lib-root .mgs-lib-field textarea{min-height:2.6em}
 .mgs-lib-root .mgs-lib-field.mgs-lib-body textarea{min-height:9rem}
 .mgs-lib-root .alt-sections-container{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-.mgs-lib-root .alt-section{flex:1 1 30%;min-width:250px;background:#F8F9FA;padding:12px;border-radius:8px;border:1px solid #E9ECEF;color:#343a40}
-.mgs-lib-root .alt-section h4{margin-top:0;margin-bottom:0;font-size:14px;color:#343a40}
+.mgs-lib-root .alt-section{flex:1 1 30%;min-width:250px;background:var(--panel2);border:1px solid var(--mgs-lib-color-36);border-radius:.7rem;padding:.7rem .8rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mgs-lib-root .alt-section h4{margin:0;font-size:.75rem;font-weight:750;color:var(--mgs-lib-color-27);text-transform:uppercase;letter-spacing:.03em}
 .mgs-lib-root .alt-section textarea,.mgs-lib-root .alt-section input{width:100%;box-sizing:border-box}
-.mgs-lib-root .alt-section .mgs-lib-src{color:#6c757d}
+.mgs-lib-root .alt-section .mgs-lib-src{color:var(--dim)}
 .mgs-lib-root .mgs-lib-check{display:flex;gap:.5rem;align-items:flex-start;font-size:.8rem;color:var(--ink2);margin-top:.5rem}
 .mgs-lib-root .mgs-lib-check input{width:18px;height:18px;margin-top:.1rem;accent-color:var(--brand)}
 .mgs-lib-root .mgs-lib-sum{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
