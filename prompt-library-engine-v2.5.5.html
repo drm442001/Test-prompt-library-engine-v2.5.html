@@ -22,6 +22,8 @@
 .mgs-lib-root .mgs-lib-chip b{color:var(--mgs-lib-color-14)}
 .tabs-hidden{display:none !important}
 .mgs-lib-root .mgs-lib-sticky-header{position:sticky;top:0;z-index:100;background:var(--bg);background-color:#0f1220;box-shadow:0 5px 12px rgba(0,0,0,.28);margin:0 0 1rem;padding:.45rem 0 .7rem}
+.mgs-lib-root .mgs-lib-sticky-header:not(.tabs-hidden){animation:mgs-lib-tabs-in .22s ease-out}
+@keyframes mgs-lib-tabs-in{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
 .mgs-lib-root .mgs-lib-selected-prompt-name{font-weight:800;font-size:1rem;line-height:1.35;padding:8px 16px;background:var(--bg);text-align:center;overflow-wrap:anywhere}
 .mgs-lib-root .mgs-lib-sticky-header .mgs-lib-tabbar{margin:0}
 .mgs-lib-root .mgs-lib-tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:0 0 1rem}
@@ -97,10 +99,10 @@
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-copied{background:var(--ok);border-color:var(--mgs-lib-color-43);color:var(--mgs-lib-color-14)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec{background:var(--mgs-lib-color-44);color:var(--mgs-lib-color-14);border-color:var(--mgs-lib-color-45)}
 .mgs-lib-root .mgs-lib-cbtn.mgs-lib-spec:hover{background:var(--mgs-lib-color-46)}
-.mgs-lib-root .copied{background:#4CAF50 !important;background-color:#4CAF50 !important;border-color:#4CAF50 !important;color:white !important}
+.mgs-lib-root .copied{background:#28a745 !important;background-color:#28a745 !important;border-color:#28a745 !important;color:white !important}
 .mgs-lib-root .mgs-lib-val{font-size:.88rem;color:var(--mgs-lib-color-47);white-space:pre-wrap;overflow-wrap:anywhere}
-.mgs-lib-root .bracket-default{background:#FFE0B2;color:#5D3A00;border-radius:3px;padding:0 2px;font-weight:700;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.mgs-lib-root .bracket-replaced{background:#C8E6C9;color:#1B5E20;border-radius:3px;padding:0 2px;font-weight:700;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.mgs-lib-root .bracket-default{background:#FFF3CD;color:#856404;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.mgs-lib-root .bracket-replaced{background:#D4EDDA;color:#155724;font-weight:bold;border-radius:3px;padding:1px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .mgs-lib-root .mgs-lib-mini{font-size:.74rem;font-weight:800;color:var(--brand2);text-transform:uppercase;letter-spacing:.03em;margin:.55rem 0 .2rem}
 .mgs-lib-root .mgs-lib-howto li{font-size:.83rem;color:var(--mgs-lib-color-47);margin-bottom:.18rem;padding-left:1rem;position:relative}
 .mgs-lib-root .mgs-lib-howto li::before{content:"\2022";position:absolute;left:.2rem;color:var(--brand)}
@@ -191,8 +193,8 @@
     <div class="mgs-lib-statusline" id="statusline"></div>
   </header>
 
-  <div class="mgs-lib-sticky-header tabs-hidden" id="tabContainer">
-    <div class="mgs-lib-selected-prompt-name" id="selectedPromptName" aria-live="polite" aria-atomic="true"></div>
+  <div class="mgs-lib-sticky-header tabs-hidden" id="tab-container" aria-hidden="true">
+    <div class="mgs-lib-selected-prompt-name" id="selectedPromptName" aria-live="polite" aria-atomic="true">No Prompt Selected</div>
     <div class="mgs-lib-tabbar" id="tabbar" role="tablist" aria-label="Engine workspaces"></div>
   </div>
 
@@ -1298,7 +1300,7 @@ var PLX = (function () {
   }
 
   /* ---------------- toast + clipboard ---------------- */
-  var toastT;
+  var toastT, copyResetT, copySeq = 0;
   function toast(msg, bad) {
     var t = el('toast'); t.textContent = msg;
     t.style.background = bad ? '#7a2020' : '#1e7d54';
@@ -1307,8 +1309,10 @@ var PLX = (function () {
   }
   function restoreBtn(b) {
     if (!b) return;
-    var o = b.getAttribute('data-label');
-    if (o !== null) b.textContent = o;
+    var originalHTML = b.getAttribute('data-label-html');
+    var originalText = b.getAttribute('data-label');
+    if (originalHTML !== null) b.innerHTML = originalHTML;
+    else if (originalText !== null) b.textContent = originalText;
     b.classList.remove('mgs-lib-copied');
     b.classList.remove('copied');
   }
@@ -1318,13 +1322,20 @@ var PLX = (function () {
       var feedbackMenu = btn.closest('.mgs-lib-menu');
       feedbackBtn = feedbackMenu ? feedbackMenu.querySelector('button[data-action="menu"]') : btn;
     }
-    if (feedbackBtn === btn && btn && btn.getAttribute('data-label') === null) btn.setAttribute('data-label', btn.textContent);
+    if (feedbackBtn && feedbackBtn.getAttribute('data-label') === null) {
+      feedbackBtn.setAttribute('data-label', feedbackBtn.textContent);
+      feedbackBtn.setAttribute('data-label-html', feedbackBtn.innerHTML);
+    }
+    var requestSeq = ++copySeq;
+    clearTimeout(copyResetT);
+    document.querySelectorAll('.mgs-lib-root button.copied, .mgs-lib-root button.mgs-lib-copied').forEach(restoreBtn);
+    if (LASTBTN) restoreBtn(LASTBTN);
+    LASTBTN = null;
     function done() {
-      document.querySelectorAll('.mgs-lib-root button.copied').forEach(function (other) { if (other !== feedbackBtn) restoreBtn(other); });
-      if (LASTBTN && LASTBTN !== feedbackBtn) restoreBtn(LASTBTN);
+      if (requestSeq !== copySeq) return;
       if (feedbackBtn) {
         feedbackBtn.classList.add('copied');
-        if (feedbackBtn === btn) feedbackBtn.textContent = 'Copied';
+        feedbackBtn.textContent = 'Copied!';
       }
       if (btn && btn.dataset.copyFeedback === 'menu' && feedbackMenu) {
         var list = feedbackMenu.querySelector('.mgs-lib-menu-list');
@@ -1332,7 +1343,13 @@ var PLX = (function () {
         feedbackBtn.setAttribute('aria-expanded', 'false');
         feedbackBtn.focus();
       }
-      LASTBTN = feedbackBtn; toast('Copied');
+      LASTBTN = feedbackBtn;
+      copyResetT = setTimeout(function () {
+        if (requestSeq !== copySeq) return;
+        restoreBtn(feedbackBtn);
+        if (LASTBTN === feedbackBtn) LASTBTN = null;
+      }, 2500);
+      toast('Copied!');
     }
     if (btn && btn.getAttribute('data-blocked') === '1') { toast('Blocked by validation', true); return; }
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1489,7 +1506,10 @@ var PLX = (function () {
     if (L.errCount) notice('warn', head + ' with ' + L.errCount + ' error(s) in the Validation tab data panel. Missing source sections are shown as MISSING, never invented.');
     else if (L.warnCount) notice('info', head + ' · ' + L.warnCount + ' SEO/structure warning(s) available in the publisher panel.');
     else notice('ok', head + ' · no errors.');
-    el('tabContainer').classList.remove('tabs-hidden');
+    syncSelectedPromptName();
+    var tabContainer = el('tab-container');
+    tabContainer.classList.remove('tabs-hidden');
+    tabContainer.removeAttribute('aria-hidden');
     el('app').classList.remove('library-pending');
     return L;
   }
@@ -1497,11 +1517,21 @@ var PLX = (function () {
 
   /* ---------------- tabs ---------------- */
   var TABS = [{ id: 'library', name: 'Prompt Library' }, { id: 'image', name: 'Image Studio' }, { id: 'publisher', name: 'Blog Publisher' }];
+  function syncSelectedPromptName() {
+    var target = el('selectedPromptName');
+    if (!target) return;
+    var L = lib(), currentPrompt = null;
+    if (L && S.selected) {
+      for (var i = 0; i < L.prompts.length; i++) {
+        if (L.prompts[i].uid === S.selected) { currentPrompt = L.prompts[i]; break; }
+      }
+    }
+    target.textContent = currentPrompt ? (currentPrompt.fields.title || '(untitled)') : 'No Prompt Selected';
+  }
   function renderTabbar() {
     var bar = el('tabbar'); bar.innerHTML = '';
     var L = lib();
-    var currentPrompt = selectedPrompt();
-    el('selectedPromptName').textContent = currentPrompt ? (currentPrompt.fields.title || '(untitled)') : '';
+    syncSelectedPromptName();
     TABS.forEach(function (t, i) {
       var b = mk('button', 'mgs-lib-tab');
       b.type = 'button'; b.id = 'tab-' + t.id;
@@ -1909,8 +1939,9 @@ var PLX = (function () {
     render();
   }
   function selectPrompt(uidv) {
-    if (S.selected === uidv) return;
+    if (S.selected === uidv) { syncSelectedPromptName(); return; }
     S.selected = uidv;
+    syncSelectedPromptName();
     S.dirty = { library: true, image: true, publisher: true };
     render();
   }
@@ -2131,9 +2162,12 @@ var PLX = (function () {
     out.push('</div></div>');
     return out.join('');
   }
+  function cleanThumbnailTitle(title) {
+    return PLX.cleanTitle(title || '').replace(/\.(?:jpe?g|png|webp|gif|avif|bmp|tiff?|svg|pdf)\s*$/i, '').replace(/\s+$/, '');
+  }
   function thumbnailTitleMenuHTML(p) {
-    var fullTitle = payload(p, 'filenames').thumb;
-    var shortTitle = payload(p, 'filenamesShort').thumb;
+    var fullTitle = cleanThumbnailTitle(p && p.fields ? p.fields.title : '');
+    var shortTitle = PLX.shortTitle(fullTitle);
     var menuId = 'thumb-title-menu-' + p.uid;
     var items = [
       '<li role="none"><button type="button" role="menuitem" data-action="copy" data-prompt="copyThumbFullTitle" data-copy-feedback="menu">Copy Full Title<span>' + escT(fullTitle) + '</span></button></li>',
@@ -2662,10 +2696,11 @@ var PLX = (function () {
 
   /* ---------------- delegated action router (no inline handlers anywhere) ---------------- */
   function copyPreviewText(btn, kind) {
-    var scope = btn && btn.closest ? (btn.closest('[role="tabpanel"]') || document) : document;
+    var scope = document;
+    if (btn && btn.closest) scope = btn.closest('.mgs-lib-card') || btn.closest('[role="tabpanel"]') || document;
     function read(role) {
       var node = scope.querySelector('[data-preview-role="' + role + '"]');
-      return node ? node.textContent : '';
+      return node ? String(node.textContent || '').replace(/\r\n?/g, '\n').replace(/^\s+|\s+$/g, '') : '';
     }
     if (kind === 'before') return read('before');
     if (kind === 'thumbnail') return read('thumbnail');
@@ -2685,8 +2720,10 @@ var PLX = (function () {
     if (name === 'copyTools') { var t = p.fields.tools || ''; if (!t) { toast('No Section 8 data', true); return; } copyText(t, btn); return; }
     if (name === 'copyBeforeFile' || name === 'copyBeforeTitle') { copyText(payload(p, 'filenames').before, btn); return; }
     if (name === 'copyAfterFile' || name === 'copyAfterTitle') { copyText(payload(p, 'filenames').after, btn); return; }
-    if (name === 'copyThumbFile' || name === 'copyThumbFullTitle') { copyText(payload(p, 'filenames').thumb, btn); return; }
-    if (name === 'copyThumbFileShort' || name === 'copyThumbShortTitle') { copyText(payload(p, 'filenamesShort').thumb, btn); return; }
+    if (name === 'copyThumbFile') { copyText(payload(p, 'filenames').thumb, btn); return; }
+    if (name === 'copyThumbFileShort') { copyText(payload(p, 'filenamesShort').thumb, btn); return; }
+    if (name === 'copyThumbFullTitle') { copyText(cleanThumbnailTitle(p.fields.title), btn); return; }
+    if (name === 'copyThumbShortTitle') { copyText(PLX.shortTitle(cleanThumbnailTitle(p.fields.title)), btn); return; }
     /* PATCH-03: explicit Original / Customized copy buttons */
     if (name === 'copyBeforeOriginal') { copyText(p.raw.before || p.fields.before, btn); return; }
     if (name === 'copyBeforeCustom') { var cb = payloads(p).customized; copyText(cb ? cb.copyBeforePrompt : (p.raw.before || p.fields.before), btn); return; }
